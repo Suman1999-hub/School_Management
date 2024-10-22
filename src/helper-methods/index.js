@@ -62,6 +62,15 @@ export const showToast = (message, type = "error", duration = 4000) => {
   toast[type](message, { duration });
 };
 
+export const errorHandler = (error) => {
+  console.log("error>>", error);
+  showToast(
+    error?.reason?.length || error?.message?.length
+      ? error?.reason || error?.message
+      : "Something went wrong, Try again later."
+  );
+};
+
 export const sleepTime = (n) => new Promise((r) => setTimeout(() => r(), n));
 
 export const capitalize = (s) => {

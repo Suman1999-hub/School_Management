@@ -11,17 +11,45 @@ import {
 } from "reactstrap";
 import PublicFooter from "../../containers/Public/PublicFooter";
 import { addUserCredential } from "../../redux/actions/userCredential";
+import { login } from "../../http/http-calls";
+import { decodeToken, errorHandler } from "../../helper-methods";
 
 const LoginPage = () => {
   // navigation
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
+  const [formFields, setFormFields] = useState({});
+  console.log("formFields",formFields);
+
+  const handleChange = (event, field) => {   
+    const updatedFormFields = {...formFields}
+    updatedFormFields[field] = event.target.value
+    setFormFields(updatedFormFields)
+
+  }
 
   // login
-  const _login = () => {
-    dispatch(addUserCredential({ token: "token", user: {} }));
-    navigate("/dashboard");
+  const _login = async () => {
+    
+    try {
+      const params = {
+        loginType : "admin",
+        email : formFields.email,
+        password : formFields.password
+      }
+      const response = await login(params) 
+      console.log("response >>", response);
+      console.log("token >>", response.token);
+      const user = decodeToken(response.token)
+      console.log("user >>", user);
+      
+      dispatch(addUserCredential({ token: response.token, user: user }));
+      navigate("/dashboard");
+
+    } catch(error) {
+      errorHandler(error)
+    }
   };
 
   return (
@@ -38,7 +66,7 @@ const LoginPage = () => {
                 <div className="form-group">
                   <Label>Email</Label>
                   <InputGroup>
-                    <Input placeholder="Enter" />
+                    <Input placeholder="Enter your Email ID" value={formFields?.email} onChange={(e) => handleChange(e, "email")}/>
                     <InputGroupText>
                       <i className="far fa-envelope" />
                     </InputGroupText>
@@ -55,7 +83,7 @@ const LoginPage = () => {
                   <Label>Password</Label>
                   <InputGroup>
                     <Input
-                      placeholder="Enter"
+                      placeholder="Enter your password" value={formFields?.password} onChange={(e) => handleChange(e, "password")}
                       type={`${showPassword ? "text" : "password"}`}
                     />
                     <InputGroupText
