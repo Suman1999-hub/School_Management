@@ -15,18 +15,23 @@ import { login } from "../../http/http-calls";
 import { decodeToken, errorHandler } from "../../helper-methods";
 
 const LoginPage = () => {
+
+  // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  // const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/
+
   // navigation
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
+
   const [formFields, setFormFields] = useState({});
-  const [errors, setErrors] = useState({});
-  const [isDirty, setIsDirty] = useState({
-    email: false,
-    password: false
-  });
+  // const [errors, setErrors] = useState({});
+  // const [isDirty, setIsDirty] = useState({
+  //   email: false,
+  //   password: false
+  // });
   console.log("formFields", formFields);
-  console.log("isDirty", isDirty);
+  // console.log("isDirty", isDirty);
 
   const handleChange = (event, field) => {
     const updatedFormFields = { ...formFields };
@@ -34,17 +39,32 @@ const LoginPage = () => {
     setFormFields(updatedFormFields);
   };
 
-  const handleBlur = (event, field) => {
-    const updatedIsDirty = {...isDirty}
-    updatedIsDirty[field] = true
-    setIsDirty(updatedIsDirty)
-  }
+  // const handleBlur = (event, field) => {
+  //   const updatedIsDirty = {...isDirty}
+  //   updatedIsDirty[field] = true
+  //   setIsDirty(updatedIsDirty)
+  // }
+
+  // const markAllDirty = () => {
+  //   const updatedIsDirty = {
+  //     email: true,
+  //     password: true
+  //   }
+  //   setIsDirty(updatedIsDirty)
+  // }
+
+  // const validateForm = () => {
+  //   const updatedErrors = {...errors}
+  //   let isValid = true
+    
+  // }
+
 
   // login
   const _login = async () => {
     try {
       const params = {
-        email: formFields.email,
+        handle: formFields.input,
         password: formFields.password,
       };
       const response = await login(params);
@@ -72,13 +92,13 @@ const LoginPage = () => {
               <Form>
                 {/* username */}
                 <div className="form-group">
-                  <Label>Email</Label>
+                  <Label>Email/Username</Label>
                   <InputGroup>
                     <Input
                       placeholder="Enter your Email ID"
                       value={formFields?.email}
-                      onChange={(e) => handleChange(e, "email")}
-                      onBlur={(e) => handleBlur(e, "email")}
+                      onChange={(e) => handleChange(e, "input")}
+                      // onBlur={(e) => handleBlur(e, "email")}
                     />
                     <InputGroupText>
                       <i className="far fa-envelope" />
@@ -99,7 +119,7 @@ const LoginPage = () => {
                       placeholder="Enter your password"
                       value={formFields?.password}
                       onChange={(e) => handleChange(e, "password")}
-                      onBlur={(e) => handleBlur(e, "password")}
+                      // onBlur={(e) => handleBlur(e, "password")}
                       type={`${showPassword ? "text" : "password"}`}
                     />
                     <InputGroupText
@@ -134,42 +154,19 @@ const LoginPage = () => {
                   color="primary"
                   className="btn-submit"
                 >
-                  Login
+                  Log in
                 </Button>
 
                 {/*infoText*/}
-                <div className="text-center fs-14 mt-3 fw-medium">
-                  Don't have an account?
-                  <Link to="/sign-up" className="ms-1">
-                    Sign Up
-                  </Link>
-                </div>
               </Form>
 
-              <div className="or">
-                <span>Or Continue With</span>
-              </div>
-
-              <div className="socialLogin">
-                <Button className="googleBtn">
-                  <img
-                    src={require("../../assets/img/google.png")}
-                    alt="google"
-                  />
-                </Button>
-                <Button className="appleBtn">
-                  <img
-                    src={require("../../assets/img/apple.svg").default}
-                    alt="apple"
-                  />
-                </Button>
-              </div>
+              
             </div>
           </div>
           <div className="rightWrapper">
             {/* logo */}
             <img
-              src={require("../../assets/img/logo-white.png")}
+              src={require("../../assets/img/school management logo.jpg")}
               alt="Brand Logo"
               className="companyLogo"
             />

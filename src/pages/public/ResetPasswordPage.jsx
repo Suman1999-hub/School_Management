@@ -71,7 +71,7 @@ const ResetPasswordPage = () => {
           <div className="rightWrapper">
             {/* logo */}
             <img
-              src={require("../../assets/img/logo-white.png")}
+              src={require("../../assets/img/school management logo.jpg")}
               alt="Brand Logo"
               className="companyLogo"
             />
