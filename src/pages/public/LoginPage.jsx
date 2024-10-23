@@ -20,35 +20,43 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [formFields, setFormFields] = useState({});
-  console.log("formFields",formFields);
+  const [errors, setErrors] = useState({});
+  const [isDirty, setIsDirty] = useState({
+    email: false,
+    password: false
+  });
+  console.log("formFields", formFields);
+  console.log("isDirty", isDirty);
 
-  const handleChange = (event, field) => {   
-    const updatedFormFields = {...formFields}
-    updatedFormFields[field] = event.target.value
-    setFormFields(updatedFormFields)
+  const handleChange = (event, field) => {
+    const updatedFormFields = { ...formFields };
+    updatedFormFields[field] = event.target.value;
+    setFormFields(updatedFormFields);
+  };
 
+  const handleBlur = (event, field) => {
+    const updatedIsDirty = {...isDirty}
+    updatedIsDirty[field] = true
+    setIsDirty(updatedIsDirty)
   }
 
   // login
   const _login = async () => {
-    
     try {
       const params = {
-        loginType : "admin",
-        email : formFields.email,
-        password : formFields.password
-      }
-      const response = await login(params) 
+        email: formFields.email,
+        password: formFields.password,
+      };
+      const response = await login(params);
       console.log("response >>", response);
       console.log("token >>", response.token);
-      const user = decodeToken(response.token)
+      const user = decodeToken(response.token);
       console.log("user >>", user);
-      
+
       dispatch(addUserCredential({ token: response.token, user: user }));
       navigate("/dashboard");
-
-    } catch(error) {
-      errorHandler(error)
+    } catch (error) {
+      errorHandler(error);
     }
   };
 
@@ -66,7 +74,12 @@ const LoginPage = () => {
                 <div className="form-group">
                   <Label>Email</Label>
                   <InputGroup>
-                    <Input placeholder="Enter your Email ID" value={formFields?.email} onChange={(e) => handleChange(e, "email")}/>
+                    <Input
+                      placeholder="Enter your Email ID"
+                      value={formFields?.email}
+                      onChange={(e) => handleChange(e, "email")}
+                      onBlur={(e) => handleBlur(e, "email")}
+                    />
                     <InputGroupText>
                       <i className="far fa-envelope" />
                     </InputGroupText>
@@ -83,7 +96,10 @@ const LoginPage = () => {
                   <Label>Password</Label>
                   <InputGroup>
                     <Input
-                      placeholder="Enter your password" value={formFields?.password} onChange={(e) => handleChange(e, "password")}
+                      placeholder="Enter your password"
+                      value={formFields?.password}
+                      onChange={(e) => handleChange(e, "password")}
+                      onBlur={(e) => handleBlur(e, "password")}
                       type={`${showPassword ? "text" : "password"}`}
                     />
                     <InputGroupText
