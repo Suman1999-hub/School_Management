@@ -87,10 +87,7 @@ const DashboardHeader = ({ isShow, setIsShow }) => {
               alt=""
             />
           </Button>
-          <div
-            className="userInfo ms-2"
-            onClick={() => navigate("/my-profile")}
-          >
+          <div className="userInfo ms-2" onClick={() => navigate("/profile")}>
             <div className="userAvatar">
               <img
                 src="https://images.unsplash.com/photo-1531891437562-4301cf35b7e4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=764&q=80"

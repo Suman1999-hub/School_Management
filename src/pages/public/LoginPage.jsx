@@ -15,7 +15,6 @@ import { login } from "../../http/http-calls";
 import { decodeToken, errorHandler } from "../../helper-methods";
 
 const LoginPage = () => {
-
   // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   // const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/
 
@@ -56,9 +55,8 @@ const LoginPage = () => {
   // const validateForm = () => {
   //   const updatedErrors = {...errors}
   //   let isValid = true
-    
-  // }
 
+  // }
 
   // login
   const _login = async () => {
@@ -159,8 +157,6 @@ const LoginPage = () => {
 
                 {/*infoText*/}
               </Form>
-
-              
             </div>
           </div>
           <div className="rightWrapper">

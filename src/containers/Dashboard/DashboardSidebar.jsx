@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, ListGroup, ListGroupItem, NavbarBrand } from "reactstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../../helper-methods";
-import { SUPER_ADMIN_ROUTES } from "../../config/helper-config";
+import {
+  STUDENT_ROUTES,
+  SUPER_ADMIN_ROUTES,
+  TEACHER_ROUTES,
+} from "../../config/helper-config";
 import { ADMIN_ROUTES } from "../../config/helper-config";
+import { useSelector } from "react-redux";
+import useGetUserType from "../../hook/useGetUserType";
 const DashboardSidebar = ({ isShow, setIsShow }) => {
   const navigate = useNavigate();
   const _logout = () => {
@@ -20,6 +26,21 @@ const DashboardSidebar = ({ isShow, setIsShow }) => {
   };
   console.log(SUPER_ADMIN_ROUTES);
   const menus = ["dashboard", "disputes"];
+
+  const [userType] = useGetUserType();
+  const [typeRoute, setTypeRoute] = useState([]);
+  useEffect(() => {
+    if (userType === "SuperAdmin") {
+      setTypeRoute(SUPER_ADMIN_ROUTES);
+    } else if (userType === "Admin") {
+      setTypeRoute(ADMIN_ROUTES);
+    } else if (userType === "Teacher") {
+      setTypeRoute(TEACHER_ROUTES);
+    } else {
+      setTypeRoute(STUDENT_ROUTES);
+    }
+  }, [userType]);
+
   return (
     <>
       {/* add show class after click on bar icon  */}
@@ -65,7 +86,7 @@ const DashboardSidebar = ({ isShow, setIsShow }) => {
                  
                 </ListGroupItem> */}
                 <ListGroup>
-                  {SUPER_ADMIN_ROUTES.map((curr) => (
+                  {typeRoute?.map((curr) => (
                     <ListGroupItem
                       key={curr.route} // Add a unique key
                       className={_isActiveTab(curr.route) ? "active" : ""}

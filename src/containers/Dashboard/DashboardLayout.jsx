@@ -42,7 +42,16 @@ const DashboardLayout = ({ props }) => {
               <Route exact path="/school" />
               <Route exact path="/admin" />
               <Route exact path="/settings" />
-              <Route exact path="/profile" />
+              <Route exact path="/profile" element={<MyProfile />} />
+              <Route exact path="/teacher" />
+              <Route exact path="/schedule" />
+              <Route exact path="/approval" />
+              <Route exact path="/attendance" />
+              <Route exact path="/report" />
+              <Route exact path="/admin" />
+              <Route exact path="/student" />
+              <Route exact path="/timelog" />
+              <Route exact path="/payment" element={<Payment />} />
             </Route>
 
             <Route path="*" element={<Navigate replace to="/dashboard" />} />
