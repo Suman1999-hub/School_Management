@@ -15,40 +15,68 @@ import { login } from "../../http/http-calls";
 import { decodeToken, errorHandler } from "../../helper-methods";
 
 const LoginPage = () => {
+
+  // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  // const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/
+
   // navigation
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
+
   const [formFields, setFormFields] = useState({});
-  console.log("formFields",formFields);
+  // const [errors, setErrors] = useState({});
+  // const [isDirty, setIsDirty] = useState({
+  //   email: false,
+  //   password: false
+  // });
+  console.log("formFields", formFields);
+  // console.log("isDirty", isDirty);
 
-  const handleChange = (event, field) => {   
-    const updatedFormFields = {...formFields}
-    updatedFormFields[field] = event.target.value
-    setFormFields(updatedFormFields)
+  const handleChange = (event, field) => {
+    const updatedFormFields = { ...formFields };
+    updatedFormFields[field] = event.target.value;
+    setFormFields(updatedFormFields);
+  };
 
-  }
+  // const handleBlur = (event, field) => {
+  //   const updatedIsDirty = {...isDirty}
+  //   updatedIsDirty[field] = true
+  //   setIsDirty(updatedIsDirty)
+  // }
+
+  // const markAllDirty = () => {
+  //   const updatedIsDirty = {
+  //     email: true,
+  //     password: true
+  //   }
+  //   setIsDirty(updatedIsDirty)
+  // }
+
+  // const validateForm = () => {
+  //   const updatedErrors = {...errors}
+  //   let isValid = true
+    
+  // }
+
 
   // login
   const _login = async () => {
-    
     try {
       const params = {
-        loginType : "admin",
-        email : formFields.email,
-        password : formFields.password
-      }
-      const response = await login(params) 
+        handle: formFields.input,
+        password: formFields.password,
+      };
+      const response = await login(params);
       console.log("response >>", response);
       console.log("token >>", response.token);
-      const user = decodeToken(response.token)
+      const user = decodeToken(response.token);
       console.log("user >>", user);
-      
+
       dispatch(addUserCredential({ token: response.token, user: user }));
       navigate("/dashboard");
-
-    } catch(error) {
-      errorHandler(error)
+    } catch (error) {
+      errorHandler(error);
     }
   };
 
@@ -64,9 +92,14 @@ const LoginPage = () => {
               <Form>
                 {/* username */}
                 <div className="form-group">
-                  <Label>Email</Label>
+                  <Label>Email/Username</Label>
                   <InputGroup>
-                    <Input placeholder="Enter your Email ID" value={formFields?.email} onChange={(e) => handleChange(e, "email")}/>
+                    <Input
+                      placeholder="Enter your Email ID"
+                      value={formFields?.email}
+                      onChange={(e) => handleChange(e, "input")}
+                      // onBlur={(e) => handleBlur(e, "email")}
+                    />
                     <InputGroupText>
                       <i className="far fa-envelope" />
                     </InputGroupText>
@@ -83,7 +116,10 @@ const LoginPage = () => {
                   <Label>Password</Label>
                   <InputGroup>
                     <Input
-                      placeholder="Enter your password" value={formFields?.password} onChange={(e) => handleChange(e, "password")}
+                      placeholder="Enter your password"
+                      value={formFields?.password}
+                      onChange={(e) => handleChange(e, "password")}
+                      // onBlur={(e) => handleBlur(e, "password")}
                       type={`${showPassword ? "text" : "password"}`}
                     />
                     <InputGroupText
@@ -118,42 +154,19 @@ const LoginPage = () => {
                   color="primary"
                   className="btn-submit"
                 >
-                  Login
+                  Log in
                 </Button>
 
                 {/*infoText*/}
-                <div className="text-center fs-14 mt-3 fw-medium">
-                  Don't have an account?
-                  <Link to="/sign-up" className="ms-1">
-                    Sign Up
-                  </Link>
-                </div>
               </Form>
 
-              <div className="or">
-                <span>Or Continue With</span>
-              </div>
-
-              <div className="socialLogin">
-                <Button className="googleBtn">
-                  <img
-                    src={require("../../assets/img/google.png")}
-                    alt="google"
-                  />
-                </Button>
-                <Button className="appleBtn">
-                  <img
-                    src={require("../../assets/img/apple.svg").default}
-                    alt="apple"
-                  />
-                </Button>
-              </div>
+              
             </div>
           </div>
           <div className="rightWrapper">
             {/* logo */}
             <img
-              src={require("../../assets/img/logo-white.png")}
+              src={require("../../assets/img/school management logo.jpg")}
               alt="Brand Logo"
               className="companyLogo"
             />
