@@ -1,6 +1,7 @@
 import {
   makeGetRequest,
   makePostRequest,
+  makePutRequest,
   // makePutRequest,
   // uploadFile,
   // makeDeleteRequest,
@@ -86,7 +87,20 @@ export const checkAvailability = (payload) => {
 
 export const getLoggedInUserDetail = () => {
   return new Promise((resolve, reject) => {
-    makeGetRequest(`${BASE_URL}/user`, true)
+    makeGetRequest(`${BASE_URL}/profile`, true)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+export const updateProfile = (payload) => {
+  return new Promise((resolve, reject) => {
+    makePutRequest(`${BASE_URL}/updateprofile`, true, payload)
       .then((res) => {
         resolve(res);
       })

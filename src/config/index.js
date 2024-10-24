@@ -1,6 +1,6 @@
-export const BASE_URL = process.env.REACT_APP_BACKEND_ENV === "live" ? "" : "https://c444-45-249-80-23.ngrok-free.app/api/v1";
+// export const BASE_URL = process.env.REACT_APP_BACKEND_ENV === "live" ? "" : "https://f344-223-236-99-125.ngrok-free.app/api/v1";
+export const BASE_URL = process.env.REACT_APP_BACKEND_ENV === "live" ? "" : "http://52.66.238.171:3000/api/v1";
 
-export const SOCKET_BASE_URL =
   process.env.REACT_APP_BACKEND_ENV === "live" ? "" : "";
 
 export const STRIPE_API_KEY =
