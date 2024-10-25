@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { Button, ListGroup, ListGroupItem, NavbarBrand } from "reactstrap";
+import { ListGroup, ListGroupItem, NavbarBrand } from "reactstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../../helper-methods";
-import {
-  STUDENT_ROUTES,
-  SUPER_ADMIN_ROUTES,
-  TEACHER_ROUTES,
-} from "../../config/helper-config";
-import { ADMIN_ROUTES } from "../../config/helper-config";
+import { ROUTES } from "../../config/routes-config";
 import { useSelector } from "react-redux";
-import useGetUserType from "../../hook/useGetUserType";
 const DashboardSidebar = ({ isShow, setIsShow }) => {
+  const { loginType, isSuperAdmin } = useSelector(
+    (state) => state?.userCredential?.user
+  );
+
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const routeKey = isSuperAdmin ? "superAdmin" : loginType;
+
   const _logout = () => {
     logout(navigate);
   };
-  const location = useLocation();
+
   // menu
   const _isActiveTab = (route) => {
     return location?.pathname === route ? true : false;
@@ -24,22 +25,6 @@ const DashboardSidebar = ({ isShow, setIsShow }) => {
   const _toggleSidebar = () => {
     setIsShow(!isShow);
   };
-  console.log(SUPER_ADMIN_ROUTES);
-  const menus = ["dashboard", "disputes"];
-
-  const [userType] = useGetUserType();
-  const [typeRoute, setTypeRoute] = useState([]);
-  useEffect(() => {
-    if (userType === "SuperAdmin") {
-      setTypeRoute(SUPER_ADMIN_ROUTES);
-    } else if (userType === "Admin") {
-      setTypeRoute(ADMIN_ROUTES);
-    } else if (userType === "Teacher") {
-      setTypeRoute(TEACHER_ROUTES);
-    } else {
-      setTypeRoute(STUDENT_ROUTES);
-    }
-  }, [userType]);
 
   return (
     <>
@@ -67,11 +52,11 @@ const DashboardSidebar = ({ isShow, setIsShow }) => {
           >
             <div className="sidebarMenu">
               <ListGroup>
-                {/* <ListGroupItem
-                  className={_isActiveTab("/payment") ? "active" : ""}
-                  onClick={() => navigate("/payment")}
+                <ListGroupItem
+                  className={_isActiveTab("/dashboard") ? "active" : ""}
+                  onClick={() => navigate("/dashboard")}
                 >
-                  {_isActiveTab("/payment") ? (
+                  {_isActiveTab("/dashboard") ? (
                     <img
                       src={require("../../assets/img/SidebarMenu/paymentActive.png")}
                       alt=""
@@ -82,11 +67,10 @@ const DashboardSidebar = ({ isShow, setIsShow }) => {
                       alt=""
                     />
                   )}
-                  <span>Admin</span>
-                 
-                </ListGroupItem> */}
+                  <span>Dashboard</span>
+                </ListGroupItem>
                 <ListGroup>
-                  {typeRoute?.map((curr) => (
+                  {ROUTES?.[routeKey]?.map((curr) => (
                     <ListGroupItem
                       key={curr.route} // Add a unique key
                       className={_isActiveTab(curr.route) ? "active" : ""}
