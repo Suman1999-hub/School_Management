@@ -11,6 +11,8 @@ import {
 } from "reactstrap";
 import CustomDateRangePicker from "../../components/CustomDateRangePicker";
 
+import AddTeacherModal from "../../components/modals/AddTeacherModal";
+
 function Teachers() {
   const [filters, setFilters] = useState({
     dateRange: {
@@ -27,6 +29,11 @@ function Teachers() {
       endDate,
     };
     setFilters(newFilters);
+  };
+
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const _toggleModal = (isOpenModal = false) => {
+    setIsOpenModal(isOpenModal);
   };
   return (
     <>
@@ -75,7 +82,18 @@ function Teachers() {
 
         {/* Personal Information */}
         <section>
-          <h6>Notice</h6>
+          <div className="innerHeader">
+            <h2>Teacher</h2>
+            <div>
+              <Button color="danger" className="ms-3 mx-5" onClick={() => null}>
+                Import CSV
+              </Button>
+
+              <Button color="primary" onClick={() => _toggleModal(true)}>
+                Add Teacher
+              </Button>
+            </div>
+          </div>
           <Card body>
             <Table responsive>
               <thead>
@@ -180,6 +198,7 @@ function Teachers() {
           </Card>
         </section>
       </TabPane>
+      <AddTeacherModal isOpen={isOpenModal} toggle={() => _toggleModal()} />
     </>
   );
 }
