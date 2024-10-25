@@ -299,7 +299,7 @@ const AddStudentModal = ({ isOpen, toggle }) => {
           <Button
             color="primary"
             className="ms-3"
-            onClick={() => _createSchoolAPiCall(payload)}
+            // onClick={() => _createSchoolAPiCall(payload)}
           >
             Add Student
           </Button>
