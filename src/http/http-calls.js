@@ -96,3 +96,31 @@ export const getLoggedInUserDetail = () => {
       });
   });
 };
+
+export const findAllSchool = () => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/schools`, true)
+      .then((res) => {
+        resolve(res);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+export const createSchool = (payload) => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/createschool`, true, payload)
+      .then((res) => {
+        resolve(res);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};

@@ -416,3 +416,11 @@ export const getAWSBucketName = (type, isPublic = false) => {
 };
 
 // end: upload file on s3 functions //
+
+//Formated Address for List os School
+
+export const getAddressFormate = (city, state, country, pinCode) => {
+  console.log(city, state, country, pinCode);
+  let address = city + ", " + state + ", " + country + ", " + pinCode;
+  return address;
+};

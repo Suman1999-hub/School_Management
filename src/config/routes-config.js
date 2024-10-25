@@ -1,0 +1,53 @@
+import MyProfile from "../pages/protected/MyProfile";
+import Notice from "../pages/protected/Notice";
+import Payment from "../pages/protected/Payment";
+import ViewAllSchool from "../pages/protected/ViewAllSchool";
+
+const SUPER_ADMIN_ROUTES = [
+  { text: "School", route: "/school", element: <ViewAllSchool /> },
+  { text: "Admin", route: "/admin" },
+  { text: "Settings", route: "/settings" },
+  { text: "Profile", route: "/profile", element: <MyProfile /> },
+];
+
+const ADMIN_ROUTES = [
+  { text: "Techer", route: "/teacher" },
+  { text: "Schedule", route: "/schedule" },
+  { text: "Notice", route: "/notice" },
+  { text: "Approval", route: "/approval" },
+  { text: "Attendance", route: "/attendance" },
+  { text: "Report", route: "/report" },
+  { text: "Student", route: "/student" },
+  { text: "Settings", route: "/settings" },
+  { text: "Profile", route: "/profile", element: <MyProfile /> },
+];
+
+const TEACHER_ROUTES = [
+  { text: "Time Log", route: "/timelog" },
+  { text: "Schedule", route: "/schedule" },
+  { text: "Notice", route: "/notice" },
+  { text: "Apply Leave", route: "/leave" },
+  { text: "Attendance", route: "/attendance" },
+  { text: "Report", route: "/report" },
+  { text: "Student", route: "/student" },
+  { text: "Salary", route: "/salary" },
+  { text: "Settings", route: "/settings" },
+  { text: "Profile", route: "/profile", element: <MyProfile /> },
+];
+
+const STUDENT_ROUTES = [
+  { text: "Attendance", route: "/attendance" },
+  { text: "Schedule", route: "/schedule" },
+  { text: "Notice", route: "/notice", element: <Notice /> },
+  { text: "Payment", route: "/payment", element: <Payment /> },
+  { text: "Report", route: "/report" },
+  { text: "Settings", route: "/settings" },
+  { text: "Profile", route: "/profile", element: <MyProfile /> },
+];
+
+export const ROUTES = {
+  superAdmin: SUPER_ADMIN_ROUTES,
+  admin: ADMIN_ROUTES,
+  student: STUDENT_ROUTES,
+  teacher: TEACHER_ROUTES,
+};
