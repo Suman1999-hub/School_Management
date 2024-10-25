@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "reactstrap";
 
 const DashboardHeader = ({ isShow, setIsShow }) => {
   const navigate = useNavigate();
   const location = useLocation();
-
+  const loginUser = useSelector((state) => state.userCredential.user);
   const _innerHeader = () => {
     if (location?.pathname === "/dashboard") {
       return (
@@ -94,7 +95,9 @@ const DashboardHeader = ({ isShow, setIsShow }) => {
                 alt="Profile"
               />
             </div>
-            <div className="userName">John Doe</div>
+            <div className="userName">
+              {loginUser.firstName} {loginUser.lastName}
+            </div>
           </div>
         </div>
       </div>

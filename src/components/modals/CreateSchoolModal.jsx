@@ -80,7 +80,7 @@ const CreateSchoolModal = ({ isOpen, toggle }) => {
       toggle={() => _closeModal()}
       scrollable
       centered
-      style={{ maxWidth: "600px" }}
+      size="xl"
     >
       <ModalHeader>Create School</ModalHeader>
       <ModalBody>

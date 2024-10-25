@@ -48,7 +48,11 @@ const DashboardSidebar = ({ isShow, setIsShow }) => {
 
           <div
             className="d-flex flex-column justify-content-between px-3"
-            style={{ flex: "1" }}
+            style={{
+              flex: "1",
+              overflowY: "auto",
+              maxHeight: "calc(100vh - 200px)",
+            }}
           >
             <div className="sidebarMenu">
               <ListGroup>
