@@ -12,6 +12,7 @@ import {
 import CustomDateRangePicker from "../../components/CustomDateRangePicker";
 
 import AddTeacherModal from "../../components/modals/AddTeacherModal";
+import PaginatedItems from "../../components/PaginatedItems";
 
 function Teachers() {
   const [filters, setFilters] = useState({
@@ -191,10 +192,7 @@ function Teachers() {
               </tbody>
             </Table>
 
-            {/* See More */}
-            <Button color="link" className="h-auto mb-2">
-              See More <i className="fa fa-chevron-down"></i>
-            </Button>
+            <PaginatedItems itemsPerPage={4} />
           </Card>
         </section>
       </TabPane>

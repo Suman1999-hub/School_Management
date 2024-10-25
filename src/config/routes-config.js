@@ -4,6 +4,7 @@ import Payment from "../pages/protected/Payment";
 import Teachers from "../pages/protected/Teachers";
 import ViewAllSchool from "../pages/protected/ViewAllSchool";
 import AllStudents from "../pages/protected/AllStudents";
+import Attendance from "../pages/protected/Attendance";
 
 const SUPER_ADMIN_ROUTES = [
   { text: "School", route: "/school", element: <ViewAllSchool /> },
@@ -17,7 +18,7 @@ const ADMIN_ROUTES = [
   { text: "Schedule", route: "/schedule" },
   { text: "Notice", route: "/notice", element: <Notice /> },
   { text: "Approval", route: "/approval" },
-  { text: "Attendance", route: "/attendance" },
+  { text: "Attendance", route: "/attendance", element: <Attendance /> },
   { text: "Report", route: "/report" },
   { text: "Student", route: "/student", element: <AllStudents /> },
   { text: "Settings", route: "/settings" },
