@@ -123,13 +123,25 @@ export const formatPhoneNumber = (phone) => {
   }
 };
 
+// export const formatDate = (date) => {
+//   if (!date) return "";
+
+//   if (moment().isSame(date, "year")) {
+//     return moment(new Date(date)).format("MMM DD");
+//   } else {
+//     return moment(new Date(date)).format("YYYY-MM-DD");
+//   }
+// };
+
 export const formatDate = (date) => {
   if (!date) return "";
 
-  if (moment().isSame(date, "year")) {
-    return moment(new Date(date)).format("MMM DD");
+  const momentDate = moment.utc(date);
+
+  if (moment().isSame(momentDate, "year")) {
+    return momentDate.format("MMM DD");
   } else {
-    return moment(new Date(date)).format("MMM DD, YYYY");
+    return momentDate.format("YYYY-MM-DD");
   }
 };
 

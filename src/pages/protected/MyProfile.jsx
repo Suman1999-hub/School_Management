@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -10,14 +10,102 @@ import {
   Input,
   InputGroupText,
 } from "reactstrap";
+import { errorHandler, formatDate } from "../../helper-methods";
+import { getLoggedInUserDetail, updateProfile } from "../../http/http-calls";
+import { useSelector } from "react-redux";
+
+const states = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+];
+
+const AllGender = ["Male", "Female", "Transgender"];
+const Roles = ["admin", "teacher", "student"];
 
 const MyProfile = () => {
   const [showPassword, setShowPassword] = useState(false);
-
   const [activeTab, setActiveTab] = useState("1");
+  const [userDetails, setUserDetails] = useState({});
+  const [DOB, setDOB] = useState(null);
+
   const _toggleTab = (newTab = "1") => {
     if (activeTab !== newTab) setActiveTab(newTab);
   };
+
+  console.log("DOB>>", DOB);
+  console.log("userDetails>>", userDetails);
+
+  // const userID = useSelector((state) => {
+  //   return state.userCredential.user.id;
+  // });
+  // // console.log("userID>>>", userID);
+
+  const fetchData = async () => {
+    try {
+      const response = await getLoggedInUserDetail();
+      // console.log("response>>", response.user);
+      setUserDetails(response.user);
+    } catch (error) {
+      errorHandler(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (userDetails) {
+      const formattedDOB = formatDate(userDetails.dob);
+      setDOB(formattedDOB);
+    }
+  }, [userDetails.dob]);
+
+  const handleChange = (event, field) => {
+    if (field === "dob") {
+      setDOB(event.target.value);
+    }
+    const updatedNewDetails = { ...userDetails };
+    updatedNewDetails[field] = event.target.value;
+    setUserDetails(updatedNewDetails);
+  };
+
+  const handleSave = async () => {
+    try {
+      const response = await updateProfile(userDetails);
+      // console.log("response>>", response.user);
+      setUserDetails(response.user);
+      alert("successfully updated")
+    } catch (error) {
+      errorHandler(error);
+    }
+  }
 
   return (
     <>
@@ -31,8 +119,8 @@ const MyProfile = () => {
                   alt=""
                 />
               </div>
-              <CardTitle>John Doe</CardTitle>
-              <span>jdoe@gmail.com</span>
+              <CardTitle>{userDetails.fullname}</CardTitle>
+              <span>{userDetails.email}</span>
             </Card>
 
             <hr />
@@ -42,7 +130,7 @@ const MyProfile = () => {
               <h6>My Docs</h6>
               {/* Photo */}
               <div className="form-group">
-                <Label>Photo</Label>
+                <Label>Change Profile Photo</Label>
                 <div className="customFileUpload">
                   <Input type="file" id="customFileUpload" />
                   {true ? (
@@ -52,7 +140,7 @@ const MyProfile = () => {
                         alt=""
                       />
                       <div className="customUploadText">
-                        <h6>Upload Document</h6>
+                        <h6>Upload File</h6>
                         <span>File size must be less than 5mb</span>
                       </div>
                     </Label>
@@ -74,7 +162,7 @@ const MyProfile = () => {
               </div>
 
               {/* Address Proof */}
-              <div className="form-group mb-0">
+              {/* <div className="form-group mb-0">
                 <Label>Address Proof</Label>
                 <div className="customFileUpload">
                   <Input type="file" id="customFileUpload" />
@@ -104,7 +192,7 @@ const MyProfile = () => {
                     </Label>
                   )}
                 </div>
-              </div>
+              </div> */}
             </Card>
           </Col>
           <Col xl="8">
@@ -116,43 +204,95 @@ const MyProfile = () => {
                   <Col md="6" lg="4">
                     {/* name */}
                     <div className="form-group">
-                      <Label>Name</Label>
-                      <Input placeholder="Enter" />
+                      <Label>First Name</Label>
+                      <Input
+                        placeholder="Enter your name"
+                        value={userDetails.firstName}
+                        onChange={(e) => handleChange(e, "firstName")}
+                      />
+                    </div>
+                  </Col>
+                  <Col md="6" lg="4">
+                    {/* name */}
+                    <div className="form-group">
+                      <Label>Last Name</Label>
+                      <Input
+                        placeholder="Enter your name"
+                        value={userDetails.lastName}
+                        onChange={(e) => handleChange(e, "lastName")}
+                      />
                     </div>
                   </Col>
                   <Col md="6" lg="4">
                     {/* Email */}
                     <div className="form-group">
                       <Label>Email</Label>
-                      <Input placeholder="Enter" />
+                      <Input
+                        readOnly={userDetails.loginType === "student"}
+                        placeholder="Enter your email"
+                        value={userDetails.email}
+                        onChange={(e) => handleChange(e, "email")}
+                      />
+                    </div>
+                  </Col>
+                  <Col md="6" lg="4">
+                    {/* phone number */}
+                    <div className="form-group">
+                      <Label>Gender</Label>
+                      {userDetails.loginType === "student" ? (<Input readOnly value={userDetails.gender}/>) :(
+                        <Input
+                          type="select"
+                          value={userDetails.gender}
+                          onChange={(e) => handleChange(e, "gender")}
+                          readOnly={userDetails.loginType === "student"}
+                        >
+                          <option value="">Select</option>
+                          {AllGender.map((gender, index) => (
+                            <option key={index} value={gender}>
+                              {gender}
+                            </option>
+                          ))}
+                        </Input>
+                      )}
                     </div>
                   </Col>
                   <Col md="6" lg="4">
                     {/* phone number */}
                     <div className="form-group">
                       <Label>Phone Number</Label>
-                      <Input placeholder="Enter" />
+                      <Input
+                        readOnly={userDetails.loginType === "student"}
+                        placeholder="Enter your Phone Number"
+                        value={userDetails.phone}
+                        onChange={(e) => handleChange(e, "phone")}
+                      />
                     </div>
                   </Col>
                   <Col md="6" lg="4">
                     {/* Year of Birth */}
                     <div className="form-group">
-                      <Label>Year of Birth</Label>
-                      <Input type="select">
-                        <option>Select</option>
+                      <Label>Date of Birth</Label>
+                      <Input
+                        readOnly={userDetails.loginType === "student"}
+                        type="date"
+                        value={DOB}
+                        onChange={(e) => handleChange(e, "dob")}
+                      >
                       </Input>
                     </div>
                   </Col>
                   <Col md="6" lg="4">
                     {/* Last 4 SSN */}
                     <div className="form-group">
-                      <Label>Last 4 SSN</Label>
+                      <Label>Username</Label>
                       <InputGroup>
                         <Input
-                          placeholder="Enter"
-                          type={`${showPassword ? "text" : "password"}`}
+                          readOnly
+                          placeholder="Enter your Username"
+                          type="text"
+                          value={userDetails.username}
                         />
-                        <InputGroupText
+                        {/* <InputGroupText
                           className="cursorPointer"
                           onClick={() => {
                             setShowPassword(!showPassword);
@@ -163,8 +303,32 @@ const MyProfile = () => {
                               showPassword ? "fa-eye" : "fa-eye-slash"
                             }`}
                           />
-                        </InputGroupText>
+                        </InputGroupText> */}
                       </InputGroup>
+                    </div>
+                  </Col>
+
+                  <Col md="6" lg="4">
+                    {/* Login Type */}
+                    <div className="form-group">
+                      <Label>Role</Label>
+                      {userDetails.loginType ==="student" ? (<Input readOnly value={userDetails.loginType}/>) : (
+                        <Input
+                          type="select"
+                          value={userDetails.loginType}
+                          onChange={(e) => handleChange(e, "loginType")}
+                          // readOnly={userDetails.loginType === "student"}
+                        >
+                          <option disabled value="">
+                            Select
+                          </option>
+                          {Roles.map((role, index) => (
+                            <option key={index} value={role}>
+                              {role}
+                            </option>
+                          ))}
+                        </Input>
+                      )}
                     </div>
                   </Col>
                 </Row>
@@ -172,7 +336,7 @@ const MyProfile = () => {
                 {/* Current Address */}
                 <div className="form-group">
                   <Label>Current Address</Label>
-                  <Input type="textarea" placeholder="Enter" />
+                  <Input type="textarea" placeholder="Enter your Address" />
                 </div>
 
                 <Row className="gy-3 gy-xl-0">
@@ -180,25 +344,30 @@ const MyProfile = () => {
                     {/* City */}
                     <div className="form-group mb-0">
                       <Label>City</Label>
-                      <Input type="select">
-                        <option>Select</option>
-                      </Input>
+                      <Input placeholder="Enter your City" type="text"></Input>
                     </div>
                   </Col>
+
                   <Col lg="6" xl="4">
                     {/* State */}
                     <div className="form-group mb-0">
                       <Label>State</Label>
                       <Input type="select">
                         <option>Select</option>
+                        {states.map((state, index) => (
+                          <option key={index} value={state}>
+                            {state}
+                          </option>
+                        ))}
                       </Input>
                     </div>
                   </Col>
+
                   <Col lg="6" xl="4">
                     {/* Zip */}
                     <div className="form-group mb-0">
                       <Label>Zip</Label>
-                      <Input placeholder="Enter" />
+                      <Input placeholder="Enter your Zip Code" />
                     </div>
                   </Col>
                 </Row>
@@ -209,8 +378,8 @@ const MyProfile = () => {
 
         {/* submit button */}
         <div className="d-flex justify-content-center mt-5">
-          <Button color="primary" className="btn-submit">
-            Save
+          <Button color="primary" className="btn-submit" onClick={handleSave}>
+            Save Changes
           </Button>
         </div>
       </section>
