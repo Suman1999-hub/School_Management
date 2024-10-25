@@ -3,6 +3,7 @@ import Notice from "../pages/protected/Notice";
 import Payment from "../pages/protected/Payment";
 import Teachers from "../pages/protected/Teachers";
 import ViewAllSchool from "../pages/protected/ViewAllSchool";
+import AllStudents from "../pages/protected/AllStudents";
 
 const SUPER_ADMIN_ROUTES = [
   { text: "School", route: "/school", element: <ViewAllSchool /> },
@@ -18,7 +19,7 @@ const ADMIN_ROUTES = [
   { text: "Approval", route: "/approval" },
   { text: "Attendance", route: "/attendance" },
   { text: "Report", route: "/report" },
-  { text: "Student", route: "/student" },
+  { text: "Student", route: "/student", element: <AllStudents /> },
   { text: "Settings", route: "/settings" },
   { text: "Profile", route: "/profile", element: <MyProfile /> },
 ];
@@ -30,7 +31,7 @@ const TEACHER_ROUTES = [
   { text: "Apply Leave", route: "/leave" },
   { text: "Attendance", route: "/attendance" },
   { text: "Report", route: "/report" },
-  { text: "Student", route: "/student" },
+  { text: "Student", route: "/student", element: <AllStudents /> },
   { text: "Salary", route: "/salary" },
   { text: "Settings", route: "/settings" },
   { text: "Profile", route: "/profile", element: <MyProfile /> },
