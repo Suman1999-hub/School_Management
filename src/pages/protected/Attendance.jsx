@@ -19,7 +19,7 @@ function Attendance() {
       endDate: null,
     },
   });
-  const [state, setState] = useState("Present");
+  const [state, setState] = useState("Absent");
   const _onDatesChange = (startDate = null, endDate = null) => {
     const newFilters = { ...filters };
 
@@ -141,30 +141,31 @@ function Attendance() {
                           width: "50px",
                           height: "28px",
                           position: "relative",
-                          accentColor: state ? "#4CAF50" : "#FF6347",
+                          accentColor: state ? "#0d6efd" : "#dd9aed",
                           borderRadius: "50px",
-                          boxShadow: "0 0 5px rgba(0, 0, 0, 0.2)",
+                          boxShadow:
+                            "rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px",
                           transition: "all 0.3s ease",
-                          backgroundColor: state ? "#4CAF50" : "#FF6347",
+                          backgroundColor: state ? "#0d6efd" : "#dd9aed",
                         }}
                       />
-                      <Label
+                      {/* <Label
                         check
                         style={{
                           paddingLeft: "15px",
                           fontWeight: "bold",
                           fontSize: "1rem",
-                          color: state ? "#4CAF50" : "#FF6347",
+                          color: state ? "#0d6efd" : "#797b85",
                           transition: "color 0.3s ease",
                         }}
                       >
-                        {state ? "Present" : "Absent"}
-                      </Label>
+                        {state ? "Present" : " Absent"}
+                      </Label> */}
                     </FormGroup>
                   </td>
                 </tr>
                 <tr>
-                  <td>2</td>
+                  <td>1</td>
                   <td>Jon roy</td>
                   <td>Male</td>
                   <td>8777667698</td>
@@ -217,30 +218,31 @@ function Attendance() {
                           width: "50px",
                           height: "28px",
                           position: "relative",
-                          accentColor: state ? "#4CAF50" : "#FF6347",
+                          accentColor: state ? "#0d6efd" : "#dd9aed",
                           borderRadius: "50px",
-                          boxShadow: "0 0 5px rgba(0, 0, 0, 0.2)",
+                          boxShadow:
+                            "rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px",
                           transition: "all 0.3s ease",
-                          backgroundColor: state ? "#4CAF50" : "#FF6347",
+                          backgroundColor: state ? "#0d6efd" : "#dd9aed",
                         }}
                       />
-                      <Label
+                      {/* <Label
                         check
                         style={{
                           paddingLeft: "15px",
                           fontWeight: "bold",
                           fontSize: "1rem",
-                          color: state ? "#4CAF50" : "#FF6347",
+                          color: state ? "#0d6efd" : "#797b85",
                           transition: "color 0.3s ease",
                         }}
                       >
-                        {state ? "Present" : "Absent"}
-                      </Label>
+                        {state ? "Present" : " Absent"}
+                      </Label> */}
                     </FormGroup>
                   </td>
                 </tr>
                 <tr>
-                  <td>3</td>
+                  <td>1</td>
                   <td>Jon roy</td>
                   <td>Male</td>
                   <td>8777667698</td>
@@ -293,30 +295,31 @@ function Attendance() {
                           width: "50px",
                           height: "28px",
                           position: "relative",
-                          accentColor: state ? "#4CAF50" : "#FF6347",
+                          accentColor: state ? "#0d6efd" : "#dd9aed",
                           borderRadius: "50px",
-                          boxShadow: "0 0 5px rgba(0, 0, 0, 0.2)",
+                          boxShadow:
+                            "rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px",
                           transition: "all 0.3s ease",
-                          backgroundColor: state ? "#4CAF50" : "#FF6347",
+                          backgroundColor: state ? "#0d6efd" : "#dd9aed",
                         }}
                       />
-                      <Label
+                      {/* <Label
                         check
                         style={{
                           paddingLeft: "15px",
                           fontWeight: "bold",
                           fontSize: "1rem",
-                          color: state ? "#4CAF50" : "#FF6347",
+                          color: state ? "#0d6efd" : "#797b85",
                           transition: "color 0.3s ease",
                         }}
                       >
-                        {state ? "Present" : "Absent"}
-                      </Label>
+                        {state ? "Present" : " Absent"}
+                      </Label> */}
                     </FormGroup>
                   </td>
                 </tr>
                 <tr>
-                  <td>4</td>
+                  <td>1</td>
                   <td>Jon roy</td>
                   <td>Male</td>
                   <td>8777667698</td>
@@ -369,30 +372,31 @@ function Attendance() {
                           width: "50px",
                           height: "28px",
                           position: "relative",
-                          accentColor: state ? "#4CAF50" : "#FF6347",
+                          accentColor: state ? "#0d6efd" : "#dd9aed",
                           borderRadius: "50px",
-                          boxShadow: "0 0 5px rgba(0, 0, 0, 0.2)",
+                          boxShadow:
+                            "rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px",
                           transition: "all 0.3s ease",
-                          backgroundColor: state ? "#4CAF50" : "#FF6347",
+                          backgroundColor: state ? "#0d6efd" : "#dd9aed",
                         }}
                       />
-                      <Label
+                      {/* <Label
                         check
                         style={{
                           paddingLeft: "15px",
                           fontWeight: "bold",
                           fontSize: "1rem",
-                          color: state ? "#4CAF50" : "#FF6347",
+                          color: state ? "#0d6efd" : "#797b85",
                           transition: "color 0.3s ease",
                         }}
                       >
-                        {state ? "Present" : "Absent"}
-                      </Label>
+                        {state ? "Present" : " Absent"}
+                      </Label> */}
                     </FormGroup>
                   </td>
                 </tr>
                 <tr>
-                  <td>5</td>
+                  <td>1</td>
                   <td>Jon roy</td>
                   <td>Male</td>
                   <td>8777667698</td>
@@ -445,30 +449,31 @@ function Attendance() {
                           width: "50px",
                           height: "28px",
                           position: "relative",
-                          accentColor: state ? "#4CAF50" : "#FF6347",
+                          accentColor: state ? "#0d6efd" : "#dd9aed",
                           borderRadius: "50px",
-                          boxShadow: "0 0 5px rgba(0, 0, 0, 0.2)",
+                          boxShadow:
+                            "rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px",
                           transition: "all 0.3s ease",
-                          backgroundColor: state ? "#4CAF50" : "#FF6347",
+                          backgroundColor: state ? "#0d6efd" : "#dd9aed",
                         }}
                       />
-                      <Label
+                      {/* <Label
                         check
                         style={{
                           paddingLeft: "15px",
                           fontWeight: "bold",
                           fontSize: "1rem",
-                          color: state ? "#4CAF50" : "#FF6347",
+                          color: state ? "#0d6efd" : "#797b85",
                           transition: "color 0.3s ease",
                         }}
                       >
-                        {state ? "Present" : "Absent"}
-                      </Label>
+                        {state ? "Present" : " Absent"}
+                      </Label> */}
                     </FormGroup>
                   </td>
                 </tr>
                 <tr>
-                  <td>6</td>
+                  <td>1</td>
                   <td>Jon roy</td>
                   <td>Male</td>
                   <td>8777667698</td>
@@ -521,101 +526,26 @@ function Attendance() {
                           width: "50px",
                           height: "28px",
                           position: "relative",
-                          accentColor: state ? "#4CAF50" : "#FF6347",
+                          accentColor: state ? "#0d6efd" : "#dd9aed",
                           borderRadius: "50px",
-                          boxShadow: "0 0 5px rgba(0, 0, 0, 0.2)",
+                          boxShadow:
+                            "rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px",
                           transition: "all 0.3s ease",
-                          backgroundColor: state ? "#4CAF50" : "#FF6347",
+                          backgroundColor: state ? "#0d6efd" : "#dd9aed",
                         }}
                       />
-                      <Label
+                      {/* <Label
                         check
                         style={{
                           paddingLeft: "15px",
                           fontWeight: "bold",
                           fontSize: "1rem",
-                          color: state ? "#4CAF50" : "#FF6347",
+                          color: state ? "#0d6efd" : "#797b85",
                           transition: "color 0.3s ease",
                         }}
                       >
-                        {state ? "Present" : "Absent"}
-                      </Label>
-                    </FormGroup>
-                  </td>
-                </tr>
-                <tr>
-                  <td>7</td>
-                  <td>Jon roy</td>
-                  <td>Male</td>
-                  <td>8777667698</td>
-                  <td>
-                    <div
-                      style={{
-                        display: "flex", // Arrange radios horizontally
-                        gap: "10px", // Spacing between radios
-                      }}
-                    >
-                      <img
-                        src={require(`../../assets/img/radio.png`)}
-                        alt=""
-                        style={{ maxWidth: "30px", maxHeight: "30px" }}
-                      />
-                      <img
-                        src={require(`../../assets/img/radio.png`)}
-                        alt=""
-                        style={{ maxWidth: "30px", maxHeight: "30px" }}
-                      />
-                      <img
-                        src={require(`../../assets/img/radio.png`)}
-                        alt=""
-                        style={{ maxWidth: "30px", maxHeight: "30px" }}
-                      />
-                      <img
-                        src={require(`../../assets/img/radio-absent.png`)}
-                        alt=""
-                        style={{ maxWidth: "30px", maxHeight: "30px" }}
-                      />
-                      <img
-                        src={require(`../../assets/img/radio.png`)}
-                        alt=""
-                        style={{ maxWidth: "30px", maxHeight: "30px" }}
-                      />
-                      <img
-                        src={require(`../../assets/img/radio.png`)}
-                        alt=""
-                        style={{ maxWidth: "30px", maxHeight: "30px" }}
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <FormGroup switch>
-                      <Input
-                        type="switch"
-                        checked={state}
-                        onClick={() => setState(!state)}
-                        style={{
-                          width: "50px",
-                          height: "28px",
-                          position: "relative",
-                          accentColor: state ? "#4CAF50" : "#FF6347",
-                          borderRadius: "50px",
-                          boxShadow: "0 0 5px rgba(0, 0, 0, 0.2)",
-                          transition: "all 0.3s ease",
-                          backgroundColor: state ? "#4CAF50" : "#FF6347",
-                        }}
-                      />
-                      <Label
-                        check
-                        style={{
-                          paddingLeft: "15px",
-                          fontWeight: "bold",
-                          fontSize: "1rem",
-                          color: state ? "#4CAF50" : "#FF6347",
-                          transition: "color 0.3s ease",
-                        }}
-                      >
-                        {state ? "Present" : "Absent"}
-                      </Label>
+                        {state ? "Present" : " Absent"}
+                      </Label> */}
                     </FormGroup>
                   </td>
                 </tr>
