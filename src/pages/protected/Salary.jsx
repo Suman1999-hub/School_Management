@@ -13,8 +13,7 @@ import CustomDateRangePicker from "../../components/CustomDateRangePicker";
 
 import AddTeacherModal from "../../components/modals/AddTeacherModal";
 import PaginatedItems from "../../components/PaginatedItems";
-
-function Teachers() {
+function Salary() {
   const [filters, setFilters] = useState({
     dateRange: {
       startDate: null,
@@ -32,10 +31,6 @@ function Teachers() {
     setFilters(newFilters);
   };
 
-  const [isOpenModal, setIsOpenModal] = useState(false);
-  const _toggleModal = (isOpenModal = false) => {
-    setIsOpenModal(isOpenModal);
-  };
   return (
     <>
       <TabPane tabId="1">
@@ -84,22 +79,22 @@ function Teachers() {
         {/* Personal Information */}
         <section>
           <div className="innerHeader">
-            <h2>Teacher</h2>
+            <h2>Salary</h2>
             <div>
-              <Button color="danger" className="ms-3 mx-5" onClick={() => null}>
-                Import CSV
-              </Button>
-
-              <Button color="primary" onClick={() => _toggleModal(true)}>
-                Add Teacher
-              </Button>
+              {/* <Button onClick={() => null}> */}
+              <img
+                src={require("../../assets/img/Payslip_downloadzip.png")}
+                alt=""
+                width="50px"
+              />
+              {/* </Button> */}
             </div>
           </div>
           <Card body>
             <Table responsive>
               <thead>
                 <tr>
-                  <th>Name</th>
+                  <th></th>
                   <th>Phone Number</th>
                   <th>Address</th>
                   <th>Gender</th>
@@ -125,70 +120,6 @@ function Teachers() {
                     </div>
                   </td>
                 </tr>
-
-                <tr>
-                  <td>Rum roy</td>
-                  <td>8777667698</td>
-                  <td>Kolkata, West Bengal, 700091</td>
-                  <td>Male</td>
-                  <td>Bengali</td>
-                  <td>Jul 12. 2023</td>
-                  <td>
-                    <div className="action">
-                      <Button color="link">
-                        <i className="fa fa-eye"></i>
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>Jo roy</td>
-                  <td>8777667698</td>
-                  <td>Kolkata, West Bengal, 700091</td>
-                  <td>Male</td>
-                  <td>Bengali</td>
-                  <td>Jul 12. 2023</td>
-                  <td>
-                    <div className="action">
-                      <Button color="link">
-                        <i className="fa fa-eye"></i>
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>Jyoti sen</td>
-                  <td>8777667698</td>
-                  <td>Kolkata, West Bengal, 700091</td>
-                  <td>Female</td>
-                  <td>Bengali</td>
-                  <td>Jul 12. 2023</td>
-                  <td>
-                    <div className="action">
-                      <Button color="link">
-                        <i className="fa fa-eye"></i>
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>Raj roy</td>
-                  <td>8777667698</td>
-                  <td>Kolkata, West Bengal, 700091</td>
-                  <td>Male</td>
-                  <td>Bengali</td>
-                  <td>Jul 12. 2023</td>
-                  <td>
-                    <div className="action">
-                      <Button color="link">
-                        <i className="fa fa-eye"></i>
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
               </tbody>
             </Table>
 
@@ -196,9 +127,8 @@ function Teachers() {
           </Card>
         </section>
       </TabPane>
-      <AddTeacherModal isOpen={isOpenModal} toggle={() => _toggleModal()} />
     </>
   );
 }
 
-export default Teachers;
+export default Salary;

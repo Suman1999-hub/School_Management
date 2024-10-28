@@ -46,7 +46,7 @@ const AddTeacherModal = ({ isOpen, toggle }) => {
         toggle={() => _closeModal()}
         scrollable
         centered
-        size="xl"
+        size="lg"
       >
         <ModalHeader>Add Teacher</ModalHeader>
         <ModalBody>
