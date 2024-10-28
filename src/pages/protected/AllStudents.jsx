@@ -24,7 +24,15 @@ function AllStudents() {
       endDate: null,
     },
   });
+  const _onDatesChange = (startDate = null, endDate = null) => {
+    const newFilters = { ...filters };
 
+    newFilters["dateRange"] = {
+      startDate,
+      endDate,
+    };
+    setFilters(newFilters);
+  };
   //   const fetchAllSchoolData = async () => {
   //     try {
   //       const schoolData = await findAllSchool();
@@ -183,7 +191,7 @@ function AllStudents() {
                 <td>yashagarwal@gmail.com</td>
                 <td>89%</td>
               </tr>
-              
+
               <tr>
                 <td>huy234</td>
                 <td>12</td>

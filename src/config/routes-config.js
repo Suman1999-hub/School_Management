@@ -4,10 +4,10 @@ import Payment from "../pages/protected/Payment";
 import Teachers from "../pages/protected/Teachers";
 import ViewAllSchool from "../pages/protected/ViewAllSchool";
 import AllStudents from "../pages/protected/AllStudents";
-import TeacherSchedule from "../pages/protected/TeacherSchedule";
-import StudentSchedule from "../pages/protected/StudentSchedule";
 import Attendance from "../pages/protected/Attendance";
 import Salary from "../pages/protected/Salary";
+import TeacherSchedule from "../pages/protected/TeacherSchedule";
+import StudentSchedule from "../pages/protected/StudentSchedule";
 
 const SUPER_ADMIN_ROUTES = [
   { text: "School", route: "/school", element: <ViewAllSchool /> },

@@ -1,7 +1,4 @@
-// export const BASE_URL =
-//   process.env.REACT_APP_BACKEND_ENV === "live"
-//     ? ""
-//     : "https://f344-223-236-99-125.ngrok-free.app/api/v1";
+// export const BASE_URL = process.env.REACT_APP_BACKEND_ENV === "live" ? "" : "https://f344-223-236-99-125.ngrok-free.app/api/v1";
 export const BASE_URL =
   process.env.REACT_APP_BACKEND_ENV === "live"
     ? "https://d4eb-115-96-143-130.ngrok-free.app/api/v1"
