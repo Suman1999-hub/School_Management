@@ -86,7 +86,7 @@ function Teachers() {
           <div className="innerHeader">
             <h2>Teacher</h2>
             <div>
-              <Button color="danger" className="ms-3 mx-5" onClick={() => null}>
+              <Button color="primary" outline className="ms-3 mx-5" onClick={() => null}>
                 Import CSV
               </Button>
 

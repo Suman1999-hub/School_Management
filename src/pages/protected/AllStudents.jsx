@@ -15,6 +15,7 @@ import { findAllSchool } from "../../http/http-calls";
 import { getAddressFormate } from "../../helper-methods";
 import AddStudentModal from "../../components/modals/AddSudentModal";
 import CustomDateRangePicker from "../../components/CustomDateRangePicker";
+import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 
 function AllStudents() {
   const [allStudents, setAllStudents] = useState([]);
@@ -157,113 +158,175 @@ function AllStudents() {
           <Table responsive>
             <thead>
               <tr>
-                <th>Username</th>
                 <th>Roll no</th>
                 <th>Name</th>
                 <th>gender</th>
                 <th>Class</th>
                 <th>Section</th>
-                <th>DOB</th>
-                <th>School</th>
-                <th>Joining Date</th>
                 <th>Address</th>
                 <th>Mobile no.</th>
-                <th>email</th>
                 <th>Attendence(%)</th>
+                <th>View Details</th>
               </tr>
             </thead>
 
             <tbody>
               <tr>
-                <td>abc123</td>
                 <td>1</td>
                 <td>Yash Agarwal</td>
                 <td>Male</td>
                 <td>VI</td>
-                <td>B</td>
-                <td>20/06/2001</td>
-                <td>DAV international School</td>
-                <td>12/08/2014</td>
+                <td>A</td>
                 <td>mg road,saket,Delhi, 407614</td>
                 <td>9004569812</td>
-                <td>yashagarwal@gmail.com</td>
-                <td>89%</td>
+                <td>
+                <CircularProgressbar
+                  value="89"
+                  text="89%"
+                  className="success"
+                  styles={buildStyles({
+                    strokeLinecap: "round",
+                  })}
+                />
+                </td>
+                <td>
+                    <div className="action">
+                      <Button color="link">
+                        <i className="fa fa-eye"></i>
+                      </Button>
+                    </div>
+                  </td>
               </tr>
 
               <tr>
-                <td>huy234</td>
                 <td>12</td>
                 <td>Aveek mehotra</td>
                 <td>Male</td>
                 <td>VII</td>
                 <td>B</td>
-                <td>31/03/2020</td>
-                <td>DAV international School</td>
-                <td>14/08/2004</td>
                 <td>mg road,saket,Delhi, 407614</td>
                 <td>9004569812</td>
-                <td>yashagarwal@gmail.com</td>
-                <td>79%</td>
+                <td>
+                <CircularProgressbar
+                  value="79"
+                  text="79%"
+                  className="success"
+                  styles={buildStyles({
+                    strokeLinecap: "round",
+                  })}
+                />
+                </td>
+                <td>
+                    <div className="action">
+                      <Button color="link">
+                        <i className="fa fa-eye"></i>
+                      </Button>
+                    </div>
+                  </td>
               </tr>
               <tr>
-                <td>qwe234</td>
                 <td>19</td>
                 <td>Priti Agarwal</td>
                 <td>Female</td>
                 <td>VI</td>
-                <td>A</td>
-                <td>20/06/2001</td>
-                <td>DAV international School</td>
-                <td>30/08/2017</td>
+                <td>C</td>
                 <td>mg road,Delhi, 407614</td>
                 <td>8643668432</td>
-                <td>yashagarwal@gmail.com</td>
-                <td>92%</td>
+                <td>
+                <CircularProgressbar
+                  value="93"
+                  text="93%"
+                  className="success"
+                  styles={buildStyles({
+                    strokeLinecap: "round",
+                  })}
+                />
+                </td>
+                <td>
+                    <div className="action">
+                      <Button color="link">
+                        <i className="fa fa-eye"></i>
+                      </Button>
+                    </div>
+                  </td>
               </tr>
               <tr>
-                <td>abc123</td>
                 <td>1</td>
                 <td>Yash Agarwal</td>
                 <td>Male</td>
                 <td>VI</td>
                 <td>B</td>
-                <td>20/06/2001</td>
-                <td>DAV international School</td>
-                <td>12/08/2014</td>
                 <td>mg road,saket,Delhi, 407614</td>
                 <td>9004569812</td>
-                <td>yashagarwal@gmail.com</td>
-                <td>89%</td>
+                <td>
+                <CircularProgressbar
+                  value="99"
+                  text="99%"
+                  className="success"
+                  styles={buildStyles({
+                    strokeLinecap: "round",
+                  })}
+                />
+                </td>
+                <td>
+                    <div className="action">
+                      <Button color="link">
+                        <i className="fa fa-eye"></i>
+                      </Button>
+                    </div>
+                  </td>
               </tr>
               <tr>
-                <td>kip123</td>
                 <td>17</td>
                 <td>Abhishek Mehra</td>
                 <td>Male</td>
                 <td>V</td>
                 <td>A</td>
-                <td>20/06/2001</td>
-                <td>DAV international School</td>
-                <td>06/08/2000</td>
                 <td>mg road,saket,Delhi, 407614</td>
                 <td>9432669812</td>
-                <td>abhishekmehra@gmail.com</td>
-                <td>76%</td>
+                <td>
+                <CircularProgressbar
+                  value="64"
+                  text="64%"
+                  className="danger"
+                  styles={buildStyles({
+                    strokeLinecap: "round",
+                  })}
+                />
+                </td>
+                <td>
+                    <div className="action">
+                      <Button color="link">
+                        <i className="fa fa-eye"></i>
+                      </Button>
+                    </div>
+                  </td>
               </tr>
               <tr>
-                <td>usk123</td>
                 <td>10</td>
                 <td>Trina Bose</td>
                 <td>Female</td>
                 <td>VIII</td>
-                <td>B</td>
-                <td>26/09/2012</td>
-                <td>DAV international School</td>
-                <td>01/05/2011</td>
+                <td>C</td>
                 <td>sk road,Gurgaon, 407614</td>
                 <td>9004512312</td>
-                <td>trinabose@gmail.com</td>
-                <td>97%</td>
+                <td>
+                <CircularProgressbar
+                  value="97"
+                  text="97%"
+                  className="success"
+                  styles={buildStyles({
+                    strokeLinecap: "round",
+                  })}
+                />
+                </td>
+                <td>
+                    <div className="action">
+                      <Button color="link">
+                        <i className="fa fa-eye"></i>
+                      </Button>
+                    </div>
+                  </td>
               </tr>
               {allStudents.map((curr) => {
                 console.log(curr);
