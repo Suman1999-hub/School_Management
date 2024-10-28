@@ -24,7 +24,9 @@ function Notice() {
     },
   });
 
-  const UserloginType = useSelector((state) => console.log(state));
+  const UserloginType = useSelector(
+    (state) => state.userCredential.user.loginType
+  );
 
   const _onDatesChange = (startDate = null, endDate = null) => {
     const newFilters = { ...filters };
@@ -37,12 +39,16 @@ function Notice() {
   };
   return (
     <>
-      <div className="innerHeader">
-        <h2> </h2>
-        <Link to="/notice/createnotice">
-          <Button color="primary">Create Notice</Button>
-        </Link>
-      </div>
+      {UserloginType === "admin" ? (
+        <div className="innerHeader">
+          <h2> </h2>
+          <Link to="/notice/createnotice">
+            <Button color="primary">Create Notice</Button>
+          </Link>
+        </div>
+      ) : (
+        ""
+      )}
 
       <TabPane tabId="1" className="mt-5">
         {/* filter */}
