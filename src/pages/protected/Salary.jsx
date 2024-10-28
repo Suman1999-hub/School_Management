@@ -42,7 +42,7 @@ function Salary() {
 
           <div className="filterForm">
             <div className="formGroup">
-              <Label>Joining Date</Label>
+              <Label>Select Date</Label>
               <CustomDateRangePicker
                 startDate={filters.dateRange.startDate}
                 endDate={filters.dateRange.endDate}
@@ -54,14 +54,14 @@ function Salary() {
               />
             </div>
 
-            <div className="formGroup">
+            {/* <div className="formGroup">
               <Label>Subject</Label>
               <Input type="select">
                 <option>All</option>
                 <option>Bengali</option>
                 <option>English</option>
               </Input>
-            </div>
+            </div> */}
 
             {/* search */}
             <div className="formGroup searchbar">
@@ -81,41 +81,160 @@ function Salary() {
           <div className="innerHeader">
             <h2>Salary</h2>
             <div>
-              {/* <Button onClick={() => null}> */}
-              <img
-                src={require("../../assets/img/Payslip_downloadzip.png")}
-                alt=""
-                width="50px"
-              />
-              {/* </Button> */}
+              <Button color="link" onClick={() => null}>
+                <img
+                  src={require("../../assets/img/Payslip_downloadzip.png")}
+                  alt=""
+                  width="40px"
+                />
+              </Button>
             </div>
           </div>
           <Card body>
             <Table responsive>
               <thead>
                 <tr>
-                  <th></th>
-                  <th>Phone Number</th>
-                  <th>Address</th>
-                  <th>Gender</th>
-                  <th>Subject</th>
-                  <th>Date of Joining</th>
-                  <th>View Details</th>
+                  <th>Document Name</th>
+                  <th>Date</th>
+                  <th>Action</th>
                 </tr>
               </thead>
 
               <tbody>
                 <tr>
-                  <td>Jon roy</td>
-                  <td>8777667698</td>
-                  <td>Kolkata, West Bengal, 700091</td>
-                  <td>Male</td>
-                  <td>Bengali</td>
+                  <td>
+                    <img
+                      src={require("../../assets/img/word.png")}
+                      alt="file"
+                      width="20px"
+                    />
+                    September 24 Payslip.pdf
+                  </td>
+
                   <td>Jul 12. 2023</td>
                   <td>
                     <div className="action">
                       <Button color="link">
-                        <i className="fa fa-eye"></i>
+                        <img
+                          src={require("../../assets/img/download-salary.png")}
+                          alt="download btn"
+                          width="30px"
+                        />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <img
+                      src={require("../../assets/img/word.png")}
+                      alt="file"
+                      width="20px"
+                    />
+                    August 24 Payslip.pdf
+                  </td>
+
+                  <td>Jul 12. 2023</td>
+                  <td>
+                    <div className="action">
+                      <Button color="link">
+                        <img
+                          src={require("../../assets/img/download-salary.png")}
+                          alt="download btn"
+                          width="30px"
+                        />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <img
+                      src={require("../../assets/img/word.png")}
+                      alt="file"
+                      width="20px"
+                    />
+                    July 24 Payslip.pdf
+                  </td>
+
+                  <td>Jul 12. 2023</td>
+                  <td>
+                    <div className="action">
+                      <Button color="link">
+                        <img
+                          src={require("../../assets/img/download-salary.png")}
+                          alt="download btn"
+                          width="30px"
+                        />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <img
+                      src={require("../../assets/img/word.png")}
+                      alt="file"
+                      width="20px"
+                    />
+                    June 24 Payslip.pdf
+                  </td>
+
+                  <td>Jul 12. 2023</td>
+                  <td>
+                    <div className="action">
+                      <Button color="link">
+                        <img
+                          src={require("../../assets/img/download-salary.png")}
+                          alt="download btn"
+                          width="30px"
+                        />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <img
+                      src={require("../../assets/img/word.png")}
+                      alt="file"
+                      width="20px"
+                    />
+                    May 24 Payslip.pdf
+                  </td>
+
+                  <td>Jul 12. 2023</td>
+                  <td>
+                    <div className="action">
+                      <Button color="link">
+                        <img
+                          src={require("../../assets/img/download-salary.png")}
+                          alt="download btn"
+                          width="30px"
+                        />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <img
+                      src={require("../../assets/img/word.png")}
+                      alt="file"
+                      width="20px"
+                    />
+                    April 24 Payslip.pdf
+                  </td>
+
+                  <td>Jul 12. 2023</td>
+                  <td>
+                    <div className="action">
+                      <Button color="link">
+                        <img
+                          src={require("../../assets/img/download-salary.png")}
+                          alt="download btn"
+                          width="30px"
+                        />
                       </Button>
                     </div>
                   </td>
