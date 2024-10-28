@@ -4,6 +4,8 @@ import Payment from "../pages/protected/Payment";
 import Teachers from "../pages/protected/Teachers";
 import ViewAllSchool from "../pages/protected/ViewAllSchool";
 import AllStudents from "../pages/protected/AllStudents";
+import TeacherSchedule from "../pages/protected/TeacherSchedule";
+import StudentSchedule from "../pages/protected/StudentSchedule";
 
 const SUPER_ADMIN_ROUTES = [
   { text: "School", route: "/school", element: <ViewAllSchool /> },
@@ -26,7 +28,7 @@ const ADMIN_ROUTES = [
 
 const TEACHER_ROUTES = [
   { text: "Time Log", route: "/timelog" },
-  { text: "Schedule", route: "/schedule" },
+  { text: "Schedule", route: "/schedule", element: <TeacherSchedule /> },
   { text: "Notice", route: "/notice", element: <Notice /> },
   { text: "Apply Leave", route: "/leave" },
   { text: "Attendance", route: "/attendance" },
@@ -39,7 +41,7 @@ const TEACHER_ROUTES = [
 
 const STUDENT_ROUTES = [
   { text: "Attendance", route: "/attendance" },
-  { text: "Schedule", route: "/schedule" },
+  { text: "Schedule", route: "/schedule", element: <StudentSchedule /> },
   { text: "Notice", route: "/notice", element: <Notice /> },
   { text: "Payment", route: "/payment", element: <Payment /> },
   { text: "Report", route: "/report" },

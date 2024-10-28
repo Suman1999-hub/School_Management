@@ -2183,6 +2183,10 @@ table {
     display: block;
   }
 }
+.scheduleDiv {
+  display: flex;
+  flex-direction: column;
+}
 
 // @media all and (max-width: 575.98px) {
 
