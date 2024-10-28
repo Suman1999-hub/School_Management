@@ -554,6 +554,10 @@ function Attendance() {
           </Card>
         </section>
       </TabPane>
+
+      <div style={{ textAlign: "center" }}>
+        <Button color="primary">Submit</Button>
+      </div>
     </>
   );
 }

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import {
   Button,
   Card,
+  FormGroup,
+  FormText,
   Input,
   InputGroup,
   InputGroupText,
@@ -10,6 +12,9 @@ import {
   TabPane,
 } from "reactstrap";
 import CustomDateRangePicker from "../../components/CustomDateRangePicker";
+import TextEditor from "../../components/TextEditor";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function Notice() {
   const [filters, setFilters] = useState({
@@ -18,6 +23,8 @@ function Notice() {
       endDate: null,
     },
   });
+
+  const UserloginType = useSelector((state) => console.log(state));
 
   const _onDatesChange = (startDate = null, endDate = null) => {
     const newFilters = { ...filters };
@@ -30,7 +37,14 @@ function Notice() {
   };
   return (
     <>
-      <TabPane tabId="1">
+      <div className="innerHeader">
+        <h2> </h2>
+        <Link to="/notice/createnotice">
+          <Button color="primary">Create Notice</Button>
+        </Link>
+      </div>
+
+      <TabPane tabId="1" className="mt-5">
         {/* filter */}
         <div className="filterWrapper">
           <div className="filterIcon">
@@ -39,7 +53,7 @@ function Notice() {
 
           <div className="filterForm">
             <div className="formGroup">
-              <Label>Transaction Date</Label>
+              <Label>Notice Date</Label>
               <CustomDateRangePicker
                 startDate={filters.dateRange.startDate}
                 endDate={filters.dateRange.endDate}
@@ -52,20 +66,11 @@ function Notice() {
             </div>
 
             <div className="formGroup">
-              <Label>Transaction Type</Label>
+              <Label>Notice Type</Label>
               <Input type="select">
                 <option>All</option>
                 <option>Basic Subscription</option>
                 <option>Premium Subscription</option>
-              </Input>
-            </div>
-
-            <div className="formGroup">
-              <Label>Status</Label>
-              <Input type="select">
-                <option>All</option>
-                <option>Active</option>
-                <option>Inactive</option>
               </Input>
             </div>
 

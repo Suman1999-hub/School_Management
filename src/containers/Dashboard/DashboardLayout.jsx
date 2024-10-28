@@ -9,6 +9,7 @@ import DashboardHeader from "./DashboardHeader";
 import DashboardSidebar from "./DashboardSidebar";
 import { ROUTES } from "../../config/routes-config";
 import { useSelector } from "react-redux";
+import CreateNotice from "../../pages/protected/CreateNotice";
 
 const DashboardLayout = () => {
   const [isShow, setIsShow] = useState(false);
@@ -32,6 +33,7 @@ const DashboardLayout = () => {
               {ROUTES?.[routeKey]?.map((curr) => {
                 return <Route exact path={curr.route} element={curr.element} />;
               })}
+              <Route path="/notice/createnotice" element={<CreateNotice />} />
             </Route>
 
             <Route path="*" element={<Navigate replace to="/dashboard" />} />
