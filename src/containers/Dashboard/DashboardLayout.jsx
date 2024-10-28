@@ -9,6 +9,7 @@ import DashboardHeader from "./DashboardHeader";
 import DashboardSidebar from "./DashboardSidebar";
 import { ROUTES } from "../../config/routes-config";
 import { useSelector } from "react-redux";
+import CreateSchedule from "../../pages/protected/CreateSchedule";
 
 const DashboardLayout = () => {
   const [isShow, setIsShow] = useState(false);
@@ -33,7 +34,7 @@ const DashboardLayout = () => {
                 return <Route exact path={curr.route} element={curr.element} />;
               })}
             </Route>
-
+            <Route path="/schedule/createschedule" element={<CreateSchedule/>} />
             <Route path="*" element={<Navigate replace to="/dashboard" />} />
           </Routes>
 

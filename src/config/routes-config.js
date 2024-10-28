@@ -8,6 +8,8 @@ import Attendance from "../pages/protected/Attendance";
 import Salary from "../pages/protected/Salary";
 import TeacherSchedule from "../pages/protected/TeacherSchedule";
 import StudentSchedule from "../pages/protected/StudentSchedule";
+import AdminSchedule from "../pages/protected/AdminSchedule";
+import CreateSchedule from "../pages/protected/CreateSchedule";
 
 const SUPER_ADMIN_ROUTES = [
   { text: "School", route: "/school", element: <ViewAllSchool /> },
@@ -18,7 +20,7 @@ const SUPER_ADMIN_ROUTES = [
 
 const ADMIN_ROUTES = [
   { text: "Techer", route: "/teacher", element: <Teachers /> },
-  { text: "Schedule", route: "/schedule" },
+  { text: "Schedule", route: "/schedule", element: <AdminSchedule /> },
   { text: "Notice", route: "/notice", element: <Notice /> },
   { text: "Approval", route: "/approval" },
   { text: "Attendance", route: "/attendance", element: <Attendance /> },
