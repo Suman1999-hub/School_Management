@@ -64,16 +64,21 @@ function AllStudents() {
 
         <div className="filterForm">
           <div className="formGroup">
-            <Label>Joining Date</Label>
-            <CustomDateRangePicker
-              startDate={filters.dateRange.startDate}
-              endDate={filters.dateRange.endDate}
-              startDateId={"startDate_kpi_dashboard"}
-              endDateId={`endDate_kpi_dashboard`}
-              onDatesChange={(startDate, endDate) =>
-                _onDatesChange(startDate, endDate)
-              }
-            />
+            <Label>Acedemic Year</Label>
+            <Input type="select">
+              <option>2024-2025</option>
+              <option>2023-2024</option>
+              <option>2022-2023</option>
+              <option>2021-2022</option>
+              <option>2020-2021</option>
+              <option>2019-2020</option>
+              <option>2018-2019</option>
+              <option>2017-2018</option>
+              <option>2016-2017</option>
+              <option>2015-2016</option>
+              <option>2014-2015</option>
+              <option>2013-2014</option>
+            </Input>
           </div>
           {/* <div className="formGroup">
             <Label>School</Label>
@@ -112,14 +117,7 @@ function AllStudents() {
               <option>C</option>
             </Input>
           </div>
-          <div className="formGroup">
-            <Label>Attendence</Label>
-            <Input type="select">
-              <option>All</option>
-              <option>100%</option>
-              <option>Below 75%</option>
-            </Input>
-          </div>
+          
 
           {/* search */}
           <div className="formGroup searchbar">
