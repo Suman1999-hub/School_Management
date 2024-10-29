@@ -10,6 +10,7 @@ import TeacherSchedule from "../pages/protected/TeacherSchedule";
 import StudentSchedule from "../pages/protected/StudentSchedule";
 import AdminSchedule from "../pages/protected/AdminSchedule";
 import CreateSchedule from "../pages/protected/CreateSchedule";
+import ApplyLeave from "../pages/protected/ApplyLeave";
 
 const SUPER_ADMIN_ROUTES = [
   { text: "School", route: "/school", element: <ViewAllSchool /> },
@@ -34,7 +35,7 @@ const TEACHER_ROUTES = [
   { text: "Time Log", route: "/timelog" },
   { text: "Schedule", route: "/schedule", element: <TeacherSchedule /> },
   { text: "Notice", route: "/notice", element: <Notice /> },
-  { text: "Apply Leave", route: "/leave" },
+  { text: "Apply Leave", route: "/leave", element: <ApplyLeave /> },
   { text: "Attendance", route: "/attendance", element: <Attendance /> },
   { text: "Report", route: "/report" },
   { text: "Student", route: "/student", element: <AllStudents /> },
