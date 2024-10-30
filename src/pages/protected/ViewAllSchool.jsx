@@ -58,7 +58,7 @@ function ViewAllSchool() {
                   <tr>
                     <td>
                       {curr.imageUrl ? (
-                        <img src={curr.imageUrl} width="100px" />
+                        <img src={curr.imageUrl} width="100px" alt="" />
                       ) : (
                         "null"
                       )}
@@ -76,6 +76,13 @@ function ViewAllSchool() {
                     <td>
                       <div className="action">
                         <Button color="link">
+                          <img
+                            src={require("../../assets/img/edit.png")}
+                            alt=""
+                            width="20px"
+                          />
+                        </Button>
+                        <Button color="link">
                           <i className="fa fa-eye"></i>
                         </Button>
                       </div>
@@ -91,7 +98,9 @@ function ViewAllSchool() {
         <PaginatedItems itemsPerPage={4} />
       </Card>
 
-      <CreateSchoolModal isOpen={isOpenModal} toggle={() => _toggleModal()} />
+      {isOpenModal && (
+        <CreateSchoolModal isOpen={isOpenModal} toggle={() => _toggleModal()} />
+      )}
     </div>
   );
 }

@@ -11,6 +11,7 @@ import StudentSchedule from "../pages/protected/StudentSchedule";
 import AdminSchedule from "../pages/protected/AdminSchedule";
 import CreateSchedule from "../pages/protected/CreateSchedule";
 import ApplyLeave from "../pages/protected/ApplyLeave";
+import Report from "../pages/protected/Report";
 
 const SUPER_ADMIN_ROUTES = [
   { text: "School", route: "/school", element: <ViewAllSchool /> },
@@ -45,11 +46,11 @@ const TEACHER_ROUTES = [
 ];
 
 const STUDENT_ROUTES = [
-  { text: "Attendance", route: "/attendance" },
+  { text: "Attendance", route: "/attendance", element: <Attendance /> },
   { text: "Schedule", route: "/schedule", element: <StudentSchedule /> },
   { text: "Notice", route: "/notice", element: <Notice /> },
   { text: "Payment", route: "/payment", element: <Payment /> },
-  { text: "Report", route: "/report" },
+  { text: "Report", route: "/report", element: <Report /> },
   { text: "Settings", route: "/settings" },
   { text: "Profile", route: "/profile", element: <MyProfile /> },
 ];
