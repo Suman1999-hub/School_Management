@@ -436,3 +436,24 @@ export const getAddressFormate = (city, state, country, pinCode) => {
   let address = city + ", " + state + ", " + country + ", " + pinCode;
   return address;
 };
+export const getFullNameFormate = (firstName, lastName) => {
+  console.log(firstName, lastName);
+  let fullName = firstName + " " + lastName;
+  return fullName;
+};
+
+export const CheckFormUpdate = (initialState, updatedState) => {
+  if (typeof initialState !== "object" || typeof updatedState !== "object") {
+    throw new Error("Both initialState and updatedState should be objects.");
+  }
+
+  const changes = {};
+
+  for (const key in initialState) {
+    if (initialState[key] !== updatedState[key]) {
+      changes[key] = updatedState[key];
+    }
+  }
+
+  return Object.keys(changes).length > 0 ? changes : null;
+};

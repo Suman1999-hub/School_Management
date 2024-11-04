@@ -138,3 +138,18 @@ export const createSchool = (payload) => {
       });
   });
 };
+
+//all teacher Api
+export const findAllTeacher = () => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/admin/teachers`, true)
+      .then((res) => {
+        resolve(res);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};

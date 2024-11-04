@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -13,6 +13,8 @@ import CustomDateRangePicker from "../../components/CustomDateRangePicker";
 
 import AddTeacherModal from "../../components/modals/AddTeacherModal";
 import PaginatedItems from "../../components/PaginatedItems";
+import { findAllTeacher } from "../../http/http-calls";
+import { getAddressFormate, getFullNameFormate } from "../../helper-methods";
 
 function Teachers() {
   const [filters, setFilters] = useState({
@@ -36,6 +38,18 @@ function Teachers() {
   const _toggleModal = (isOpenModal = false) => {
     setIsOpenModal(isOpenModal);
   };
+  const [allteacher, setAllTeacher] = useState();
+  const _getAllTeacherAPiCall = async () => {
+    try {
+      const getAllTeacherApi = await findAllTeacher();
+      setAllTeacher(getAllTeacherApi.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    _getAllTeacherAPiCall();
+  }, []);
   return (
     <>
       <TabPane tabId="1">
@@ -86,7 +100,12 @@ function Teachers() {
           <div className="innerHeader">
             <h2>Teacher</h2>
             <div>
-              <Button color="primary" outline className="ms-3 mx-5" onClick={() => null}>
+              <Button
+                color="primary"
+                outline
+                className="ms-3 mx-5"
+                onClick={() => null}
+              >
                 Import CSV
               </Button>
 
@@ -110,85 +129,35 @@ function Teachers() {
               </thead>
 
               <tbody>
-                <tr>
-                  <td>Jon roy</td>
-                  <td>8777667698</td>
-                  <td>Kolkata, West Bengal, 700091</td>
-                  <td>Male</td>
-                  <td>Bengali</td>
-                  <td>Jul 12. 2023</td>
-                  <td>
-                    <div className="action">
-                      <Button color="link">
-                        <i className="fa fa-eye"></i>
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>Rum roy</td>
-                  <td>8777667698</td>
-                  <td>Kolkata, West Bengal, 700091</td>
-                  <td>Male</td>
-                  <td>Bengali</td>
-                  <td>Jul 12. 2023</td>
-                  <td>
-                    <div className="action">
-                      <Button color="link">
-                        <i className="fa fa-eye"></i>
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>Jo roy</td>
-                  <td>8777667698</td>
-                  <td>Kolkata, West Bengal, 700091</td>
-                  <td>Male</td>
-                  <td>Bengali</td>
-                  <td>Jul 12. 2023</td>
-                  <td>
-                    <div className="action">
-                      <Button color="link">
-                        <i className="fa fa-eye"></i>
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>Jyoti sen</td>
-                  <td>8777667698</td>
-                  <td>Kolkata, West Bengal, 700091</td>
-                  <td>Female</td>
-                  <td>Bengali</td>
-                  <td>Jul 12. 2023</td>
-                  <td>
-                    <div className="action">
-                      <Button color="link">
-                        <i className="fa fa-eye"></i>
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>Raj roy</td>
-                  <td>8777667698</td>
-                  <td>Kolkata, West Bengal, 700091</td>
-                  <td>Male</td>
-                  <td>Bengali</td>
-                  <td>Jul 12. 2023</td>
-                  <td>
-                    <div className="action">
-                      <Button color="link">
-                        <i className="fa fa-eye"></i>
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
+                {allteacher?.map((curr, index) => {
+                  console.log(curr);
+                  return (
+                    <tr>
+                      <td>
+                        {getFullNameFormate(curr.firstName, curr.lastName)}
+                      </td>
+                      <td>{curr.phone}</td>
+                      <td>
+                        {getAddressFormate(
+                          curr.address.city,
+                          curr.address.state,
+                          curr.address.country,
+                          curr.address.pin
+                        )}
+                      </td>
+                      <td>{curr.gender}</td>
+                      <td>Bengali</td>
+                      <td>Jul 12. 2023</td>
+                      <td>
+                        <div className="action">
+                          <Button color="link">
+                            <i className="fa fa-eye"></i>
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </Table>
 
