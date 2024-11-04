@@ -138,12 +138,14 @@ function Teachers() {
                       </td>
                       <td>{curr.phone}</td>
                       <td>
-                        {getAddressFormate(
-                          curr.address.city,
-                          curr.address.state,
-                          curr.address.country,
-                          curr.address.pin
-                        )}
+                        {curr.address
+                          ? getAddressFormate(
+                              curr.address.city,
+                              curr.address.state,
+                              curr.address.country,
+                              curr.address.pin
+                            )
+                          : ""}
                       </td>
                       <td>{curr.gender}</td>
                       <td>Bengali</td>
