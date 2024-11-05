@@ -138,17 +138,23 @@ export const createSchool = (payload) => {
       });
   });
 };
-
-<<<<<<< HEAD
+export const findAllStudent = () => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}admin/students/view-students`, true)
+      .then((res) => {
+        resolve(res);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
 //all teacher Api
 export const findAllTeacher = () => {
   return new Promise((resolve, reject) => {
     makePostRequest(`${BASE_URL}/admin/teachers`, true)
-=======
-export const findAllStudent = () => {
-  return new Promise((resolve, reject) => {
-    makePostRequest(`${BASE_URL}admin/students/view-students`, true)
->>>>>>> origin/okavita
       .then((res) => {
         resolve(res);
         console.log(res);

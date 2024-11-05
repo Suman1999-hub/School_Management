@@ -16,7 +16,7 @@ import Settings from "../pages/protected/Settings";
 
 const SUPER_ADMIN_ROUTES = [
   { text: "School", route: "/school", element: <ViewAllSchool /> },
-  { text: "Admin", route: "/admin" },
+  // { text: "Admin", route: "/admin" },
   { text: "Settings", route: "/settings", element: <Settings /> },
   { text: "Profile", route: "/profile", element: <MyProfile /> },
 ];
@@ -26,7 +26,7 @@ const ADMIN_ROUTES = [
   { text: "Schedule", route: "/schedule", element: <AdminSchedule /> },
   { text: "Notice", route: "/notice", element: <Notice /> },
   { text: "Approval", route: "/approval" },
-  { text: "Attendance", route: "/attendance", element: <Attendance /> },
+  // { text: "Attendance", route: "/attendance", element: <Attendance /> },
   { text: "Report", route: "/report", element: <Report /> },
   { text: "Student", route: "/student", element: <AllStudents /> },
   { text: "Settings", route: "/settings", element: <Settings /> },
@@ -51,7 +51,7 @@ const STUDENT_ROUTES = [
   { text: "Schedule", route: "/schedule", element: <StudentSchedule /> },
   { text: "Notice", route: "/notice", element: <Notice /> },
   { text: "Payment", route: "/payment", element: <Payment /> },
-  { text: "Report", route: "/report" },
+  { text: "Report", route: "/report", element: <Report /> },
   { text: "Settings", route: "/settings", element: <Settings /> },
   { text: "Profile", route: "/profile", element: <MyProfile /> },
 ];
