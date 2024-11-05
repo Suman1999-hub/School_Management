@@ -139,10 +139,16 @@ export const createSchool = (payload) => {
   });
 };
 
+<<<<<<< HEAD
 //all teacher Api
 export const findAllTeacher = () => {
   return new Promise((resolve, reject) => {
     makePostRequest(`${BASE_URL}/admin/teachers`, true)
+=======
+export const findAllStudent = () => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}admin/students/view-students`, true)
+>>>>>>> origin/okavita
       .then((res) => {
         resolve(res);
         console.log(res);

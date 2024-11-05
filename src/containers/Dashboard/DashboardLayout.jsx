@@ -9,8 +9,13 @@ import DashboardHeader from "./DashboardHeader";
 import DashboardSidebar from "./DashboardSidebar";
 import { ROUTES } from "../../config/routes-config";
 import { useSelector } from "react-redux";
+<<<<<<< HEAD
 import CreateNotice from "../../pages/protected/CreateNotice";
 import CreateSchedule from "../../pages/protected/CreateSchedule";
+=======
+import CreateSchedule from "../../pages/protected/CreateSchedule";
+import CreateNotice from "../../pages/protected/CreateNotice";
+>>>>>>> origin/okavita
 
 const DashboardLayout = () => {
   const [isShow, setIsShow] = useState(false);

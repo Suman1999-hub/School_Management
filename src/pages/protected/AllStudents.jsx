@@ -11,44 +11,34 @@ import {
   TabPane,
 } from "reactstrap";
 import PaginatedItems from "../../components/PaginatedItems";
-import { findAllSchool } from "../../http/http-calls";
 import { getAddressFormate } from "../../helper-methods";
 import AddStudentModal from "../../components/modals/AddSudentModal";
-import CustomDateRangePicker from "../../components/CustomDateRangePicker";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
+import { useSelector } from "react-redux";
+import { findAllStudent } from "../../http/http-calls";
 
 function AllStudents() {
   const [allStudents, setAllStudents] = useState([]);
-  const [filters, setFilters] = useState({
-    dateRange: {
-      startDate: null,
-      endDate: null,
-    },
-  });
-  const _onDatesChange = (startDate = null, endDate = null) => {
-    const newFilters = { ...filters };
+   
+  const userID = useSelector((state) => state.userCredential.user.id);
+  
 
-    newFilters["dateRange"] = {
-      startDate,
-      endDate,
+    const fetchAllSchoolData = async () => {
+      try {
+        // console.log("userID", userID);
+        const studentData = await findAllStudent();
+        console.log("studentData>>>", studentData);
+        setAllStudents(studentData);
+      } catch (err) {
+        console.log("Error", err);
+      }
     };
-    setFilters(newFilters);
-  };
-  //   const fetchAllSchoolData = async () => {
-  //     try {
-  //       const schoolData = await findAllSchool();
-  //       console.log("school>>>", schoolData.school);
-  //       setAllSchool(schoolData.school);
-  //     } catch (err) {
-  //       console.log("All School Error", err);
-  //     }
-  //   };
 
-  //   console.log("allschool", allSchool);
+    console.log("allStudents", allStudents);
 
-  //   useEffect(() => {
-  //     fetchAllSchoolData();
-  //   }, []);
+    useEffect(() => {
+      fetchAllSchoolData();
+    }, []);
 
   const [isOpenModal, setIsOpenModal] = useState(false);
   const _toggleModal = (isOpenModal = false) => {
@@ -135,7 +125,7 @@ function AllStudents() {
 
       <div>
         <div className="innerHeader">
-          <h2>Teacher</h2>
+          <h2>Students</h2>
           <div>
             <Button
               color="primary"
@@ -153,7 +143,6 @@ function AllStudents() {
         </div>
 
         <Card body>
-          <CardTitle>Students</CardTitle>
 
           <Table responsive>
             <thead>
@@ -367,8 +356,7 @@ function AllStudents() {
           {/* pagination */}
           <PaginatedItems itemsPerPage={4} />
         </Card>
-
-        <AddStudentModal isOpen={isOpenModal} toggle={() => _toggleModal()} />
+        { isOpenModal && <AddStudentModal isOpen={isOpenModal} toggle={() => _toggleModal()} /> }
       </div>
     </TabPane>
   );

@@ -43,6 +43,15 @@ const states = [
   "Uttar Pradesh",
   "Uttarakhand",
   "West Bengal",
+  "Andaman and Nicobar Islands",
+  "Chandigarh",
+  "Dadra and Nagar Haveli",
+  "Daman and Diu",
+  "Lakshadweep",
+  "Delhi ",
+  "Puducherry",
+  "Jammu and Kashmir",
+  "Ladakh"  
 ];
 
 const AllGender = ["Male", "Female", "Transgender"];
@@ -52,6 +61,7 @@ const MyProfile = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState("1");
   const [userDetails, setUserDetails] = useState({});
+  const [address, setAddress] = useState({});
   const [DOB, setDOB] = useState(null);
 
   const _toggleTab = (newTab = "1") => {
@@ -60,7 +70,11 @@ const MyProfile = () => {
 
   console.log("DOB>>", DOB);
   console.log("userDetails>>", userDetails);
+  console.log("address>>", address);
 
+  // console.log("address>>", userDetails.address.city);
+
+  // userDetails.address.country
   // const userID = useSelector((state) => {
   //   return state.userCredential.user.id;
   // });
@@ -84,6 +98,7 @@ const MyProfile = () => {
     if (userDetails) {
       const formattedDOB = formatDate(userDetails.dob);
       setDOB(formattedDOB);
+      setAddress(userDetails.address)
     }
   }, [userDetails.dob]);
 
@@ -96,16 +111,26 @@ const MyProfile = () => {
     setUserDetails(updatedNewDetails);
   };
 
+  const handleAddress = (event, field) => {
+    const updatedAddress = { ...address };
+    updatedAddress[field] = event.target.value;
+    setAddress(updatedAddress);
+    setUserDetails(prev => ({
+      ...prev,
+      address: updatedAddress
+    }));
+  };
+
   const handleSave = async () => {
     try {
       const response = await updateProfile(userDetails);
       // console.log("response>>", response.user);
       setUserDetails(response.user);
-      alert("successfully updated")
+      alert("successfully updated");
     } catch (error) {
       errorHandler(error);
     }
-  }
+  };
 
   return (
     <>
@@ -203,172 +228,207 @@ const MyProfile = () => {
                 <Row>
                   <Col md="6" lg="4">
                     {/* name */}
-                    <div className="form-group">
-                      <Label>First Name</Label>
-                      <Input
-                        placeholder="Enter your name"
-                        value={userDetails.firstName}
-                        onChange={(e) => handleChange(e, "firstName")}
-                      />
-                    </div>
+                    {userDetails.firstName && (
+                      <div className="form-group">
+                        <Label>First Name</Label>
+                        <Input
+                          placeholder="Enter your name"
+                          value={userDetails.firstName}
+                          onChange={(e) => handleChange(e, "firstName")}
+                        />
+                      </div>
+                    )}
                   </Col>
                   <Col md="6" lg="4">
                     {/* name */}
-                    <div className="form-group">
-                      <Label>Last Name</Label>
-                      <Input
-                        placeholder="Enter your name"
-                        value={userDetails.lastName}
-                        onChange={(e) => handleChange(e, "lastName")}
-                      />
-                    </div>
+                    {userDetails.lastName && (
+                      <div className="form-group">
+                        <Label>Last Name</Label>
+                        <Input
+                          placeholder="Enter your name"
+                          value={userDetails.lastName}
+                          onChange={(e) => handleChange(e, "lastName")}
+                        />
+                      </div>
+                    )}
                   </Col>
                   <Col md="6" lg="4">
                     {/* Email */}
-                    <div className="form-group">
-                      <Label>Email</Label>
-                      <Input
-                        readOnly={userDetails.loginType === "student"}
-                        placeholder="Enter your email"
-                        value={userDetails.email}
-                        onChange={(e) => handleChange(e, "email")}
-                      />
-                    </div>
-                  </Col>
-                  <Col md="6" lg="4">
-                    {/* phone number */}
-                    <div className="form-group">
-                      <Label>Gender</Label>
-                      {userDetails.loginType === "student" ? (<Input readOnly value={userDetails.gender}/>) :(
+                    {userDetails.email && (
+                      <div className="form-group">
+                        <Label>Email</Label>
                         <Input
-                          type="select"
-                          value={userDetails.gender}
-                          onChange={(e) => handleChange(e, "gender")}
                           readOnly={userDetails.loginType === "student"}
-                        >
-                          <option value="">Select</option>
-                          {AllGender.map((gender, index) => (
-                            <option key={index} value={gender}>
-                              {gender}
-                            </option>
-                          ))}
-                        </Input>
-                      )}
-                    </div>
+                          placeholder="Enter your email"
+                          value={userDetails.email}
+                          onChange={(e) => handleChange(e, "email")}
+                        />
+                      </div>
+                    )}
                   </Col>
                   <Col md="6" lg="4">
                     {/* phone number */}
-                    <div className="form-group">
-                      <Label>Phone Number</Label>
-                      <Input
-                        readOnly={userDetails.loginType === "student"}
-                        placeholder="Enter your Phone Number"
-                        value={userDetails.phone}
-                        onChange={(e) => handleChange(e, "phone")}
-                      />
-                    </div>
+                    {userDetails.gender && (
+                      <div className="form-group">
+                        <Label>Gender</Label>
+                        {userDetails.loginType === "student" ? (
+                          <Input readOnly value={userDetails.gender} />
+                        ) : (
+                          <Input
+                            type="select"
+                            value={userDetails.gender}
+                            onChange={(e) => handleChange(e, "gender")}
+                            readOnly={userDetails.loginType === "student"}
+                          >
+                            <option value="">Select</option>
+                            {AllGender.map((gender, index) => (
+                              <option key={index} value={gender}>
+                                {gender}
+                              </option>
+                            ))}
+                          </Input>
+                        )}
+                      </div>
+                    )}
+                  </Col>
+                  <Col md="6" lg="4">
+                    {/* phone number */}
+                    {userDetails.phone && (
+                      <div className="form-group">
+                        <Label>Phone Number</Label>
+                        <Input
+                          readOnly={userDetails.loginType === "student"}
+                          placeholder="Enter your Phone Number"
+                          value={userDetails.phone}
+                          onChange={(e) => handleChange(e, "phone")}
+                        />
+                      </div>
+                    )}
                   </Col>
                   <Col md="6" lg="4">
                     {/* Year of Birth */}
-                    <div className="form-group">
-                      <Label>Date of Birth</Label>
-                      <Input
-                        readOnly={userDetails.loginType === "student"}
-                        type="date"
-                        value={DOB}
-                        onChange={(e) => handleChange(e, "dob")}
-                      >
-                      </Input>
-                    </div>
+                    {DOB && (
+                      <div className="form-group">
+                        <Label>Date of Birth</Label>
+                        <Input
+                          readOnly={userDetails.loginType === "student"}
+                          type="date"
+                          value={DOB}
+                          onChange={(e) => handleChange(e, "dob")}
+                        ></Input>
+                      </div>
+                    )}
                   </Col>
                   <Col md="6" lg="4">
                     {/* Last 4 SSN */}
-                    <div className="form-group">
-                      <Label>Username</Label>
-                      <InputGroup>
-                        <Input
-                          readOnly
-                          placeholder="Enter your Username"
-                          type="text"
-                          value={userDetails.username}
-                        />
-                        {/* <InputGroupText
-                          className="cursorPointer"
-                          onClick={() => {
-                            setShowPassword(!showPassword);
-                          }}
-                        >
-                          <i
-                            className={`far ${
-                              showPassword ? "fa-eye" : "fa-eye-slash"
-                            }`}
+                    {userDetails.username && (
+                      <div className="form-group">
+                        <Label>Username</Label>
+                        <InputGroup>
+                          <Input
+                            readOnly
+                            placeholder="Enter your Username"
+                            type="text"
+                            value={userDetails.username}
                           />
-                        </InputGroupText> */}
-                      </InputGroup>
-                    </div>
+                        </InputGroup>
+                      </div>
+                    )}
                   </Col>
 
                   <Col md="6" lg="4">
                     {/* Login Type */}
-                    <div className="form-group">
-                      <Label>Role</Label>
-                      {userDetails.loginType ==="student" ? (<Input readOnly value={userDetails.loginType}/>) : (
-                        <Input
-                          type="select"
-                          value={userDetails.loginType}
-                          onChange={(e) => handleChange(e, "loginType")}
-                          // readOnly={userDetails.loginType === "student"}
-                        >
-                          <option disabled value="">
-                            Select
-                          </option>
-                          {Roles.map((role, index) => (
-                            <option key={index} value={role}>
-                              {role}
-                            </option>
-                          ))}
-                        </Input>
-                      )}
-                    </div>
+                    {userDetails.loginType && (
+                      <div className="form-group">
+                        <Label>Role</Label>
+                        <Input readOnly value={userDetails.loginType} />
+                      </div>
+                    )}
                   </Col>
                 </Row>
-
+                <h6>Address</h6>
                 {/* Current Address */}
-                <div className="form-group">
-                  <Label>Current Address</Label>
-                  <Input type="textarea" placeholder="Enter your Address" />
-                </div>
+                {userDetails.address && (
+                  <div className="form-group">
+                    <Label>Locality</Label>
+                    <Input
+                      type="text"
+                      placeholder="Enter your Address"
+                      value={userDetails.address.locality}
+                      onChange={(e) => handleAddress(e, "locality")}
+                    />
+                  </div>
+                )}
 
                 <Row className="gy-3 gy-xl-0">
                   <Col lg="6" xl="4">
                     {/* City */}
-                    <div className="form-group mb-0">
-                      <Label>City</Label>
-                      <Input placeholder="Enter your City" type="text"></Input>
-                    </div>
+                    {userDetails.address && (
+                      <div className="form-group mb-0">
+                        <Label>City</Label>
+                        <Input
+                          placeholder="Enter your City"
+                          type="text"
+                          value={userDetails.address.city}
+                          onChange={(e) => handleAddress(e, "city")}
+                        ></Input>
+                      </div>
+                    )}
                   </Col>
 
                   <Col lg="6" xl="4">
                     {/* State */}
-                    <div className="form-group mb-0">
-                      <Label>State</Label>
-                      <Input type="select">
-                        <option>Select</option>
-                        {states.map((state, index) => (
-                          <option key={index} value={state}>
-                            {state}
-                          </option>
-                        ))}
-                      </Input>
-                    </div>
+                    {userDetails.address && (
+                      <div className="form-group mb-0">
+                        <Label>State</Label>
+                        <Input
+                          type="select"
+                          value={userDetails.address.state}
+                          onChange={(e) => handleAddress(e, "state")}
+                        >
+                          <option hidden>Select State</option>
+                          {states.map((state, index) => (
+                            <option key={index} value={state}>
+                              {state}
+                            </option>
+                          ))}
+                        </Input>
+                      </div>
+                    )}
                   </Col>
 
                   <Col lg="6" xl="4">
                     {/* Zip */}
-                    <div className="form-group mb-0">
-                      <Label>Zip</Label>
-                      <Input placeholder="Enter your Zip Code" />
-                    </div>
+                    {userDetails.address && (
+                      <div className="form-group mb-0">
+                        <Label>Zip</Label>
+                        <Input
+                          placeholder="Enter your Zip Code"
+                          value={userDetails.address.pin}
+                          onChange={(e) => handleAddress(e, "pin")}
+
+                        />
+                      </div>
+                    )}
+                  </Col>
+
+                  <Col lg="6" xl="4">
+                    {/* Zip */}
+                    {userDetails.address && (
+                      <div className="form-group mb-0">
+                        <Label>Country</Label>
+                        <Input
+                          type="select"
+                          value={userDetails.address.country}
+                          onChange={(e) => handleAddress(e, "country")}
+
+                        >
+                          <option hidden>Select Country</option>
+                          <option>India</option>
+                          <option>USA</option>
+                        </Input>
+                      </div>
+                    )}
                   </Col>
                 </Row>
               </div>
