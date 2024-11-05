@@ -10,11 +10,12 @@ import TeacherSchedule from "../pages/protected/TeacherSchedule";
 import StudentSchedule from "../pages/protected/StudentSchedule";
 import AdminSchedule from "../pages/protected/AdminSchedule";
 import CreateSchedule from "../pages/protected/CreateSchedule";
+import Settings from "../pages/protected/Settings";
 
 const SUPER_ADMIN_ROUTES = [
   { text: "School", route: "/school", element: <ViewAllSchool /> },
   { text: "Admin", route: "/admin" },
-  { text: "Settings", route: "/settings" },
+  { text: "Settings", route: "/settings", element: <Settings /> },
   { text: "Profile", route: "/profile", element: <MyProfile /> },
 ];
 
@@ -26,7 +27,7 @@ const ADMIN_ROUTES = [
   { text: "Attendance", route: "/attendance", element: <Attendance /> },
   { text: "Report", route: "/report" },
   { text: "Student", route: "/student", element: <AllStudents /> },
-  { text: "Settings", route: "/settings" },
+  { text: "Settings", route: "/settings", element: <Settings /> },
   { text: "Profile", route: "/profile", element: <MyProfile /> },
 ];
 
@@ -39,7 +40,7 @@ const TEACHER_ROUTES = [
   { text: "Report", route: "/report" },
   { text: "Student", route: "/student", element: <AllStudents /> },
   { text: "Salary", route: "/salary", element: <Salary /> },
-  { text: "Settings", route: "/settings" },
+  { text: "Settings", route: "/settings", element: <Settings /> },
   { text: "Profile", route: "/profile", element: <MyProfile /> },
 ];
 
@@ -49,7 +50,7 @@ const STUDENT_ROUTES = [
   { text: "Notice", route: "/notice", element: <Notice /> },
   { text: "Payment", route: "/payment", element: <Payment /> },
   { text: "Report", route: "/report" },
-  { text: "Settings", route: "/settings" },
+  { text: "Settings", route: "/settings", element: <Settings /> },
   { text: "Profile", route: "/profile", element: <MyProfile /> },
 ];
 

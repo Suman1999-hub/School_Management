@@ -114,11 +114,23 @@ const AddStudentModal = ({ isOpen, toggle }) => {
             <FormGroup>
               <Label>Class</Label>
               <Input
-                type="text"
-                name="lastName"
-                value={formData.lastName}
+                type="select"
+                // name="lastName"
+                // value={formData.lastName}
                 onChange={handleInputChange}
-              />
+              >
+              <option value="">Select Class</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+                <option>9</option>
+                <option>10</option>
+                </Input>
             </FormGroup>
           </Col>
           <Col md="6">
@@ -138,17 +150,21 @@ const AddStudentModal = ({ isOpen, toggle }) => {
               </Input>
             </FormGroup>
           </Col>
-        </Row>
-        <Row>
           <Col md="6">
             <FormGroup>
-              <Label>DOB</Label>
+              <Label>Session</Label>
               <Input
-                type="date"
-                name="DOB"
-                value={formData.DOB}
+                type="select"
+                name="gender"
+                // value={formData.gender}
                 onChange={handleInputChange}
-              />
+              >
+                <option value="">Select Session</option>
+                <option value="2024-2025">2024-2025</option>
+                <option value="2025-2026<">2025-2026</option>
+                <option value="2026-2027">2026-2027</option>
+                {/* <option value="Others">Others</option> */}
+              </Input>
             </FormGroup>
           </Col>
           <Col md="6">
@@ -168,7 +184,20 @@ const AddStudentModal = ({ isOpen, toggle }) => {
               </Input>
             </FormGroup>
           </Col>
+          <Col md="6">
+            <FormGroup>
+              <Label>DOB</Label>
+              <Input
+                type="date"
+                name="DOB"
+                value={formData.DOB}
+                onChange={handleInputChange}
+              />
+            </FormGroup>
+          </Col>
+          
         </Row>
+        
         <FormGroup>
           <Label>Father's Name</Label>
           <Input
