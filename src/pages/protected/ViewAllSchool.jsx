@@ -58,13 +58,28 @@ function ViewAllSchool() {
                   <tr>
                     <td>
                       {curr.imageUrl ? (
-                        <img src={curr.imageUrl} width="100px" alt="" />
+                        <img
+                          src={curr.imageUrl}
+                          width="50px"
+                          height="50px"
+                          alt=""
+                        />
                       ) : (
-                        "null"
+                        <img
+                          src={require("../../assets/img/Defaultschool.png")}
+                          width="50px"
+                          height="50px"
+                          alt="default school logo"
+                        />
                       )}
                     </td>
                     <td>{curr.name}</td>
                     <td>
+                      <img
+                        src={require("../../assets/img/location.png")}
+                        width="30px"
+                        alt="location logo"
+                      />
                       {getAddressFormate(
                         curr.address.city,
                         curr.address.state,
@@ -75,11 +90,12 @@ function ViewAllSchool() {
                     <td>{curr.registrationNumber}</td>
                     <td>
                       <div className="action">
-                        <Button color="link">
+                        <Button color="link" onClick={() => _toggleModal(true)}>
                           <img
                             src={require("../../assets/img/edit.png")}
                             alt=""
                             width="20px"
+                            // onClick={}
                           />
                         </Button>
                         <Button color="link">

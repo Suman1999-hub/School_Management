@@ -59,6 +59,7 @@ const CreateSchoolModal = ({ isOpen, toggle }) => {
   const _createSchoolAPiCall = async (payload) => {
     try {
       const createSchoolApi = await createSchool(payload);
+      toggle();
       console.log(createSchoolApi);
     } catch (error) {
       console.log(error);
@@ -153,6 +154,39 @@ const CreateSchoolModal = ({ isOpen, toggle }) => {
             </FormGroup>
           </Col>
         </Row>
+        <Row>
+          <Col md="6">
+            <FormGroup>
+              <Label>Phone Number</Label>
+              <Input
+                type="text"
+                name="pinCode"
+                value={formData.SchoolPhNumber}
+                onChange={handleInputChange}
+              />
+            </FormGroup>
+          </Col>
+          <Col md="6">
+            <FormGroup>
+              <Label>Email</Label>
+              <Input
+                type="text"
+                name="pinCode"
+                value={formData.schoolEmail}
+                onChange={handleInputChange}
+              />
+            </FormGroup>
+          </Col>
+        </Row>
+        <FormGroup>
+          <Label>Location Url</Label>
+          <Input
+            type="text"
+            name="website"
+            value={formData.locationUrl}
+            onChange={handleInputChange}
+          />
+        </FormGroup>
         <FormGroup>
           <Label>Website</Label>
           <Input
