@@ -156,6 +156,7 @@ const MyProfile = () => {
                         src={require("../../assets/img/uploadDoc.svg").default}
                         alt=""
                       />
+                      
                       <div className="customUploadText">
                         <h6>Change Profile Picture</h6>
                         <span>File size must be less than 5mb</span>

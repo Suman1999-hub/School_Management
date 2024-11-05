@@ -147,11 +147,11 @@ function AllStudents() {
           <Table responsive>
             <thead>
               <tr>
-                <th>Roll no</th>
                 <th>Name</th>
-                <th>gender</th>
                 <th>Class</th>
                 <th>Section</th>
+                <th>Roll no</th>
+                <th>gender</th>
                 <th>Address</th>
                 <th>Mobile no.</th>
                 <th>Attendence(%)</th>
@@ -161,11 +161,11 @@ function AllStudents() {
 
             <tbody>
               <tr>
-                <td>1</td>
                 <td>Yash Agarwal</td>
-                <td>Male</td>
                 <td>VI</td>
                 <td>A</td>
+                <td>1</td>
+                <td>Male</td>
                 <td>mg road,saket,Delhi, 407614</td>
                 <td>9004569812</td>
                 <td>
@@ -188,11 +188,11 @@ function AllStudents() {
               </tr>
 
               <tr>
-                <td>12</td>
                 <td>Aveek mehotra</td>
-                <td>Male</td>
                 <td>VII</td>
                 <td>B</td>
+                <td>12</td>
+                <td>Male</td>
                 <td>mg road,saket,Delhi, 407614</td>
                 <td>9004569812</td>
                 <td>
@@ -214,11 +214,11 @@ function AllStudents() {
                   </td>
               </tr>
               <tr>
-                <td>19</td>
                 <td>Priti Agarwal</td>
-                <td>Female</td>
                 <td>VI</td>
                 <td>C</td>
+                <td>19</td>
+                <td>Female</td>
                 <td>mg road,Delhi, 407614</td>
                 <td>8643668432</td>
                 <td>
@@ -240,11 +240,11 @@ function AllStudents() {
                   </td>
               </tr>
               <tr>
-                <td>1</td>
                 <td>Yash Agarwal</td>
-                <td>Male</td>
                 <td>VI</td>
                 <td>B</td>
+                <td>1</td>
+                <td>Male</td>
                 <td>mg road,saket,Delhi, 407614</td>
                 <td>9004569812</td>
                 <td>
@@ -266,11 +266,11 @@ function AllStudents() {
                   </td>
               </tr>
               <tr>
-                <td>17</td>
                 <td>Abhishek Mehra</td>
-                <td>Male</td>
                 <td>V</td>
                 <td>A</td>
+                <td>17</td>
+                <td>Male</td>
                 <td>mg road,saket,Delhi, 407614</td>
                 <td>9432669812</td>
                 <td>
@@ -292,11 +292,11 @@ function AllStudents() {
                   </td>
               </tr>
               <tr>
-                <td>10</td>
                 <td>Trina Bose</td>
-                <td>Female</td>
                 <td>VIII</td>
                 <td>C</td>
+                <td>10</td>
+                <td>Female</td>
                 <td>sk road,Gurgaon, 407614</td>
                 <td>9004512312</td>
                 <td>
