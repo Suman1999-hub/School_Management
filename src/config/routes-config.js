@@ -15,7 +15,7 @@ import Report from "../pages/protected/Report";
 
 const SUPER_ADMIN_ROUTES = [
   { text: "School", route: "/school", element: <ViewAllSchool /> },
-  { text: "Admin", route: "/admin" },
+  // { text: "Admin", route: "/admin" },
   { text: "Settings", route: "/settings" },
   { text: "Profile", route: "/profile", element: <MyProfile /> },
 ];
@@ -26,7 +26,7 @@ const ADMIN_ROUTES = [
   { text: "Notice", route: "/notice", element: <Notice /> },
   { text: "Approval", route: "/approval" },
   { text: "Attendance", route: "/attendance", element: <Attendance /> },
-  { text: "Report", route: "/report" },
+  { text: "Report", route: "/report", element: <Report /> },
   { text: "Student", route: "/student", element: <AllStudents /> },
   { text: "Settings", route: "/settings" },
   { text: "Profile", route: "/profile", element: <MyProfile /> },
@@ -38,7 +38,7 @@ const TEACHER_ROUTES = [
   { text: "Notice", route: "/notice", element: <Notice /> },
   { text: "Apply Leave", route: "/leave", element: <ApplyLeave /> },
   { text: "Attendance", route: "/attendance", element: <Attendance /> },
-  { text: "Report", route: "/report" },
+  // { text: "Report", route: "/report" },
   { text: "Student", route: "/student", element: <AllStudents /> },
   { text: "Salary", route: "/salary", element: <Salary /> },
   { text: "Settings", route: "/settings" },
