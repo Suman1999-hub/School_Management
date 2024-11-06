@@ -140,7 +140,7 @@ export const createSchool = (payload) => {
 };
 export const findAllStudent = () => {
   return new Promise((resolve, reject) => {
-    makePostRequest(`${BASE_URL}admin/students/view-students`, true)
+    makePostRequest(`${BASE_URL}/admin/students/view-students`, true)
       .then((res) => {
         resolve(res);
         console.log(res);

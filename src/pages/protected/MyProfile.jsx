@@ -145,17 +145,9 @@ const MyProfile = () => {
                 />
               </div>
               <CardTitle>{userDetails.fullname}</CardTitle>
-              <span>{userDetails.email}</span>
-            </Card>
-
-            <hr />
-
-            <Card body className="mt-2">
-              {/* My Doc */}
-              <h6>My Docs</h6>
-              {/* Photo */}
+              {/* <span>{userDetails.email}</span> */}
               <div className="form-group">
-                <Label>Change Profile Photo</Label>
+                {/* <Label>Change Profile Photo</Label> */}
                 <div className="customFileUpload">
                   <Input type="file" id="customFileUpload" />
                   {true ? (
@@ -164,8 +156,9 @@ const MyProfile = () => {
                         src={require("../../assets/img/uploadDoc.svg").default}
                         alt=""
                       />
+                      
                       <div className="customUploadText">
-                        <h6>Upload File</h6>
+                        <h6>Change Profile Picture</h6>
                         <span>File size must be less than 5mb</span>
                       </div>
                     </Label>
@@ -185,40 +178,11 @@ const MyProfile = () => {
                   )}
                 </div>
               </div>
-
-              {/* Address Proof */}
-              {/* <div className="form-group mb-0">
-                <Label>Address Proof</Label>
-                <div className="customFileUpload">
-                  <Input type="file" id="customFileUpload" />
-                  {false ? (
-                    <Label for="customFileUpload" className="p-3">
-                      <img
-                        src={require("../../assets/img/uploadDoc.svg").default}
-                        alt=""
-                      />
-                      <div className="customUploadText">
-                        <h6>Upload Document</h6>
-                        <span>File size must be less than 5mb</span>
-                      </div>
-                    </Label>
-                  ) : (
-                    <Label for="customFileUpload" className="uploaded p-3">
-                      <img
-                        src={
-                          require("../../assets/img/sign-up-doc.svg").default
-                        }
-                        alt=""
-                      />
-                      <div className="customUploadText">
-                        <h6>Group 378961.svg</h6>
-                        <span>File size must be less than 5mb</span>
-                      </div>
-                    </Label>
-                  )}
-                </div>
-              </div> */}
             </Card>
+
+            <hr />
+
+           
           </Col>
           <Col xl="8">
             <Card body>
