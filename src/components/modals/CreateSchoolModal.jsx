@@ -13,7 +13,7 @@ import {
 import stateData from "../../State.json";
 import { createSchool } from "../../http/http-calls";
 
-const CreateSchoolModal = ({ isOpen, toggle }) => {
+const CreateSchoolModal = ({ isOpen, pageName, toggle }) => {
   const _closeModal = () => {
     toggle();
   };
@@ -31,6 +31,9 @@ const CreateSchoolModal = ({ isOpen, toggle }) => {
     DOB: "",
     gender: "",
     phoneNumber: "",
+    SchoolPhNumber: "",
+    schoolEmail: "",
+    locationUrl: "",
   });
   const payload = {
     name: formData.schoolName,
@@ -41,9 +44,9 @@ const CreateSchoolModal = ({ isOpen, toggle }) => {
       pinCode: formData.pinCode,
     },
     contact: {
-      phoneNo: "24355465665",
-      email: "jhdsg@gmail.com",
-      website: "www.hcjss.com",
+      phoneNo: formData.SchoolPhNumber,
+      email: formData.schoolEmail,
+      website: formData.website,
     },
     location: {
       type: "Point",
@@ -83,7 +86,7 @@ const CreateSchoolModal = ({ isOpen, toggle }) => {
       centered
       size="lg"
     >
-      <ModalHeader>Create School</ModalHeader>
+      <ModalHeader>{pageName}</ModalHeader>
       <ModalBody>
         {/* Card Number */}
         <h6>Add School details</h6>

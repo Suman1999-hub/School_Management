@@ -26,6 +26,11 @@ function ViewAllSchool() {
     setIsOpenModal(isOpenModal);
   };
 
+  const [isOpenEditModal, setIsOpenEditModal] = useState(false);
+  const _toggleEditModal = (isOpenModal = false) => {
+    setIsOpenEditModal(isOpenModal);
+  };
+
   return (
     <div>
       <div className="innerHeader">
@@ -90,7 +95,10 @@ function ViewAllSchool() {
                     <td>{curr.registrationNumber}</td>
                     <td>
                       <div className="action">
-                        <Button color="link" onClick={() => _toggleModal(true)}>
+                        <Button
+                          color="link"
+                          onClick={() => _toggleEditModal(true)}
+                        >
                           <img
                             src={require("../../assets/img/edit.png")}
                             alt=""
@@ -115,7 +123,18 @@ function ViewAllSchool() {
       </Card>
 
       {isOpenModal && (
-        <CreateSchoolModal isOpen={isOpenModal} toggle={() => _toggleModal()} />
+        <CreateSchoolModal
+          isOpen={isOpenModal}
+          pageName="Create School"
+          toggle={() => _toggleModal()}
+        />
+      )}
+      {isOpenEditModal && (
+        <CreateSchoolModal
+          isOpen={isOpenEditModal}
+          pageName="Edit School"
+          toggle={() => _toggleEditModal()}
+        />
       )}
     </div>
   );
