@@ -165,3 +165,32 @@ export const findAllTeacher = () => {
       });
   });
 };
+
+//edit School
+export const updateSchool = ({ payload, schoolId }) => {
+  console.log("1111", { payload, schoolId });
+  return new Promise((resolve, reject) => {
+    makePutRequest(`${BASE_URL}/school/${schoolId}`, true, payload)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+//get School details
+export const getSchoolDetail = ({ id }) => {
+  return new Promise((resolve, reject) => {
+    makeGetRequest(`${BASE_URL}/school/${id}`, true)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};

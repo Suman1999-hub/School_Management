@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, CardTitle, Table } from "reactstrap";
 import PaginatedItems from "../../components/PaginatedItems";
-import { findAllSchool } from "../../http/http-calls";
+import { findAllSchool, getSchoolDetail } from "../../http/http-calls";
 import { getAddressFormate } from "../../helper-methods";
 import CreateSchoolModal from "../../components/modals/CreateSchoolModal";
+import { Link } from "react-router-dom";
 
 function ViewAllSchool() {
   const [allSchool, setAllSchool] = useState([]);
+  const [currentItems, setCurrentItems] = useState([]);
+
   const fetchAllSchoolData = async () => {
     try {
       const schoolData = await findAllSchool();
@@ -27,10 +30,21 @@ function ViewAllSchool() {
   };
 
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
-  const _toggleEditModal = (isOpenModal = false) => {
+  const [isOpenEditModalIndex, setIsOpenEditModalIndex] = useState();
+  const _toggleEditModal = (isOpenModal = false, index) => {
     setIsOpenEditModal(isOpenModal);
+    setIsOpenEditModalIndex(index);
   };
 
+  const _getSchoolAPiCall = async (id) => {
+    try {
+      const getSchoolApi = await getSchoolDetail({ id });
+
+      console.log(getSchoolApi);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div>
       <div className="innerHeader">
@@ -51,20 +65,20 @@ function ViewAllSchool() {
               <th>School Name</th>
               <th>Location</th>
               <th>Registration Number</th>
-              <th>View</th>
+              <th>Action</th>
             </tr>
           </thead>
 
           <tbody>
-            {allSchool.map((curr) => {
-              console.log(curr);
+            {currentItems.map((curr, index) => {
+              // console.log(curr);
               return (
                 <>
                   <tr>
                     <td>
-                      {curr.imageUrl ? (
+                      {curr?.imageUrl ? (
                         <img
-                          src={curr.imageUrl}
+                          src={curr?.imageUrl}
                           width="50px"
                           height="50px"
                           alt=""
@@ -78,7 +92,12 @@ function ViewAllSchool() {
                         />
                       )}
                     </td>
-                    <td>{curr.name}</td>
+
+                    <td>
+                      {" "}
+                      <Link to={`/school/${curr?._id}`}>{curr?.name}</Link>
+                    </td>
+
                     <td>
                       <img
                         src={require("../../assets/img/location.png")}
@@ -86,29 +105,33 @@ function ViewAllSchool() {
                         alt="location logo"
                       />
                       {getAddressFormate(
-                        curr.address.city,
-                        curr.address.state,
-                        curr.address.country,
-                        curr.address.pinCode
+                        curr?.address.city,
+                        curr?.address.state,
+                        curr?.address.country,
+                        curr?.address.pinCode
                       )}
                     </td>
-                    <td>{curr.registrationNumber}</td>
+                    <td>{curr?.registrationNumber}</td>
                     <td>
                       <div className="action">
                         <Button
                           color="link"
-                          onClick={() => _toggleEditModal(true)}
+                          onClick={() => _toggleEditModal(true, index)}
                         >
                           <img
                             src={require("../../assets/img/edit.png")}
                             alt=""
                             width="20px"
-                            // onClick={}
                           />
                         </Button>
-                        <Button color="link">
-                          <i className="fa fa-eye"></i>
-                        </Button>
+                        {/* <Link to={`/school/${curr?._id}`}>
+                          <Button
+                            color="link"
+                            onClick={() => _getSchoolAPiCall(curr?._id)}
+                          >
+                            <i className="fa fa-eye"></i>
+                          </Button>
+                        </Link> */}
                       </div>
                     </td>
                   </tr>
@@ -119,13 +142,19 @@ function ViewAllSchool() {
         </Table>
 
         {/* pagination */}
-        <PaginatedItems itemsPerPage={4} />
+        <PaginatedItems
+          items={allSchool}
+          itemsPerPage={5}
+          setCurrentItems={setCurrentItems}
+        />
       </Card>
 
       {isOpenModal && (
         <CreateSchoolModal
           isOpen={isOpenModal}
           pageName="Create School"
+          data="null"
+          index="null"
           toggle={() => _toggleModal()}
         />
       )}
@@ -133,7 +162,10 @@ function ViewAllSchool() {
         <CreateSchoolModal
           isOpen={isOpenEditModal}
           pageName="Edit School"
+          data={allSchool}
+          index={isOpenEditModalIndex}
           toggle={() => _toggleEditModal()}
+          fetchAllSchoolData={fetchAllSchoolData}
         />
       )}
     </div>

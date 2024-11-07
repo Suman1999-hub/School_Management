@@ -11,6 +11,7 @@ import { ROUTES } from "../../config/routes-config";
 import { useSelector } from "react-redux";
 import CreateSchedule from "../../pages/protected/CreateSchedule";
 import CreateNotice from "../../pages/protected/CreateNotice";
+import ViewSchool from "../../pages/protected/ViewSchool";
 
 const DashboardLayout = () => {
   const [isShow, setIsShow] = useState(false);
@@ -40,6 +41,8 @@ const DashboardLayout = () => {
               path="/schedule/createschedule"
               element={<CreateSchedule />}
             />
+            <Route path="/school/:id" element={<ViewSchool />} />
+
             <Route path="*" element={<Navigate replace to="/dashboard" />} />
           </Routes>
 
