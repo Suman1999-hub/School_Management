@@ -70,7 +70,7 @@ function ViewAllSchool() {
           </thead>
 
           <tbody>
-            {currentItems.map((curr, index) => {
+            {allSchool.map((curr, index) => {
               // console.log(curr);
               return (
                 <>
@@ -143,9 +143,9 @@ function ViewAllSchool() {
 
         {/* pagination */}
         <PaginatedItems
-          items={allSchool}
+          // items={allSchool}
           itemsPerPage={5}
-          setCurrentItems={setCurrentItems}
+          // setCurrentItems={setCurrentItems}
         />
       </Card>
 
