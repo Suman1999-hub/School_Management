@@ -7,9 +7,12 @@ import {
   CardSubtitle,
   CardText,
   CardTitle,
+  Col,
+  Label,
+  Row,
 } from "reactstrap";
 import { getSchoolDetail } from "../../http/http-calls";
-import { getAddressFormate } from "../../helper-methods";
+import { dateFormat, getAddressFormate } from "../../helper-methods";
 
 function ViewSchool() {
   const { id } = useParams();
@@ -81,20 +84,53 @@ function ViewSchool() {
             />
             <span>
               {getAddressFormate(
-                schoolData?.address?.city,
-                schoolData?.address?.state,
-                schoolData?.address?.country,
+                schoolData?.address?.city ? schoolData?.address?.city : "-",
+
+                schoolData?.address?.state ? schoolData?.address?.state : "-",
+                schoolData?.address?.country
+                  ? schoolData?.address?.country
+                  : "-",
                 schoolData?.address?.pinCode
+                  ? schoolData?.address?.pinCode
+                  : "-"
               )}
             </span>
           </CardSubtitle>
           <CardText>
-            <div>
-              <h6>Principle Name: {schoolData?.principalName}</h6>
-              <h6>Phone: {schoolData?.contact?.phoneNo}</h6>
-              <h6>Email: {schoolData?.contact?.email}</h6>
-              <h6>Website: {schoolData?.contact?.website}</h6>
-            </div>
+            <Row>
+              <Col md="6">
+                <Label style={{ fontWeight: "bold" }}>Email</Label>
+                <div>
+                  {schoolData?.contact?.email
+                    ? schoolData?.contact?.email
+                    : "-"}
+                </div>
+              </Col>
+              <Col md="6">
+                <Label style={{ fontWeight: "bold" }}>Phone Number</Label>
+                <div>
+                  {schoolData?.contact?.phoneNo
+                    ? schoolData?.contact?.phoneNo
+                    : "-"}
+                </div>
+              </Col>
+            </Row>
+            <Row className="mt-3">
+              <Col md="6">
+                <Label style={{ fontWeight: "bold" }}>Principle Name:</Label>
+                <div>
+                  {schoolData?.principalName ? schoolData?.principalName : "-"}
+                </div>
+              </Col>
+              <Col md="6">
+                <Label style={{ fontWeight: "bold" }}>Website:</Label>
+                <div>
+                  {schoolData?.contact?.website
+                    ? schoolData?.contact?.website
+                    : "-"}
+                </div>
+              </Col>
+            </Row>
           </CardText>
         </CardBody>
       </Card>
@@ -124,7 +160,7 @@ function ViewSchool() {
                 width="100px"
                 style={{
                   border: "2px solid aqua",
-                  borderRadius: "50%",
+                  borderRadius: "10%",
                 }}
               />
             ) : (
@@ -150,18 +186,37 @@ function ViewSchool() {
             />
             <span>
               {getAddressFormate(
-                schoolData?.admin?.address?.city,
-                schoolData?.admin?.address?.state,
-                schoolData?.admin?.address?.country,
+                schoolData?.admin?.address?.city
+                  ? schoolData?.admin?.address?.city
+                  : "-",
+
+                schoolData?.admin?.address?.state
+                  ? schoolData?.admin?.address?.state
+                  : "-",
+                schoolData?.admin?.address?.country
+                  ? schoolData?.admin?.address?.country
+                  : "-",
                 schoolData?.admin?.address?.pin
+                  ? schoolData?.admin?.address?.pin
+                  : "-"
               )}
             </span>
           </CardSubtitle>
           <CardText>
-            <div>
-              <h6>Phone Number: {schoolData?.admin?.phone}</h6>
-              <h6>Email: {schoolData?.admin?.email}</h6>
-            </div>
+            <Row>
+              <Col md="6">
+                <Label style={{ fontWeight: "bold" }}>Email</Label>
+                <div>
+                  {schoolData?.admin?.email ? schoolData?.admin?.email : "-"}
+                </div>
+              </Col>
+              <Col md="6">
+                <Label style={{ fontWeight: "bold" }}>Phone Number</Label>
+                <div>
+                  {schoolData?.admin?.phone ? schoolData?.admin?.phone : "-"}
+                </div>
+              </Col>
+            </Row>
           </CardText>
         </CardBody>
       </Card>

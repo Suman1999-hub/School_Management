@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import CreateSchedule from "../../pages/protected/CreateSchedule";
 import CreateNotice from "../../pages/protected/CreateNotice";
 import ViewSchool from "../../pages/protected/ViewSchool";
+import ViewDetailsTeacher from "../../pages/protected/ViewDetailsTeacher";
 
 const DashboardLayout = () => {
   const [isShow, setIsShow] = useState(false);
@@ -42,6 +43,7 @@ const DashboardLayout = () => {
               element={<CreateSchedule />}
             />
             <Route path="/school/:id" element={<ViewSchool />} />
+            <Route path="/teacher/:id" element={<ViewDetailsTeacher />} />
 
             <Route path="*" element={<Navigate replace to="/dashboard" />} />
           </Routes>
