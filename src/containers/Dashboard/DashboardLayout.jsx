@@ -13,7 +13,11 @@ import CreateSchedule from "../../pages/protected/CreateSchedule";
 import CreateNotice from "../../pages/protected/CreateNotice";
 import ViewSchool from "../../pages/protected/ViewSchool";
 import ViewDetailsTeacher from "../../pages/protected/ViewDetailsTeacher";
+<<<<<<< HEAD
 import ViewNotice from "../../pages/protected/ViewNotice";
+=======
+import ViewDetailsStudent from "../../pages/protected/ViewDetailsStudent";
+>>>>>>> origin/okavita
 
 const DashboardLayout = () => {
   const [isShow, setIsShow] = useState(false);
@@ -47,6 +51,7 @@ const DashboardLayout = () => {
             <Route path="/teacher/:id" element={<ViewDetailsTeacher />} />
             <Route path="/notice/:id" element={<ViewNotice />} />
 
+            <Route path="/student/:id" element={<ViewDetailsStudent />} />
             <Route path="*" element={<Navigate replace to="/dashboard" />} />
           </Routes>
 

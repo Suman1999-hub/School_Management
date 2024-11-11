@@ -95,8 +95,9 @@ const DashboardHeader = ({ isShow, setIsShow }) => {
                 alt="Profile"
               />
             </div>
-            <div className="userName">
-              {loginUser.firstName} {loginUser.lastName}
+            <div style={{textAlign:"center", marginTop:"10px"}} className="userName">
+              <div>{loginUser.firstName} {loginUser.lastName}</div>
+              <div style={{color:"grey", fontSize:"12px", marginTop:"8px"}}>{ loginUser.loginType }</div>
             </div>
           </div>
         </div>
