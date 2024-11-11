@@ -11,55 +11,106 @@ import {
   Input,
 } from "reactstrap";
 import stateData from "../../State.json";
-import { createSchool } from "../../http/http-calls";
+import {
+  createSchool,
+  createStudent,
+  updateStudent,
+} from "../../http/http-calls";
 
-const AddStudentModal = ({ isOpen, toggle }) => {
+const AddStudentModal = ({
+  isOpen,
+  pageName,
+  toggle,
+  id,
+  studentDetails,
+  fetchAllStudentData,
+  getStudentAPICall,
+}) => {
   const _closeModal = () => {
     toggle();
   };
 
+console.log("studentDetails",studentDetails);
+
+
   const [formData, setFormData] = useState({
-    schoolName: "",
-    city: "",
-    state: "",
-    country: "",
-    pinCode: "",
-    website: "",
-    email: "",
-    firstName: "",
-    lastName: "",
-    DOB: "",
-    gender: "",
-    phoneNumber: "",
+    Locality: studentDetails?.address?.locality || "",
+    city: studentDetails?.address?.city || "",
+    state: studentDetails?.address?.state || "",
+    country: studentDetails?.address?.country || "",
+    pinCode: studentDetails?.address?.pin || "",
+    email: studentDetails?.email || "",
+    firstName: studentDetails?.firstName || "",
+    lastName: studentDetails?.lastName || "",
+    DOB: studentDetails?.dob || "",
+    gender: studentDetails?.gender || "",
+    section: studentDetails?._class?.section || "",
+    class: studentDetails?._class?.name || "",
+    phoneNumber: studentDetails?.phone || "",
+    FatherName: studentDetails?.guardian?.fathersName || "",
+    MotherName: studentDetails?.guardian?.mothersName || "",
+    MotherOccupation: studentDetails?.mothersOccupation || "",
+    FatherOccupation: studentDetails?.fathersOccupation || "",
+    session : studentDetails?.currentAcademicYear || "",
+    joinDate: studentDetails?.joinDate || "",
   });
+
   const payload = {
-    name: formData.schoolName,
-    schoolAddress: {
-      city: formData.city,
-      state: formData.state,
-      country: formData.country,
-      pinCode: formData.pinCode,
+    firstName: formData?.firstName,
+    lastName: formData?.lastName,
+    gender: formData?.gender,
+    guardian: {
+      fathersName: formData?.FatherName,
+      fathersOccupation: formData?.FatherOccupation,
+      mothersName: formData?.MotherName,
+      mothersOccupation: formData?.MotherOccupation,
     },
-    contact: {
-      phoneNo: "24355465665",
-      email: "jhdsg@gmail.com",
-      website: "www.hcjss.com",
+    address: {
+      locality: formData?.Locality,
+      city: formData?.city,
+      state: formData?.state,
+      pin: formData?.pinCode,
+      country: formData?.country,
     },
-    location: {
-      type: "Point",
-      coordinates: [73.323, 88.323],
-    },
-    email: formData.email,
-    firstName: formData.firstName,
-    lastName: formData.lastName,
-    dob: formData.DOB,
-    gender: formData.gender,
-    phone: formData.phoneNumber,
+    phone: formData?.phoneNumber,
+    currentAcademicYear: formData?.session,
+    dob: formData?.DOB,
+    rollNo: "",
+    joinDate: "2024",
+    classname: formData?.class,
+    section: formData?.section,
+    signature: "base64EncodedString",
+    profileImage: "public/docsimg/ProfilePic.jpeg",
+    autoAssignRoll: true,
+   
   };
-  const _createSchoolAPiCall = async (payload) => {
+
+  //Create
+  const _createStudentApiCall = async () => {
     try {
-      const createSchoolApi = await createSchool(payload);
-      console.log(createSchoolApi);
+      const createStudentRes = await createStudent(payload);
+      // if (!createStudentRes?.error) {
+      //   fetchAllStudentData();
+      //   toggle();
+      // }
+      console.log(payload);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //Edit
+  const _EditStudentApiCall = async () => {
+    try {
+      if (id !== undefined) {
+        const updateStudentRes = await updateStudent({ payload, id });
+        if (!updateStudentRes?.error) {
+          getStudentAPICall(id);
+        }
+
+        toggle();
+        console.log(updateStudentRes);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -82,11 +133,16 @@ const AddStudentModal = ({ isOpen, toggle }) => {
       centered
       style={{ maxWidth: "600px" }}
     >
-      <ModalHeader>Add Student</ModalHeader>
+      {pageName === "Create Student" ? (
+        <ModalHeader>Add Student</ModalHeader>
+      ) : (
+        <ModalHeader>Edit Student</ModalHeader>
+      )}
+
       <ModalBody>
         {/* Card Number */}
-        <h6>Add Student details</h6>        
-        
+        {/* {pageName==="Create Student" ? (<h6>Add Student details</h6>) : (<h6>Edit Student details</h6>)}         */}
+
         <Row>
           <Col md="6">
             <FormGroup>
@@ -115,11 +171,11 @@ const AddStudentModal = ({ isOpen, toggle }) => {
               <Label>Class</Label>
               <Input
                 type="select"
-                // name="lastName"
-                // value={formData.lastName}
+                name="class"
+                value={formData.class}
                 onChange={handleInputChange}
               >
-              <option value="">Select Class</option>
+                <option value="">Select Class</option>
                 <option>1</option>
                 <option>2</option>
                 <option>3</option>
@@ -130,7 +186,7 @@ const AddStudentModal = ({ isOpen, toggle }) => {
                 <option>8</option>
                 <option>9</option>
                 <option>10</option>
-                </Input>
+              </Input>
             </FormGroup>
           </Col>
           <Col md="6">
@@ -138,8 +194,8 @@ const AddStudentModal = ({ isOpen, toggle }) => {
               <Label>Section</Label>
               <Input
                 type="select"
-                name="gender"
-                value={formData.gender}
+                name="section"
+                value={formData.section}
                 onChange={handleInputChange}
               >
                 <option value="">Select Section</option>
@@ -155,8 +211,8 @@ const AddStudentModal = ({ isOpen, toggle }) => {
               <Label>Session</Label>
               <Input
                 type="select"
-                name="gender"
-                // value={formData.gender}
+                name="session"
+                value={formData.session}
                 onChange={handleInputChange}
               >
                 <option value="">Select Session</option>
@@ -195,15 +251,14 @@ const AddStudentModal = ({ isOpen, toggle }) => {
               />
             </FormGroup>
           </Col>
-          
         </Row>
-        
+
         <FormGroup>
           <Label>Father's Name</Label>
           <Input
             type="text"
-            name="phoneNumber"
-            value={formData.phoneNumber}
+            name="FatherName"
+            value={formData.FatherName}
             onChange={handleInputChange}
           />
         </FormGroup>
@@ -211,17 +266,17 @@ const AddStudentModal = ({ isOpen, toggle }) => {
           <Label>Father's Occupation</Label>
           <Input
             type="text"
-            name="schoolName"
-            value={formData.schoolName}
+            name="FatherOccupation"
+            value={formData.FatherOccupation}
             onChange={handleInputChange}
           />
         </FormGroup>
         <FormGroup>
-          <Label>Mother's Name</Label>
+          <Label>MotherName</Label>
           <Input
             type="text"
-            name="schoolName"
-            value={formData.schoolName}
+            name="MotherName"
+            value={formData.MotherName}
             onChange={handleInputChange}
           />
         </FormGroup>
@@ -229,22 +284,22 @@ const AddStudentModal = ({ isOpen, toggle }) => {
           <Label>Mother's Occupation</Label>
           <Input
             type="text"
-            name="schoolName"
-            value={formData.schoolName}
+            name="MotherOccupation"
+            value={formData.MotherOccupation}
             onChange={handleInputChange}
           />
         </FormGroup>
         <h6>Address</h6>
         <Row>
-        <FormGroup>
-          <Label>Locality</Label>
-          <Input
-            type="text"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleInputChange}
-          />
-        </FormGroup>
+          <FormGroup>
+            <Label>Locality</Label>
+            <Input
+              type="text"
+              name="Locality"
+              value={formData.Locality}
+              onChange={handleInputChange}
+            />
+          </FormGroup>
           <Col md="6">
             <FormGroup>
               <Label>City</Label>
@@ -306,8 +361,8 @@ const AddStudentModal = ({ isOpen, toggle }) => {
           <Label>email</Label>
           <Input
             type="text"
-            name="website"
-            value={formData.website}
+            name="email"
+            value={formData.email}
             onChange={handleInputChange}
           />
         </FormGroup>
@@ -315,8 +370,8 @@ const AddStudentModal = ({ isOpen, toggle }) => {
           <Label>Mobile no.</Label>
           <Input
             type="text"
-            name="website"
-            value={formData.website}
+            name="phoneNumber"
+            value={formData.phoneNumber}
             onChange={handleInputChange}
           />
         </FormGroup>
@@ -325,13 +380,23 @@ const AddStudentModal = ({ isOpen, toggle }) => {
           <Button color="primary" outline onClick={() => _closeModal()}>
             Cancel
           </Button>
-          <Button
-            color="primary"
-            className="ms-3"
-            // onClick={() => _createSchoolAPiCall(payload)}
-          >
-            Add Student
-          </Button>
+          {pageName === "Create Student" ? (
+            <Button
+              color="primary"
+              className="ms-3"
+              onClick={() => _createStudentApiCall()}
+            >
+              {pageName}
+            </Button>
+          ) : (
+            <Button
+              color="primary"
+              className="ms-3"
+              onClick={() => _EditStudentApiCall()}
+            >
+              {pageName}
+            </Button>
+          )}
         </div>
       </ModalBody>
     </Modal>

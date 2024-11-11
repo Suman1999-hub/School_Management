@@ -23,7 +23,7 @@ function AllStudents() {
 
   const user = useSelector((state) => state.userCredential.user.loginType);
 
-  const fetchAllSchoolData = async () => {
+  const fetchAllStudentData = async () => {
     try {
       // console.log("userID", userID);
       const studentData = await findAllStudent();
@@ -37,7 +37,7 @@ function AllStudents() {
   console.log("allStudents", allStudents);
 
   useEffect(() => {
-    fetchAllSchoolData();
+    fetchAllStudentData();
   }, []);
 
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -210,6 +210,14 @@ function AllStudents() {
         {isOpenModal && (
           <AddStudentModal isOpen={isOpenModal} toggle={() => _toggleModal()} />
         )}
+        {isOpenModal && (
+        <AddStudentModal
+          isOpen={isOpenModal}
+          pageName="Create Student"
+          toggle={() => _toggleModal()}
+          fetchAllStudentData={() => fetchAllStudentData()}
+        />
+      )}
       </div>
     </TabPane>
   );

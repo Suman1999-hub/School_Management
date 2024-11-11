@@ -251,11 +251,39 @@ export const ActivateDeactivate = ({ payload, id }) => {
   });
 };
 
+//Create Teacher
+export const createStudent = (payload) => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/admin/student`, true, payload)
+      .then((res) => {
+        resolve(res);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
 
 //getStudentdetails
 export const getStudentdetails = ({ id }) => {
   return new Promise((resolve, reject) => {
     makeGetRequest(`${BASE_URL}/admin/student/${id}`, true)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+//Edit Teacher
+export const updateStudent = ({ payload, id }) => {
+  return new Promise((resolve, reject) => {
+    makePutRequest(`${BASE_URL}/admin/student/${id}`, true, payload)
       .then((res) => {
         resolve(res);
       })

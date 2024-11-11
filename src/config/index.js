@@ -2,7 +2,7 @@
 export const BASE_URL =
   process.env.REACT_APP_BACKEND_ENV === "live"
     ? "https://537e-110-225-10-144.ngrok-free.app/api/v1"
-    : "http://52.66.238.171:3000/api/v1";
+    : "https://schoolmanagement-zn7n.onrender.com/api/v1";
 
 // process.env.REACT_APP_BACKEND_ENV === "live" ? "" : "";
 

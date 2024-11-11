@@ -19,6 +19,7 @@ import {
 import { Link, useParams } from "react-router-dom";
 import { dateFormat, getAddressFormate } from "../../helper-methods";
 import AddTeacherModal from "../../components/modals/AddTeacherModal";
+import AddStudentModal from "../../components/modals/AddSudentModal";
 
 function ViewDetailsStudent() {
   const [studentData, setStudentData] = useState(null);
@@ -80,7 +81,7 @@ function ViewDetailsStudent() {
                   //   onChange={handleChangeActiveDeactive}
                 >
                   <option value="true">Active</option>
-                  <option value="false">Inactive</option>
+                  <option value="false">Deactivate</option>
                 </Input>
               </div>
               <div>
@@ -225,6 +226,16 @@ function ViewDetailsStudent() {
           getTeacherAPiCall={_getTeacherAPiCall}
         />
       )} */}
+      {isOpenEditModal && (
+        <AddStudentModal
+          isOpen={isOpenEditModal}
+          pageName="Edit Student"
+          toggle={() => _toggleEditModal()}
+          id={id}
+          studentDetails={studentData}
+          getStudentAPICall={_getStudentAPICall}
+        />
+      )}
     </div>
   );
 }
