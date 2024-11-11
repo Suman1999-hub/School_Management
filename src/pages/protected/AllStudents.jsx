@@ -20,7 +20,7 @@ import { findAllStudent } from "../../http/http-calls";
 function AllStudents() {
   const [allStudents, setAllStudents] = useState([]);
 
-  const userID = useSelector((state) => state.userCredential.user.id);
+  const user = useSelector((state) => state.userCredential.user.loginType);
 
   const fetchAllSchoolData = async () => {
     try {
@@ -70,7 +70,7 @@ function AllStudents() {
               <option>2013-2014</option>
             </Input>
           </div>
-          
+
           <div className="formGroup">
             <Label>Class</Label>
             <Input type="select">
@@ -113,20 +113,24 @@ function AllStudents() {
       <div>
         <div className="innerHeader">
           <h2>Students</h2>
-          <div>
-            <Button
-              color="primary"
-              outline
-              className="ms-3 mx-5"
-              onClick={() => null}
-            >
-              Import CSV
-            </Button>
+          {user === "admin" ? (
+            <div>
+              <Button
+                color="primary"
+                outline
+                className="ms-3 mx-5"
+                onClick={() => null}
+              >
+                Import CSV
+              </Button>
 
-            <Button color="primary" onClick={() => _toggleModal(true)}>
-              Add Student
-            </Button>
-          </div>
+              <Button color="primary" onClick={() => _toggleModal(true)}>
+                Add Student
+              </Button>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
 
         <Card body>
@@ -141,12 +145,12 @@ function AllStudents() {
                 <th>Address</th>
                 <th>Mobile no.</th>
                 <th>Attendence(%)</th>
-                <th>View Details</th>
+                <th>Status</th>
+                {user === "admin" ? <th>Edit</th> : ""}
               </tr>
             </thead>
 
             <tbody>
-              
               {allStudents.map((curr) => {
                 console.log(curr);
                 return (
@@ -163,16 +167,15 @@ function AllStudents() {
                       <td>{curr.rollNo ? curr.rollNo : ""}</td>
                       <td>{curr.gender ? curr.gender : ""}</td>
                       <td>
-                        {curr.address ? 
-                        getAddressFormate(
-                          curr.address.locality,
-                          curr.address.city,
-                          curr.address.state,
-                          curr.address.country,
-                          curr.address.pin
-                        )
-                        : ""}
-                        
+                        {curr.address
+                          ? getAddressFormate(
+                              curr.address.locality,
+                              curr.address.city,
+                              curr.address.state,
+                              curr.address.country,
+                              curr.address.pin
+                            )
+                          : ""}
                       </td>
                       <td>{curr.phone ? curr.phone : ""}</td>
                       <td>
@@ -185,10 +188,11 @@ function AllStudents() {
                           })}
                         />
                       </td>
+                      <td>{curr.isActive === true ? "Active" : "Deactive"}</td>
                       <td>
                         <div className="action">
                           <Button color="link">
-                            <i className="fa fa-eye"></i>
+                            <i className="fa fa-edit"></i>
                           </Button>
                         </div>
                       </td>
