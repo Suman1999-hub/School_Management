@@ -240,7 +240,35 @@ export const updateTeacher = ({ payload, id }) => {
 //Active and In
 export const ActivateDeactivate = ({ payload, id }) => {
   return new Promise((resolve, reject) => {
-    makePutRequest(`${BASE_URL}/activatedeactivate/${id}`, true, payload)
+    makePostRequest(`${BASE_URL}/activatedeactivate/${id}`, true, payload)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+//All Notice
+export const getAllNotices = (payload) => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/admin/notices/allnotices`, true, payload)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+//Create Notice
+export const createNoticeApi = (payload) => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/admin/notice/createnotice`, true, payload)
       .then((res) => {
         resolve(res);
       })

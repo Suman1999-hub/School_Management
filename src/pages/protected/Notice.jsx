@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -15,6 +15,8 @@ import CustomDateRangePicker from "../../components/CustomDateRangePicker";
 import TextEditor from "../../components/TextEditor";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { getAllNotices } from "../../http/http-calls";
+import { formatDatell } from "../../helper-methods";
 
 function Notice() {
   const [filters, setFilters] = useState({
@@ -23,6 +25,7 @@ function Notice() {
       endDate: null,
     },
   });
+  const [allNotice, setAllNotice] = useState();
 
   const UserloginType = useSelector(
     (state) => state.userCredential.user.loginType
@@ -37,6 +40,30 @@ function Notice() {
     };
     setFilters(newFilters);
   };
+
+  const _getAllNotice = async () => {
+    let payload = {};
+    if (UserloginType === "teacher") {
+      payload = {
+        type: "teacher",
+      };
+    } else if (UserloginType === "student") {
+      payload = {
+        type: "student",
+      };
+    }
+    try {
+      const allNoticeRes = await getAllNotices(payload);
+      console.log(allNoticeRes.notices);
+      setAllNotice(allNoticeRes.notices);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  console.log(allNotice);
+  useEffect(() => {
+    _getAllNotice();
+  }, []);
   return (
     <>
       {UserloginType === "admin" ? (
@@ -109,78 +136,51 @@ function Notice() {
               </thead>
 
               <tbody>
-                <tr>
-                  <td>Basic Subscription</td>
-                  <td>ABC 12458547</td>
-                  <td>Visa 4242</td>
+                {allNotice?.map((curr) => {
+                  console.log(curr?.attachments?.[0]?.url);
+                  return (
+                    <tr>
+                      <td>
+                        <Link to={`/notice/${curr._id}`}>
+                          {curr?.title ? curr?.title : "-"}
+                        </Link>
+                      </td>
 
-                  <td>Jul 12. 2023</td>
-                  <td>
-                    <Button style={{ backgroundColor: "#E3F3DA" }}>
-                      <img
-                        src={require("../../assets/img/download.png")}
-                        alt=""
-                        width="20px"
-                      />
-                    </Button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Premium Subscription</td>
-                  <td>ABC 12458547</td>
-                  <td>Visa 4242</td>
+                      <td>
+                        {curr?.description?.length > 50
+                          ? `${curr.description.substring(0, 50)}...`
+                          : curr?.description}
+                      </td>
+                      <td>{curr?.noticeType ? curr?.noticeType : "-"}</td>
 
-                  <td>Jul 12. 2023</td>
-                  <td>
-                    <Button style={{ backgroundColor: "#E3F3DA" }}>
-                      <img
-                        src={require("../../assets/img/download.png")}
-                        alt=""
-                        width="20px"
-                      />
-                    </Button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Dispute Letter</td>
-                  <td>ABC 12458547</td>
-                  <td>Visa 4242</td>
-
-                  <td>Jul 12. 2023</td>
-                  <td>
-                    {" "}
-                    <Button style={{ backgroundColor: "#E3F3DA" }}>
-                      <img
-                        src={require("../../assets/img/download.png")}
-                        alt=""
-                        width="20px"
-                      />
-                    </Button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Certified Letter</td>
-                  <td>ABC 12458547</td>
-                  <td>Visa 4242</td>
-                  <td>Jul 12. 2023</td>
-                  <td>
-                    {" "}
-                    <Button style={{ backgroundColor: "#E3F3DA" }}>
-                      <img
-                        src={require("../../assets/img/download.png")}
-                        alt=""
-                        width="20px"
-                      />
-                    </Button>
-                  </td>
-                </tr>
+                      <td>
+                        {curr?.postedDate
+                          ? formatDatell(curr?.postedDate)
+                          : "-"}
+                      </td>
+                      <td>
+                        {curr?.attachments?.length > 0 ? (
+                          <a href={curr?.attachments?.[0]?.url} download>
+                            <img
+                              src={require("../../assets/img/download.png")}
+                              alt=""
+                              width="20px"
+                            />
+                          </a>
+                        ) : (
+                          ""
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </Table>
 
             {/* See More */}
-            <Button color="link" className="h-auto mb-2">
+            {/* <Button color="link" className="h-auto mb-2">
               See More <i className="fa fa-chevron-down"></i>
-            </Button>
+            </Button> */}
           </Card>
         </section>
       </TabPane>

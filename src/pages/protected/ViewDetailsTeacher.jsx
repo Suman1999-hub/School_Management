@@ -17,7 +17,7 @@ import { dateFormat, getAddressFormate } from "../../helper-methods";
 import AddTeacherModal from "../../components/modals/AddTeacherModal";
 
 function ViewDetailsTeacher() {
-  const [teacherData, setTeacherData] = useState(null);
+  const [teacherData, setTeacherData] = useState();
   const [isActive, setIsActive] = useState(null);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
 
@@ -27,28 +27,35 @@ function ViewDetailsTeacher() {
     try {
       const getTeacherApiRes = await getTeacherdetails({ id });
       setTeacherData(getTeacherApiRes?.user);
-      setIsActive(getTeacherApiRes?.user?.isActive || false);
+      setIsActive(getTeacherApiRes?.user?.isActive ?? true);
+      console.log("getTeacherApiRes", getTeacherApiRes.user);
     } catch (error) {
-      console.error("Error fetching teacher details:", error);
+      console.log(error);
     }
   };
 
-  const _AactivateDeactivateApiCall = async () => {
-    const payload = { flag: isActive };
+  const _AactivateDeactivateApiCall = async (data) => {
+    const payload = {
+      flag: data,
+    };
     try {
-      await ActivateDeactivate({ payload, id });
-      console.log(id, payload);
-
-      _getTeacherAPiCall();
+      await ActivateDeactivate({
+        payload,
+        id,
+      });
     } catch (err) {
-      console.error("Error activating/deactivating teacher:", err);
+      console.log(err);
     }
   };
 
-  const handleChangeActiveDeactive = (event) => {
-    const newStatus = event.target.value === "true";
-    setIsActive(newStatus);
-    _AactivateDeactivateApiCall();
+  const handleChangeActiveDeactive = (e) => {
+    console.log(e.target.value);
+    const newActiveStatus = e.target.value;
+    if (newActiveStatus === false) {
+    }
+    setIsActive(newActiveStatus);
+    console.log("isActive", isActive);
+    _AactivateDeactivateApiCall(e.target.value);
   };
 
   const _toggleEditModal = (isOpenModal = false) => {
@@ -61,7 +68,13 @@ function ViewDetailsTeacher() {
 
   return (
     <div>
-      <Card style={{ maxWidth: "50rem", margin: "auto", marginTop: "10px" }}>
+      <Card
+        style={{
+          maxWidth: "50rem",
+          margin: "auto",
+          marginTop: "10px",
+        }}
+      >
         <CardBody>
           <div className="innerHeader">
             <h2>Teacher</h2>
@@ -69,8 +82,11 @@ function ViewDetailsTeacher() {
               <div>
                 <Input
                   type="select"
-                  style={{ maxHeight: "35px", marginTop: "10px" }}
-                  value={isActive}
+                  value={Boolean(isActive)}
+                  style={{
+                    maxHeight: "35px",
+                    marginTop: "10px",
+                  }}
                   onChange={handleChangeActiveDeactive}
                 >
                   <option value="true">Active</option>
@@ -94,7 +110,7 @@ function ViewDetailsTeacher() {
             {teacherData?.profileImage ? (
               <img
                 src={teacherData?.profileImage}
-                alt="Profile"
+                alt=""
                 width="100px"
                 style={{
                   border: "2px solid aqua",
@@ -104,7 +120,7 @@ function ViewDetailsTeacher() {
             ) : (
               <img
                 src={require("../../assets/img/SidebarMenu/user .png")}
-                alt="Default User"
+                alt=""
                 width="100px"
                 style={{
                   border: "2px solid aqua",
@@ -113,7 +129,6 @@ function ViewDetailsTeacher() {
               />
             )}
           </div>
-
           <CardTitle className="text-center" tag="h5">
             {teacherData?.fullName}
           </CardTitle>
@@ -121,7 +136,7 @@ function ViewDetailsTeacher() {
             <img
               src={require("../../assets/img/location.png")}
               width="30px"
-              alt="Location"
+              alt="location logo"
             />
             <span>
               {getAddressFormate(
@@ -136,11 +151,11 @@ function ViewDetailsTeacher() {
             <Row>
               <Col md="6">
                 <Label style={{ fontWeight: "bold" }}>Email</Label>
-                <div>{teacherData?.email || "-"}</div>
+                <div>{teacherData?.email}</div>
               </Col>
               <Col md="6">
                 <Label style={{ fontWeight: "bold" }}>Phone Number</Label>
-                <div>{teacherData?.phone || "-"}</div>
+                <div>{teacherData?.phone}</div>
               </Col>
             </Row>
             <Row className="mt-3">
@@ -163,17 +178,22 @@ function ViewDetailsTeacher() {
             <Row className="mt-3">
               <Col md="6">
                 <Label style={{ fontWeight: "bold" }}>Qualification</Label>
-                <div>{teacherData?.qualification || "-"}</div>
+                <div>
+                  {teacherData?.qualification
+                    ? teacherData?.qualification
+                    : "-"}
+                </div>
               </Col>
               <Col md="6">
                 <Label style={{ fontWeight: "bold" }}>Experience</Label>
-                <div>{teacherData?.experience || "-"}</div>
+                <div>
+                  {teacherData?.experience ? teacherData?.experience : "-"}
+                </div>
               </Col>
             </Row>
           </CardText>
         </CardBody>
       </Card>
-
       {isOpenEditModal && (
         <AddTeacherModal
           isOpen={isOpenEditModal}
