@@ -13,6 +13,7 @@ import CreateSchedule from "../../pages/protected/CreateSchedule";
 import CreateNotice from "../../pages/protected/CreateNotice";
 import ViewSchool from "../../pages/protected/ViewSchool";
 import ViewDetailsTeacher from "../../pages/protected/ViewDetailsTeacher";
+import ViewDetailsStudent from "../../pages/protected/ViewDetailsStudent";
 
 const DashboardLayout = () => {
   const [isShow, setIsShow] = useState(false);
@@ -44,7 +45,7 @@ const DashboardLayout = () => {
             />
             <Route path="/school/:id" element={<ViewSchool />} />
             <Route path="/teacher/:id" element={<ViewDetailsTeacher />} />
-
+            <Route path="/student/:id" element={<ViewDetailsStudent />} />
             <Route path="*" element={<Navigate replace to="/dashboard" />} />
           </Routes>
 

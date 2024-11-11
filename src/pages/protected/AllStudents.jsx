@@ -16,6 +16,7 @@ import AddStudentModal from "../../components/modals/AddSudentModal";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import { useSelector } from "react-redux";
 import { findAllStudent } from "../../http/http-calls";
+import { Link } from "react-router-dom";
 
 function AllStudents() {
   const [allStudents, setAllStudents] = useState([]);
@@ -145,8 +146,7 @@ function AllStudents() {
                 <th>Address</th>
                 <th>Mobile no.</th>
                 <th>Attendence(%)</th>
-                <th>Status</th>
-                {user === "admin" ? <th>Edit</th> : ""}
+                <th>View Details</th>
               </tr>
             </thead>
 
@@ -188,12 +188,13 @@ function AllStudents() {
                           })}
                         />
                       </td>
-                      <td>{curr.isActive === true ? "Active" : "Deactive"}</td>
                       <td>
                         <div className="action">
+                        <Link to={`/student/${curr._id}`}>
                           <Button color="link">
-                            <i className="fa fa-edit"></i>
+                            <i className="fa fa-eye"></i>
                           </Button>
+                          </Link>
                         </div>
                       </td>
                     </tr>

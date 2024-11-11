@@ -250,3 +250,18 @@ export const ActivateDeactivate = ({ payload, id }) => {
       });
   });
 };
+
+
+//getStudentdetails
+export const getStudentdetails = ({ id }) => {
+  return new Promise((resolve, reject) => {
+    makeGetRequest(`${BASE_URL}/admin/student/${id}`, true)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
