@@ -53,6 +53,7 @@ console.log("studentDetails",studentDetails);
     FatherOccupation: studentDetails?.fathersOccupation || "",
     session : studentDetails?.currentAcademicYear || "",
     joinDate: studentDetails?.joinDate || "",
+    profileUrl: studentDetails?.profileUrl || ""
   });
 
   const payload = {
@@ -80,7 +81,7 @@ console.log("studentDetails",studentDetails);
     classname: formData?.class,
     section: formData?.section,
     signature: "base64EncodedString",
-    profileImage: "public/docsimg/ProfilePic.jpeg",
+    profileImage: formData?.profileUrl,
     autoAssignRoll: true,
    
   };
@@ -89,10 +90,10 @@ console.log("studentDetails",studentDetails);
   const _createStudentApiCall = async () => {
     try {
       const createStudentRes = await createStudent(payload);
-      // if (!createStudentRes?.error) {
-      //   fetchAllStudentData();
-      //   toggle();
-      // }
+      if (!createStudentRes?.error) {
+        fetchAllStudentData();
+        toggle();
+      }
       console.log(payload);
     } catch (err) {
       console.log(err);
@@ -140,10 +141,30 @@ console.log("studentDetails",studentDetails);
       )}
 
       <ModalBody>
-        {/* Card Number */}
-        {/* {pageName==="Create Student" ? (<h6>Add Student details</h6>) : (<h6>Edit Student details</h6>)}         */}
-
-        <Row>
+      <div className="userAvatar" style={{ textAlign: "center" }}>
+            <img
+              src={
+                formData?.profileUrl
+                  ? formData?.profileUrl
+                  : "https://isobarscience-1bfd8.kxcdn.com/wp-content/uploads/2020/09/default-profile-picture1.jpg"
+                // : require("../../assets/img/SidebarMenu/user .png")
+              }
+              alt="Profile"
+              style={{
+                width: "200px",
+                height: "200px",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
+            />
+          </div>
+          <div style={{ margin: "auto", maxWidth: "300px", marginTop: "10px" }}>
+            <FormGroup>
+              <Input name="file" type="file" style={{ maxHeight: "35px" }} />
+            </FormGroup>
+          </div>
+          <div>
+          <Row>
           <Col md="6">
             <FormGroup>
               <Label>First Name</Label>
@@ -398,6 +419,9 @@ console.log("studentDetails",studentDetails);
             </Button>
           )}
         </div>
+          </div>
+
+       
       </ModalBody>
     </Modal>
   );
