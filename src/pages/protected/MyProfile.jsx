@@ -9,7 +9,6 @@ import {
   InputGroup,
   Input,
   InputGroupText,
-  CardBody,
 } from "reactstrap";
 import { errorHandler, formatDate } from "../../helper-methods";
 import { getLoggedInUserDetail, updateProfile } from "../../http/http-calls";
@@ -52,7 +51,7 @@ const states = [
   "Delhi ",
   "Puducherry",
   "Jammu and Kashmir",
-  "Ladakh",
+  "Ladakh"  
 ];
 
 const AllGender = ["Male", "Female", "Transgender"];
@@ -99,7 +98,7 @@ const MyProfile = () => {
     if (userDetails) {
       const formattedDOB = formatDate(userDetails.dob);
       setDOB(formattedDOB);
-      setAddress(userDetails.address);
+      setAddress(userDetails.address)
     }
   }, [userDetails.dob]);
 
@@ -116,9 +115,9 @@ const MyProfile = () => {
     const updatedAddress = { ...address };
     updatedAddress[field] = event.target.value;
     setAddress(updatedAddress);
-    setUserDetails((prev) => ({
+    setUserDetails(prev => ({
       ...prev,
-      address: updatedAddress,
+      address: updatedAddress
     }));
   };
 
@@ -135,261 +134,287 @@ const MyProfile = () => {
 
   return (
     <>
-      <Col style={{padding:"10px", maxWidth:"70%", margin:"auto"}} xl="18">
-        <Card body>
-          <div>
-            <h6 style={{ textAlign: "center" }}>My Profile</h6>
-            <Col xl="15">
-              <Card body className="profileCard">
-                <div className="cardImg">
-                  <img
-                    src={userDetails.profileImage}
-                    alt=""
-                  />
-                </div>
-
-                <CardTitle>{userDetails.fullname}</CardTitle>
-                {/* <span>{userDetails.email}</span> */}
-                <div className="form-group">
-                  {/* <Label>Change Profile Photo</Label> */}
-                  <div className="customFileUpload">
-                    <Input type="file" id="customFileUpload" />
-
+      <section>
+        <Row className="gy-3 gy-xl-0">
+          <Col xl="4">
+            <Card body className="profileCard">
+              <div className="cardImg">
+                <img
+                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80"
+                  alt=""
+                />
+              </div>
+              <CardTitle>{userDetails.fullname}</CardTitle>
+              {/* <span>{userDetails.email}</span> */}
+              <div className="form-group">
+                {/* <Label>Change Profile Photo</Label> */}
+                <div className="customFileUpload">
+                  <Input type="file" id="customFileUpload" />
+                  {true ? (
                     <Label for="customFileUpload" className="p-3">
-                      <div className="action">
-                        <Button color="link">
-                          <i className="fa fa-edit fa-2x"></i>
-                        </Button>
-                      </div>
-
+                      <img
+                        src={require("../../assets/img/uploadDoc.svg").default}
+                        alt=""
+                      />
+                      
                       <div className="customUploadText">
                         <h6>Change Profile Picture</h6>
                         <span>File size must be less than 5mb</span>
                       </div>
                     </Label>
-                  </div>
-                </div>
-              </Card>
-
-              <hr />
-            </Col>
-
-            <Col style={{padding:"10px", maxWidth:"90%", margin:"auto"}} xl="18">
-            <Row>
-              <h6 style={{ textAlign: "center" }}>Basic Info</h6>
-
-              <Col md="3" lg="2">
-                {/* name */}
-                {userDetails.firstName && (
-                  <div className="form-group">
-                    <Label>First Name</Label>
-                    <Input
-                      placeholder="Enter your name"
-                      value={userDetails.firstName}
-                      onChange={(e) => handleChange(e, "firstName")}
-                    />
-                  </div>
-                )}
-              </Col>
-              <Col md="3" lg="2">
-                {/* name */}
-                {userDetails.lastName && (
-                  <div className="form-group">
-                    <Label>Last Name</Label>
-                    <Input
-                      placeholder="Enter your name"
-                      value={userDetails.lastName}
-                      onChange={(e) => handleChange(e, "lastName")}
-                    />
-                  </div>
-                )}
-              </Col>
-              <Col md="3" lg="2">
-                {/* Email */}
-                {userDetails.email && (
-                  <div className="form-group">
-                    <Label>Email</Label>
-                    <Input
-                      readOnly={userDetails.loginType === "student"}
-                      placeholder="Enter your email"
-                      value={userDetails.email}
-                      onChange={(e) => handleChange(e, "email")}
-                    />
-                  </div>
-                )}
-              </Col>
-              <Col md="3" lg="2">
-                {/* phone number */}
-                {userDetails.gender && (
-                  <div className="form-group">
-                    <Label>Gender</Label>
-                    {userDetails.loginType === "student" ? (
-                      <Input readOnly value={userDetails.gender} />
-                    ) : (
-                      <Input
-                        type="select"
-                        value={userDetails.gender}
-                        onChange={(e) => handleChange(e, "gender")}
-                        readOnly={userDetails.loginType === "student"}
-                      >
-                        <option value="">Select</option>
-                        {AllGender.map((gender, index) => (
-                          <option key={index} value={gender}>
-                            {gender}
-                          </option>
-                        ))}
-                      </Input>
-                    )}
-                  </div>
-                )}
-              </Col>
-              <Col md="3" lg="2">
-                {/* phone number */}
-                {userDetails.phone && (
-                  <div className="form-group">
-                    <Label>Phone Number</Label>
-                    <Input
-                      readOnly={userDetails.loginType === "student"}
-                      placeholder="Enter your Phone Number"
-                      value={userDetails.phone}
-                      onChange={(e) => handleChange(e, "phone")}
-                    />
-                  </div>
-                )}
-              </Col>
-              <Col md="3" lg="2">
-                {/* Year of Birth */}
-                {DOB && (
-                  <div className="form-group">
-                    <Label>Date of Birth</Label>
-                    <Input
-                      readOnly={userDetails.loginType === "student"}
-                      type="date"
-                      value={DOB}
-                      onChange={(e) => handleChange(e, "dob")}
-                    ></Input>
-                  </div>
-                )}
-              </Col>
-              <Col md="3" lg="2">
-                {/* Last 4 SSN */}
-                {userDetails.username && (
-                  <div className="form-group">
-                    <Label>Username</Label>
-                    <InputGroup>
-                      <Input
-                        readOnly
-                        placeholder="Enter your Username"
-                        type="text"
-                        value={userDetails.username}
+                  ) : (
+                    <Label for="customFileUpload" className="uploaded p-3">
+                      <img
+                        src={
+                          require("../../assets/img/sign-up-doc.svg").default
+                        }
+                        alt=""
                       />
-                    </InputGroup>
-                  </div>
-                )}
-              </Col>
-            </Row>
-            <h6 style={{ textAlign: "center" }}>Address</h6>
-            <Col md="13" lg="8">
-              {/* Current Address */}
-              {userDetails.address && (
-                <div className="form-group">
-                  <Label>Locality</Label>
-                  <Input
-                    type="text"
-                    placeholder="Enter your Address"
-                    value={userDetails.address.locality}
-                    onChange={(e) => handleAddress(e, "locality")}
-                  />
+                      <div className="customUploadText">
+                        <h6>Group 378961.svg</h6>
+                        <span>File size must be less than 5mb</span>
+                      </div>
+                    </Label>
+                  )}
                 </div>
-              )}
-            </Col>
+              </div>
+            </Card>
 
-            <Row className="gy-3 gy-xl-0">
-              <Col md="3" lg="2">
-                {/* City */}
+            <hr />
+
+           
+          </Col>
+          <Col xl="8">
+            <Card body>
+              <div>
+                <h6>Basic Info</h6>
+
+                <Row>
+                  <Col md="6" lg="4">
+                    {/* name */}
+                    {userDetails.firstName && (
+                      <div className="form-group">
+                        <Label>First Name</Label>
+                        <Input
+                          placeholder="Enter your name"
+                          value={userDetails.firstName}
+                          onChange={(e) => handleChange(e, "firstName")}
+                        />
+                      </div>
+                    )}
+                  </Col>
+                  <Col md="6" lg="4">
+                    {/* name */}
+                    {userDetails.lastName && (
+                      <div className="form-group">
+                        <Label>Last Name</Label>
+                        <Input
+                          placeholder="Enter your name"
+                          value={userDetails.lastName}
+                          onChange={(e) => handleChange(e, "lastName")}
+                        />
+                      </div>
+                    )}
+                  </Col>
+                  <Col md="6" lg="4">
+                    {/* Email */}
+                    {userDetails.email && (
+                      <div className="form-group">
+                        <Label>Email</Label>
+                        <Input
+                          readOnly={userDetails.loginType === "student"}
+                          placeholder="Enter your email"
+                          value={userDetails.email}
+                          onChange={(e) => handleChange(e, "email")}
+                        />
+                      </div>
+                    )}
+                  </Col>
+                  <Col md="6" lg="4">
+                    {/* phone number */}
+                    {userDetails.gender && (
+                      <div className="form-group">
+                        <Label>Gender</Label>
+                        {userDetails.loginType === "student" ? (
+                          <Input readOnly value={userDetails.gender} />
+                        ) : (
+                          <Input
+                            type="select"
+                            value={userDetails.gender}
+                            onChange={(e) => handleChange(e, "gender")}
+                            readOnly={userDetails.loginType === "student"}
+                          >
+                            <option value="">Select</option>
+                            {AllGender.map((gender, index) => (
+                              <option key={index} value={gender}>
+                                {gender}
+                              </option>
+                            ))}
+                          </Input>
+                        )}
+                      </div>
+                    )}
+                  </Col>
+                  <Col md="6" lg="4">
+                    {/* phone number */}
+                    {userDetails.phone && (
+                      <div className="form-group">
+                        <Label>Phone Number</Label>
+                        <Input
+                          readOnly={userDetails.loginType === "student"}
+                          placeholder="Enter your Phone Number"
+                          value={userDetails.phone}
+                          onChange={(e) => handleChange(e, "phone")}
+                        />
+                      </div>
+                    )}
+                  </Col>
+                  <Col md="6" lg="4">
+                    {/* Year of Birth */}
+                    {DOB && (
+                      <div className="form-group">
+                        <Label>Date of Birth</Label>
+                        <Input
+                          readOnly={userDetails.loginType === "student"}
+                          type="date"
+                          value={DOB}
+                          onChange={(e) => handleChange(e, "dob")}
+                        ></Input>
+                      </div>
+                    )}
+                  </Col>
+                  <Col md="6" lg="4">
+                    {/* Last 4 SSN */}
+                    {userDetails.username && (
+                      <div className="form-group">
+                        <Label>Username</Label>
+                        <InputGroup>
+                          <Input
+                            readOnly
+                            placeholder="Enter your Username"
+                            type="text"
+                            value={userDetails.username}
+                          />
+                        </InputGroup>
+                      </div>
+                    )}
+                  </Col>
+
+                  <Col md="6" lg="4">
+                    {/* Login Type */}
+                    {userDetails.loginType && (
+                      <div className="form-group">
+                        <Label>Role</Label>
+                        <Input readOnly value={userDetails.loginType} />
+                      </div>
+                    )}
+                  </Col>
+                </Row>
+                <h6>Address</h6>
+                {/* Current Address */}
                 {userDetails.address && (
-                  <div className="form-group mb-0">
-                    <Label>City</Label>
+                  <div className="form-group">
+                    <Label>Locality</Label>
                     <Input
-                      placeholder="Enter your City"
                       type="text"
-                      value={userDetails.address.city}
-                      onChange={(e) => handleAddress(e, "city")}
-                    ></Input>
-                  </div>
-                )}
-              </Col>
-
-              <Col md="3" lg="2">
-                {/* State */}
-                {userDetails.address && (
-                  <div className="form-group mb-0">
-                    <Label>State</Label>
-                    <Input
-                      type="select"
-                      value={userDetails.address.state}
-                      onChange={(e) => handleAddress(e, "state")}
-                    >
-                      <option hidden>Select State</option>
-                      {states.map((state, index) => (
-                        <option key={index} value={state}>
-                          {state}
-                        </option>
-                      ))}
-                    </Input>
-                  </div>
-                )}
-              </Col>
-
-              <Col md="3" lg="2">
-                {/* Zip */}
-                {userDetails.address && (
-                  <div className="form-group mb-0">
-                    <Label>Zip</Label>
-                    <Input
-                      placeholder="Enter your Zip Code"
-                      value={userDetails.address.pin}
-                      onChange={(e) => handleAddress(e, "pin")}
+                      placeholder="Enter your Address"
+                      value={userDetails.address.locality}
+                      onChange={(e) => handleAddress(e, "locality")}
                     />
                   </div>
                 )}
-              </Col>
+                <Row className="gy-3 gy-xl-0">
+                  <Col lg="6" xl="4">
+                    {/* City */}
+                    {userDetails.address && (
+                      <div className="form-group mb-0">
+                        <Label>City</Label>
+                        <Input
+                          placeholder="Enter your City"
+                          type="text"
+                          value={userDetails.address.city}
+                          onChange={(e) => handleAddress(e, "city")}
+                        ></Input>
+                      </div>
+                    )}
+                  </Col>
 
-              <Col md="3" lg="2">
-                {/* Zip */}
-                {userDetails.address && (
-                  <div className="form-group mb-0">
-                    <Label>Country</Label>
-                    <Input
-                      type="select"
-                      value={userDetails.address.country}
-                      onChange={(e) => handleAddress(e, "country")}
-                    >
-                      <option hidden>Select Country</option>
-                      <option>India</option>
-                      <option>USA</option>
-                    </Input>
-                  </div>
-                )}
-              </Col>
-            </Row>
-            </Col>
+                  <Col lg="6" xl="4">
+                    {/* State */}
+                    {userDetails.address && (
+                      <div className="form-group mb-0">
+                        <Label>State</Label>
+                        <Input
+                          type="select"
+                          value={userDetails.address.state}
+                          onChange={(e) => handleAddress(e, "state")}
+                        >
+                          <option hidden>Select State</option>
+                          {states.map((state, index) => (
+                            <option key={index} value={state}>
+                              {state}
+                            </option>
+                          ))}
+                        </Input>
+                      </div>
+                    )}
+                  </Col>
 
+                  <Col lg="6" xl="4">
+                    {/* Zip */}
+                    {userDetails.address && (
+                      <div className="form-group mb-0">
+                        <Label>Zip</Label>
+                        <Input
+                          placeholder="Enter your Zip Code"
+                          value={userDetails.address.pin}
+                          onChange={(e) => handleAddress(e, "pin")}
 
-           
+                        />
+                      </div>
+                    )}
+                  </Col>
 
-           
-          </div>
-        </Card>
+                  <Col lg="6" xl="4">
+                    {/* Zip */}
+                    {userDetails.address && (
+                      <div className="form-group mb-0">
+                        <Label>Country</Label>
+                        <Input
+                          type="select"
+                          value={userDetails.address.country}
+                          onChange={(e) => handleAddress(e, "country")}
+
+                        >
+                          <option hidden>Select Country</option>
+                          <option>India</option>
+                          <option>USA</option>
+                        </Input>
+                      </div>
+                    )}
+                  </Col>
+                </Row>
+              </div>
+            </Card>
+          </Col>
+        </Row>
+
         {/* submit button */}
         <div className="d-flex justify-content-center mt-5">
           <Button color="primary" className="btn-submit" onClick={handleSave}>
             Save Changes
           </Button>
         </div>
-      </Col>
+      </section>
     </>
   );
 };
 
 export default MyProfile;
+
+
+
+
+
+
+
