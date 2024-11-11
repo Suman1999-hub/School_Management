@@ -1,29 +1,57 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, CardTitle, Table } from "reactstrap";
 import PaginatedItems from "../../components/PaginatedItems";
-import { findAllSchool } from "../../http/http-calls";
+import { findAllSchool, getSchoolDetail } from "../../http/http-calls";
 import { getAddressFormate } from "../../helper-methods";
 import CreateSchoolModal from "../../components/modals/CreateSchoolModal";
+import { Link } from "react-router-dom";
 
 function ViewAllSchool() {
   const [allSchool, setAllSchool] = useState([]);
-  const fetchAllSchoolData = async () => {
+  const [totalSchools, setTotalSchools] = useState(0);
+  const [currentItems, setCurrentItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const fetchAllSchoolData = async (currentPage, itemsPerPage) => {
+    const payload = {
+      pageNumber: currentPage,
+      pageSize: itemsPerPage,
+    };
     try {
-      const schoolData = await findAllSchool();
-      console.log("school>>>", schoolData.school);
+      const schoolData = await findAllSchool(payload);
       setAllSchool(schoolData.school);
+      setTotalSchools(schoolData.totalSchools);
     } catch (err) {
       console.log("All School Error", err);
     }
   };
-  console.log("allschool", allSchool);
+
   useEffect(() => {
-    fetchAllSchoolData();
+    fetchAllSchoolData(currentPage, itemsPerPage);
   }, []);
 
   const [isOpenModal, setIsOpenModal] = useState(false);
   const _toggleModal = (isOpenModal = false) => {
     setIsOpenModal(isOpenModal);
+  };
+
+  const [isOpenEditModal, setIsOpenEditModal] = useState(false);
+  const [isOpenEditModalIndex, setIsOpenEditModalIndex] = useState();
+  const _toggleEditModal = (isOpenModal = false, index) => {
+    console.log(index);
+    setIsOpenEditModal(isOpenModal);
+    setIsOpenEditModalIndex(index);
+  };
+
+  // Pagination handlers
+  const handlePageChange = async (page) => {
+    await fetchAllSchoolData(page, itemsPerPage);
+    setCurrentPage(page);
+  };
+
+  const handleItemsChange = (items) => {
+    setCurrentItems(items);
   };
 
   return (
@@ -46,60 +74,97 @@ function ViewAllSchool() {
               <th>School Name</th>
               <th>Location</th>
               <th>Registration Number</th>
-              <th>View</th>
+              <th>Action</th>
             </tr>
           </thead>
 
           <tbody>
-            {allSchool.map((curr) => {
-              console.log(curr);
-              return (
-                <>
-                  <tr>
-                    <td>
-                      {curr.imageUrl ? (
-                        <img src={curr.imageUrl} width="100px" alt="" />
-                      ) : (
-                        "null"
-                      )}
-                    </td>
-                    <td>{curr.name}</td>
-                    <td>
-                      {getAddressFormate(
-                        curr.address.city,
-                        curr.address.state,
-                        curr.address.country,
-                        curr.address.pinCode
-                      )}
-                    </td>
-                    <td>{curr.registrationNumber}</td>
-                    <td>
-                      <div className="action">
-                        <Button color="link">
-                          <img
-                            src={require("../../assets/img/edit.png")}
-                            alt=""
-                            width="20px"
-                          />
-                        </Button>
-                        <Button color="link">
-                          <i className="fa fa-eye"></i>
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                </>
-              );
-            })}
+            {currentItems?.map((curr, index) => (
+              <tr key={curr._id}>
+                <td>
+                  {curr.imageUrl ? (
+                    <img
+                      src={curr.imageUrl}
+                      width="50px"
+                      height="50px"
+                      alt=""
+                    />
+                  ) : (
+                    <img
+                      src={require("../../assets/img/Defaultschool.png")}
+                      width="50px"
+                      height="50px"
+                      alt="default school logo"
+                    />
+                  )}
+                </td>
+                <td>
+                  <Link to={`/school/${curr._id}`}>
+                    <span>{curr.name}</span>
+                  </Link>
+                </td>
+                <td>
+                  <img
+                    src={require("../../assets/img/location.png")}
+                    width="30px"
+                    alt="location logo"
+                  />
+                  {getAddressFormate(
+                    curr.address.city,
+                    curr.address.state,
+                    curr.address.country,
+                    curr.address.pinCode
+                  )}
+                </td>
+                <td>{curr.registrationNumber}</td>
+                <td>
+                  <div className="action">
+                    <Button
+                      color="link"
+                      onClick={() => _toggleEditModal(true, index)}
+                    >
+                      <img
+                        src={require("../../assets/img/edit.png")}
+                        alt=""
+                        width="20px"
+                      />
+                    </Button>
+                  </div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </Table>
 
-        {/* pagination */}
-        <PaginatedItems itemsPerPage={4} />
+        {/* Pagination */}
+        <PaginatedItems
+          items={allSchool}
+          totalItems={totalSchools}
+          currentPage={currentPage}
+          itemsPerPage={itemsPerPage}
+          onItemsChange={(items) => handleItemsChange(items)}
+          onPageChange={handlePageChange}
+        />
       </Card>
 
       {isOpenModal && (
-        <CreateSchoolModal isOpen={isOpenModal} toggle={() => _toggleModal()} />
+        <CreateSchoolModal
+          isOpen={isOpenModal}
+          pageName="Create School"
+          data="null"
+          index="null"
+          toggle={() => _toggleModal()}
+        />
+      )}
+      {isOpenEditModal && (
+        <CreateSchoolModal
+          isOpen={isOpenEditModal}
+          pageName="Edit School"
+          data={allSchool}
+          index={isOpenEditModalIndex}
+          toggle={() => _toggleEditModal()}
+          fetchAllSchoolData={fetchAllSchoolData}
+        />
       )}
     </div>
   );

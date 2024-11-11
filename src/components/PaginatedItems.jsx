@@ -1,39 +1,48 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { Row, Col } from "reactstrap";
-const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 
-const PaginatedItems = ({ itemsPerPage }) => {
-  // eslint-disable-next-line
-  const [currentItems, setCurrentItems] = useState(null);
-  const [pageCount, setPageCount] = useState(0);
-  const [itemOffset, setItemOffset] = useState(0);
-
-  useEffect(() => {
-    // Fetch items from another resources.
-    const endOffset = itemOffset + itemsPerPage;
-    setCurrentItems(items.slice(itemOffset, endOffset));
-    setPageCount(Math.ceil(items.length / itemsPerPage));
-  }, [itemOffset, itemsPerPage]);
+const PaginatedItems = ({
+  items,
+  totalItems,
+  currentPage,
+  itemsPerPage,
+  onItemsChange,
+  onPageChange,
+}) => {
+  const pageCount = Math.ceil(totalItems / itemsPerPage);
+  const itemOffset = (currentPage - 1) * itemsPerPage;
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % items.length;
-    setItemOffset(newOffset);
+    if (onPageChange) onPageChange(event?.selected + 1);
   };
+
+  useEffect(() => {
+    // Fetch items from another resources.
+    // const endOffset = itemOffset + itemsPerPage;
+    // const newItems = items?.slice(itemOffset, endOffset);
+    // onItemsChange(items);
+  }, [items]);
 
   return (
     <>
-      <Row className="align-items-center" noGutters>
+      <Row className="align-items-center">
         <Col md={6}>
-          <div className="tableCount">Showing 3 entries out of 20 entries</div>
+          <div className="tableCount">{`Showing ${itemOffset + 1} - ${
+            itemOffset + itemsPerPage > totalItems
+              ? totalItems
+              : itemOffset + itemsPerPage
+          } entries out of ${totalItems} entries`}</div>
         </Col>
+
         <Col md={6}>
           <ReactPaginate
             breakLabel="..."
             nextLabel=">"
             onPageChange={handlePageClick}
             pageRangeDisplayed={5}
+            {...(currentPage && { forcePage: currentPage - 1 })}
             pageCount={pageCount}
             previousLabel="<"
             renderOnZeroPageCount={null}

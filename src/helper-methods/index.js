@@ -457,3 +457,24 @@ export const CheckFormUpdate = (initialState, updatedState) => {
 
   return Object.keys(changes).length > 0 ? changes : null;
 };
+
+export const formatDatell = (date) => {
+  if (!date) return "";
+
+  const momentDate = moment.utc(date);
+
+  if (moment().isSame(momentDate, "year")) {
+    return momentDate.format("ll");
+  } else {
+    return momentDate.format("YYYY-MM-DD");
+  }
+};
+
+export const dateFormat = (date) => {
+  console.log(date);
+  if (!date) return "";
+
+  const momentDate = moment.utc(date);
+  console.log("gdsjds>>>>", momentDate.format("L"));
+  return momentDate.format("L");
+};

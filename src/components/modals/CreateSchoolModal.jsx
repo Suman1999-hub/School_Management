@@ -11,13 +11,20 @@ import {
   Input,
 } from "reactstrap";
 import stateData from "../../State.json";
-import { createSchool } from "../../http/http-calls";
+import { createSchool, updateSchool } from "../../http/http-calls";
 
-const CreateSchoolModal = ({ isOpen, toggle }) => {
+const CreateSchoolModal = ({
+  isOpen,
+  pageName,
+  toggle,
+  index,
+  data,
+  fetchAllSchoolData,
+}) => {
   const _closeModal = () => {
     toggle();
   };
-
+  const [schoolId, setSchoolId] = useState();
   const [formData, setFormData] = useState({
     schoolName: "",
     city: "",
@@ -31,7 +38,11 @@ const CreateSchoolModal = ({ isOpen, toggle }) => {
     DOB: "",
     gender: "",
     phoneNumber: "",
+    SchoolPhNumber: "",
+    schoolEmail: "",
+    locationUrl: "",
   });
+
   const payload = {
     name: formData.schoolName,
     schoolAddress: {
@@ -41,9 +52,9 @@ const CreateSchoolModal = ({ isOpen, toggle }) => {
       pinCode: formData.pinCode,
     },
     contact: {
-      phoneNo: "24355465665",
-      email: "jhdsg@gmail.com",
-      website: "www.hcjss.com",
+      phoneNo: formData.SchoolPhNumber,
+      email: formData.schoolEmail,
+      website: formData.website,
     },
     location: {
       type: "Point",
@@ -56,16 +67,17 @@ const CreateSchoolModal = ({ isOpen, toggle }) => {
     gender: formData.gender,
     phone: formData.phoneNumber,
   };
-  const _createSchoolAPiCall = async (payload) => {
+
+  const _createSchoolAPiCall = async () => {
     try {
       const createSchoolApi = await createSchool(payload);
+      toggle();
       console.log(createSchoolApi);
     } catch (error) {
       console.log(error);
     }
   };
 
-  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -74,17 +86,54 @@ const CreateSchoolModal = ({ isOpen, toggle }) => {
     }));
   };
 
+  useEffect(() => {
+    if (index !== null && data) {
+      const found = data[index];
+      if (found) {
+        setFormData({
+          schoolName: found.name || "",
+          city: found.address?.city || "",
+          state: found.address?.state || "",
+          country: found.address?.country || "",
+          pinCode: found.address?.pinCode || "",
+          website: found.contact?.website || "",
+          email: found.admin?.email || "",
+          firstName: found.admin?.firstName || "",
+          lastName: found.admin?.lastName || "",
+          DOB: found.admin?.dob || "",
+          gender: found.admin?.gender || "",
+          phoneNumber: found.admin?.phoneNumber || "",
+          SchoolPhNumber: found.contact?.phoneNo || "",
+          schoolEmail: found.contact?.email || "",
+          locationUrl: found.locationUrl || "",
+        });
+        setSchoolId(found._id);
+      }
+    }
+  }, [index, data]);
+
+  const _updateSchoolAPiCall = async () => {
+    try {
+      if (schoolId !== undefined) {
+        const updateSchoolRes = await updateSchool({ payload, schoolId });
+        if (!updateSchoolRes?.error) {
+          fetchAllSchoolData();
+        }
+        console.log(schoolId);
+
+        toggle();
+        console.log(updateSchoolRes);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <Modal
-      isOpen={isOpen}
-      toggle={() => _closeModal()}
-      scrollable
-      centered
-      size="lg"
-    >
-      <ModalHeader>Create School</ModalHeader>
+    <Modal isOpen={isOpen} toggle={_closeModal} scrollable centered size="lg">
+      <ModalHeader>{pageName}</ModalHeader>
       <ModalBody>
-        {/* Card Number */}
+        {console.log("schoollId", schoolId)}
         <h6>Add School details</h6>
         <FormGroup>
           <Label>School Name</Label>
@@ -153,6 +202,39 @@ const CreateSchoolModal = ({ isOpen, toggle }) => {
             </FormGroup>
           </Col>
         </Row>
+        <Row>
+          <Col md="6">
+            <FormGroup>
+              <Label>School Phone Number</Label>
+              <Input
+                type="text"
+                name="SchoolPhNumber"
+                value={formData.SchoolPhNumber}
+                onChange={handleInputChange}
+              />
+            </FormGroup>
+          </Col>
+          <Col md="6">
+            <FormGroup>
+              <Label>School Email</Label>
+              <Input
+                type="text"
+                name="schoolEmail"
+                value={formData.schoolEmail}
+                onChange={handleInputChange}
+              />
+            </FormGroup>
+          </Col>
+        </Row>
+        <FormGroup>
+          <Label>Location Url</Label>
+          <Input
+            type="text"
+            name="locationUrl"
+            value={formData.locationUrl}
+            onChange={handleInputChange}
+          />
+        </FormGroup>
         <FormGroup>
           <Label>Website</Label>
           <Input
@@ -220,7 +302,6 @@ const CreateSchoolModal = ({ isOpen, toggle }) => {
                 <option value="">Select Gender</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
-                {/* <option value="Others">Others</option> */}
               </Input>
             </FormGroup>
           </Col>
@@ -234,18 +315,27 @@ const CreateSchoolModal = ({ isOpen, toggle }) => {
             onChange={handleInputChange}
           />
         </FormGroup>
-        {/* submit button */}
         <div className="inlineBtnWrapper">
-          <Button color="primary" outline onClick={() => _closeModal()}>
+          <Button color="primary" outline onClick={_closeModal}>
             Cancel
           </Button>
-          <Button
-            color="primary"
-            className="ms-3"
-            onClick={() => _createSchoolAPiCall(payload)}
-          >
-            Create School
-          </Button>
+          {pageName !== "Edit School" ? (
+            <Button
+              color="primary"
+              className="ms-3"
+              onClick={() => _createSchoolAPiCall()}
+            >
+              {pageName}
+            </Button>
+          ) : (
+            <Button
+              color="primary"
+              className="ms-3"
+              onClick={() => _updateSchoolAPiCall()}
+            >
+              {pageName}
+            </Button>
+          )}
         </div>
       </ModalBody>
     </Modal>

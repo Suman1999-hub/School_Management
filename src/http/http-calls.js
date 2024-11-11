@@ -111,9 +111,9 @@ export const updateProfile = (payload) => {
   });
 };
 
-export const findAllSchool = () => {
+export const findAllSchool = (payload) => {
   return new Promise((resolve, reject) => {
-    makePostRequest(`${BASE_URL}/schools`, true)
+    makePostRequest(`${BASE_URL}/schools`, true, payload)
       .then((res) => {
         resolve(res);
         console.log(res);
@@ -158,6 +158,91 @@ export const findAllTeacher = () => {
       .then((res) => {
         resolve(res);
         console.log(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+//edit School
+export const updateSchool = ({ payload, schoolId }) => {
+  return new Promise((resolve, reject) => {
+    makePutRequest(`${BASE_URL}/school/${schoolId}`, true, payload)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+//get School details
+export const getSchoolDetail = ({ id }) => {
+  return new Promise((resolve, reject) => {
+    makeGetRequest(`${BASE_URL}/school/${id}`, true)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+//Create Teacher
+export const createTeacher = (payload) => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/admin/teacher/create`, true, payload)
+      .then((res) => {
+        resolve(res);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+//getTeacherdetails
+export const getTeacherdetails = ({ id }) => {
+  return new Promise((resolve, reject) => {
+    makeGetRequest(`${BASE_URL}/admin/teacher/get/${id}`, true)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+//Edit Teacher
+export const updateTeacher = ({ payload, id }) => {
+  return new Promise((resolve, reject) => {
+    makePutRequest(`${BASE_URL}/admin/teacher/update/${id}`, true, payload)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+//Active and In
+export const ActivateDeactivate = ({ payload, id }) => {
+  return new Promise((resolve, reject) => {
+    makePutRequest(`${BASE_URL}/activatedeactivate/${id}`, true, payload)
+      .then((res) => {
+        resolve(res);
       })
       .catch((e) => {
         console.log("API call error>>", e);

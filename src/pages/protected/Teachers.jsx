@@ -14,7 +14,12 @@ import CustomDateRangePicker from "../../components/CustomDateRangePicker";
 import AddTeacherModal from "../../components/modals/AddTeacherModal";
 import PaginatedItems from "../../components/PaginatedItems";
 import { findAllTeacher } from "../../http/http-calls";
-import { getAddressFormate, getFullNameFormate } from "../../helper-methods";
+import {
+  formatDatell,
+  getAddressFormate,
+  getFullNameFormate,
+} from "../../helper-methods";
+import { Link } from "react-router-dom";
 
 function Teachers() {
   const [filters, setFilters] = useState({
@@ -134,27 +139,39 @@ function Teachers() {
                   return (
                     <tr>
                       <td>
-                        {getFullNameFormate(curr.firstName, curr.lastName)}
+                        {getFullNameFormate(curr?.firstName, curr?.lastName)}
                       </td>
-                      <td>{curr.phone}</td>
+                      <td>{curr?.phone}</td>
                       <td>
-                        {curr.address
+                        {curr?.address
                           ? getAddressFormate(
-                              curr.address.city,
-                              curr.address.state,
-                              curr.address.country,
-                              curr.address.pin
+                              curr?.address?.city ? curr?.address?.city : "-",
+                              curr?.address?.state ? curr?.address?.state : "-",
+                              curr?.address?.country
+                                ? curr?.address?.country
+                                : "-",
+                              curr?.address?.pin ? curr?.address?.pin : "-"
                             )
                           : ""}
                       </td>
-                      <td>{curr.gender}</td>
-                      <td>Bengali</td>
-                      <td>Jul 12. 2023</td>
+                      <td>{curr?.gender}</td>
+                      <td>
+                        {curr?.subject?.length
+                          ? curr?.subject
+                              ?.map((currSubject) => currSubject)
+                              .join()
+                          : "-"}
+                      </td>
+                      <td>
+                        {curr?.joinDate ? formatDatell(curr?.joinDate) : "-"}
+                      </td>
                       <td>
                         <div className="action">
-                          <Button color="link">
-                            <i className="fa fa-eye"></i>
-                          </Button>
+                          <Link to={`/teacher/${curr._id}`}>
+                            <Button color="link">
+                              <i className="fa fa-eye"></i>
+                            </Button>
+                          </Link>
                         </div>
                       </td>
                     </tr>
@@ -167,7 +184,14 @@ function Teachers() {
           </Card>
         </section>
       </TabPane>
-      <AddTeacherModal isOpen={isOpenModal} toggle={() => _toggleModal()} />
+      {isOpenModal && (
+        <AddTeacherModal
+          isOpen={isOpenModal}
+          pageName="Create Teacher"
+          toggle={() => _toggleModal()}
+          getAllTeacherAPiCall={() => _getAllTeacherAPiCall()}
+        />
+      )}
     </>
   );
 }
