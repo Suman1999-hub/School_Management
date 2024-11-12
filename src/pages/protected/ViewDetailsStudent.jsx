@@ -27,7 +27,7 @@ function ViewDetailsStudent() {
   const [isActive, setIsActive] = useState(null);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
   const loginType = useSelector(state => state.userCredential.user.loginType)
-  console.log("loginType>>>>", loginType);
+  console.log("isActive>>>>", isActive);
   
   const { id } = useParams();
 
@@ -43,8 +43,8 @@ function ViewDetailsStudent() {
     }
   };
 
-    const _AactivateDeactivateApiCall = async () => {
-      const payload = { flag: isActive };
+    const _AactivateDeactivateApiCall = async (newStatus) => {
+      const payload = { flag: newStatus };
       try {
         await ActivateDeactivate({ payload, id });
         console.log(id, payload);
@@ -57,8 +57,10 @@ function ViewDetailsStudent() {
 
     const handleChangeActiveDeactive = (event) => {
       const newStatus = event.target.value === "true";
+      console.log("newStatus>>>", newStatus);
+      
       setIsActive(newStatus);
-      _AactivateDeactivateApiCall();
+      _AactivateDeactivateApiCall(newStatus);
     };
 
   const _toggleEditModal = (isOpenModal = false) => {
@@ -85,7 +87,7 @@ function ViewDetailsStudent() {
                   onChange={handleChangeActiveDeactive}
               >
                 <option value="true">Active</option>
-                <option value="false">Deactivate</option>
+                <option value="false">Inactive</option>
               </Input>
             </div>
             <div>
