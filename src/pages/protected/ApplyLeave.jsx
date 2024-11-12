@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -14,6 +14,9 @@ import {
 } from "reactstrap";
 import CustomDateRangePicker from "../../components/CustomDateRangePicker";
 import ApplyLeaveModal from "../../components/modals/ApplyLeaveModal";
+import { getAllLeaves, getLeaves } from "../../http/http-calls";
+import { useSelector } from "react-redux";
+import { formatDatell } from "../../helper-methods";
 
 function ApplyLeave() {
   const [filters, setFilters] = useState({
@@ -42,6 +45,19 @@ function ApplyLeave() {
   const _toggleTab = (newTab = "1") => {
     if (activeTab !== newTab) setActiveTab(newTab);
   };
+  const [applyLeaveData, setApplyLeaveData] = useState();
+  const _getApplyLeaveApi = async () => {
+    try {
+      const getApplyLeaveApiRes = await getAllLeaves();
+      setApplyLeaveData(getApplyLeaveApiRes.leaves);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    _getApplyLeaveApi();
+  }, []);
+
   return (
     <>
       <div className="innerHeader">
@@ -100,7 +116,7 @@ function ApplyLeave() {
               <Table responsive>
                 <thead>
                   <tr>
-                    <th>Leave Id</th>
+                    {/* <th>Leave Id</th> */}
                     <th>Leave Type</th>
                     <th style={{ maxWidth: "300px" }}>Leave Reasons</th>
                     <th>Start Date</th>
@@ -110,19 +126,33 @@ function ApplyLeave() {
                 </thead>
 
                 <tbody>
-                  <tr>
-                    <td>4344343434</td>
-                    <td>CL</td>
-                    <td style={{ maxWidth: "300px" }}>
-                      Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    </td>
-                    <td>Jul 11. 2023</td>
-                    <td>Jul 12. 2023</td>
-                    <td>
-                      <span className="badge-danger">Pending</span>
-                    </td>
-                  </tr>
-                  <tr>
+                  {applyLeaveData?.length !== 0
+                    ? applyLeaveData?.map((curr) => {
+                        return (
+                          <tr>
+                            {/* <td>{curr._id}</td> */}
+                            <td>{curr.leaveType}</td>
+                            <td style={{ maxWidth: "300px" }}>{curr.reason}</td>
+                            <td>
+                              {curr?.startDate && formatDatell(curr?.startDate)}
+                            </td>
+                            <td>
+                              {" "}
+                              {curr?.endDate && formatDatell(curr?.endDate)}
+                            </td>
+                            <td>
+                              {curr?.status === "pending" ? (
+                                <span className="badge-danger">Pending</span>
+                              ) : (
+                                <span className="badge-success">Accept</span>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })
+                    : "No Data Found"}
+
+                  {/* <tr>
                     <td>4344343434</td>
                     <td>CL</td>
                     <td style={{ maxWidth: "300px" }}>
@@ -157,14 +187,18 @@ function ApplyLeave() {
                     <td>
                       <span className="badge-danger">Pending</span>
                     </td>
-                  </tr>
+                  </tr> */}
                 </tbody>
               </Table>
             </Card>
           </section>
         </TabPane>
         {isOpenModal && (
-          <ApplyLeaveModal isOpen={isOpenModal} toggle={() => _toggleModal()} />
+          <ApplyLeaveModal
+            isOpen={isOpenModal}
+            toggle={() => _toggleModal()}
+            setApplyLeaveData={setApplyLeaveData}
+          />
         )}
       </TabContent>
     </>

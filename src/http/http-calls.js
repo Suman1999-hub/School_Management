@@ -321,3 +321,61 @@ export const updateStudent = ({ payload, id }) => {
       });
   });
 };
+
+//get notice by id
+export const getNoticedetails = ({ id }) => {
+  return new Promise((resolve, reject) => {
+    makeGetRequest(`${BASE_URL}/admin/notice/getNotice/${id}`, true)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+//Update Notice
+export const updateNotice = ({ payload, id }) => {
+  return new Promise((resolve, reject) => {
+    makePutRequest(`${BASE_URL}/admin/notice/editnotice/${id}`, true, payload)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+//Get Leave
+export const getAllLeaves = () => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/leaves`, true)
+      .then((res) => {
+        resolve(res);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+//Apply Leave
+export const ApplyLeave = (payload) => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/teacher/leave`, true, payload)
+      .then((res) => {
+        resolve(res);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
