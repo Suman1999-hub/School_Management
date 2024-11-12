@@ -8,23 +8,23 @@ function MidExam() {
   const [progressReport, setProgressReport] = useState(null)
   console.log("progressReport", progressReport);
 
+  const _getStudentProgressReport = async (id) => {
+    try {
+      const Response = await getStudentProgressReport({ id });
+      console.log("Response", Response);
+
+      setProgressReport(Response);
+    } catch (error) {
+      console.error("Error fetching student details:", error);
+    }
+  };
+
   const UserID = useSelector((state) => state.userCredential.user.id);
   console.log("UserID >>>", UserID);
-
-  // const _getStudentProgressReport = async () => {
-  //   try {
-  //     const Response = await getStudentProgressReport({ UserID, className, academicYear  });
-  //     console.log("Response", Response);
-
-  //     setProgressReport(Response);
-  //   } catch (error) {
-  //     console.error("Error fetching student details:", error);
-  //   }
-  // };
   
-  // useEffect(() => {
-  //   _getStudentProgressReport();
-  // }, [])
+  useEffect(() => {
+    _getStudentProgressReport(UserID);
+  }, [])
 
   return (
     <>

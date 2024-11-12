@@ -296,9 +296,9 @@ export const updateStudent = ({ payload, id }) => {
 
 //get Student Progress Report
 
-export const getStudentProgressReport = ({ id, className, academicYear }) => {
+export const getStudentProgressReport = ({ id }) => {
   return new Promise((resolve, reject) => {
-    makeGetRequest(`${BASE_URL}/admin/progressReport/getprogressreport/${id}?class=${className}&academicYear=${academicYear}`, true)
+    makeGetRequest(`${BASE_URL}/admin/progressReport/getprogressreport/${id}`, true)
       .then((res) => {
         resolve(res);
       })

@@ -422,7 +422,7 @@ function Report() {
 
                 <div className="filterForm">
                   <div className="formGroup">
-                    <Label>Academic Years</Label>
+                    <Label>Academic Year</Label>
                     <Input type="select">
                       <option>Select Academic Years </option>
                       <option>2024 - 2025</option>

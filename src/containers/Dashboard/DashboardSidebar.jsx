@@ -7,6 +7,8 @@ const DashboardSidebar = ({ isShow, setIsShow }) => {
   const { loginType, isSuperAdmin } = useSelector(
     (state) => state?.userCredential?.user
   );
+  const UserID = useSelector((state) => state.userCredential.user.id);
+  console.log("UserID >>>", UserID);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -74,21 +76,44 @@ const DashboardSidebar = ({ isShow, setIsShow }) => {
                   <span>Dashboard</span>
                 </ListGroupItem>
                 <ListGroup>
-                  {ROUTES?.[routeKey]?.map((curr) => (
-                    <ListGroupItem
-                      key={curr.route} // Add a unique key
-                      className={_isActiveTab(curr.route) ? "active" : ""}
-                      onClick={() => navigate(curr.route)}
-                    >
-                      <img
-                        src={require(`../../assets/img/SidebarMenu/payment${
-                          _isActiveTab(curr.route) ? "Active" : ""
-                        }.png`)}
-                        alt=""
-                      />
-                      <span>{curr.text}</span>
-                    </ListGroupItem>
-                  ))}
+                  {ROUTES?.[routeKey]?.map(
+                    (curr) => (
+                      console.log(curr.text),
+                      curr.text === "Report" ? (
+                        <ListGroupItem
+                          key={curr.route} // Add a unique key
+                          className={_isActiveTab(curr.route) ? "active" : ""}
+                          onClick={() =>
+                            navigate(
+                              `${curr.route}?class=10thGrade&academicYear=2023-2024`
+                            )
+                          }
+                        >
+                          <img
+                            src={require(`../../assets/img/SidebarMenu/payment${
+                              _isActiveTab(curr.route) ? "Active" : ""
+                            }.png`)}
+                            alt=""
+                          />
+                          <span>{curr.text}</span>
+                        </ListGroupItem>
+                      ) : (
+                        <ListGroupItem
+                          key={curr.route} // Add a unique key
+                          className={_isActiveTab(curr.route) ? "active" : ""}
+                          onClick={() => navigate(curr.route)}
+                        >
+                          <img
+                            src={require(`../../assets/img/SidebarMenu/payment${
+                              _isActiveTab(curr.route) ? "Active" : ""
+                            }.png`)}
+                            alt=""
+                          />
+                          <span>{curr.text}</span>
+                        </ListGroupItem>
+                      )
+                    )
+                  )}
                 </ListGroup>
               </ListGroup>
             </div>

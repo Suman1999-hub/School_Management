@@ -13,7 +13,7 @@ import CreateSchedule from "../pages/protected/CreateSchedule";
 import ApplyLeave from "../pages/protected/ApplyLeave";
 import Report from "../pages/protected/Report";
 import Settings from "../pages/protected/Settings";
-
+  
 const SUPER_ADMIN_ROUTES = [
   { text: "School", route: "/school", element: <ViewAllSchool /> },
   // { text: "Admin", route: "/admin" },
