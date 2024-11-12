@@ -85,7 +85,7 @@ const DashboardSidebar = ({ isShow, setIsShow }) => {
                           className={_isActiveTab(curr.route) ? "active" : ""}
                           onClick={() =>
                             navigate(
-                              `${curr.route}?class=10thGrade&academicYear=2023-2024`
+                              `${curr.route}?class=10&academicYear=2024-2025`
                             )
                           }
                         >
