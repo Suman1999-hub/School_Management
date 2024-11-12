@@ -26,9 +26,9 @@ function ViewDetailsStudent() {
   const [studentData, setStudentData] = useState(null);
   const [isActive, setIsActive] = useState(null);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
-  const loginType = useSelector(state => state.userCredential.user.loginType)
+  const loginType = useSelector((state) => state.userCredential.user.loginType);
   console.log("isActive>>>>", isActive);
-  
+
   const { id } = useParams();
 
   const _getStudentAPICall = async () => {
@@ -43,25 +43,25 @@ function ViewDetailsStudent() {
     }
   };
 
-    const _AactivateDeactivateApiCall = async (newStatus) => {
-      const payload = { flag: newStatus };
-      try {
-        await ActivateDeactivate({ payload, id });
-        console.log(id, payload);
+  const _AactivateDeactivateApiCall = async (newStatus) => {
+    const payload = { flag: newStatus };
+    try {
+      await ActivateDeactivate({ payload, id });
+      console.log(id, payload);
 
-        _getStudentAPICall();
-      } catch (err) {
-        console.error("Error activating/deactivating teacher:", err);
-      }
-    };
+      _getStudentAPICall();
+    } catch (err) {
+      console.error("Error activating/deactivating teacher:", err);
+    }
+  };
 
-    const handleChangeActiveDeactive = (event) => {
-      const newStatus = event.target.value === "true";
-      console.log("newStatus>>>", newStatus);
-      
-      setIsActive(newStatus);
-      _AactivateDeactivateApiCall(newStatus);
-    };
+  const handleChangeActiveDeactive = (event) => {
+    const newStatus = event.target.value === "true";
+    console.log("newStatus>>>", newStatus);
+
+    setIsActive(newStatus);
+    _AactivateDeactivateApiCall(newStatus);
+  };
 
   const _toggleEditModal = (isOpenModal = false) => {
     setIsOpenEditModal(isOpenModal);
@@ -77,37 +77,31 @@ function ViewDetailsStudent() {
         <CardBody>
           <div className="innerHeader">
             <h2>Student</h2>
-            { loginType !== "teacher" &&
-            <div style={{ display: "flex" }}>
-            <div>
-              <Input
-                type="select"
-                style={{ maxHeight: "35px", marginTop: "10px" }}
-                value={isActive}
-                  onChange={handleChangeActiveDeactive}
-              >
-                <option value="true">Active</option>
-                <option value="false">Inactive</option>
-              </Input>
-            </div>
-            <div>
-              <Button color="link" onClick={() => _toggleEditModal(true)}>
-
-
-                <img
-                src={require("../../assets/img/edit.png")}
-                alt=""
-                width="20px"
-                className="float-end"
-              />
-
-
-                
-              </Button>
-            </div>
-          </div>
-            }
-            
+            {loginType !== "teacher" && (
+              <div style={{ display: "flex" }}>
+                <div>
+                  <Input
+                    type="select"
+                    style={{ maxHeight: "35px", marginTop: "10px" }}
+                    value={isActive}
+                    onChange={handleChangeActiveDeactive}
+                  >
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                  </Input>
+                </div>
+                <div>
+                  <Button color="link" onClick={() => _toggleEditModal(true)}>
+                    <img
+                      src={require("../../assets/img/edit.png")}
+                      alt=""
+                      width="20px"
+                      className="float-end"
+                    />
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
 
           <div style={{ textAlign: "center" }}>
@@ -224,7 +218,6 @@ function ViewDetailsStudent() {
                 </div>
               </Col>
             </Row>
-            
           </CardText>
         </CardBody>
       </Card>

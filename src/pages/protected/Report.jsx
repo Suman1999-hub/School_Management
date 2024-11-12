@@ -53,7 +53,7 @@ function Report() {
   console.log(loginUser);
   return (
     <>
-      {loginUser === "admin" ? (
+      {loginUser !== "student" ? (
         <>
           <div className="innerHeader">
             <h2>Report</h2>
