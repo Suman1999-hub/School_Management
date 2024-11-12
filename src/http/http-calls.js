@@ -237,10 +237,10 @@ export const updateTeacher = ({ payload, id }) => {
   });
 };
 
-//Active and In
+//Activate and Deactivate
 export const ActivateDeactivate = ({ payload, id }) => {
   return new Promise((resolve, reject) => {
-    makePutRequest(`${BASE_URL}/activatedeactivate/${id}`, true, payload)
+    makePostRequest(`${BASE_URL}/activatedeactivate/${id}`, true, payload)
       .then((res) => {
         resolve(res);
       })
