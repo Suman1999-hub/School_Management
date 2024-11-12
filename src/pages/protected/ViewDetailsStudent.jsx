@@ -75,36 +75,37 @@ function ViewDetailsStudent() {
         <CardBody>
           <div className="innerHeader">
             <h2>Student</h2>
+            { loginType !== "teacher" &&
             <div style={{ display: "flex" }}>
-              <div>
-                <Input
-                  type="select"
-                  style={{ maxHeight: "35px", marginTop: "10px" }}
-                  value={isActive}
-                    onChange={handleChangeActiveDeactive}
-                >
-                  <option value="true">Active</option>
-                  <option value="false">Deactivate</option>
-                </Input>
-              </div>
-              <div>
-                <Button color="link" onClick={() => _toggleEditModal(true)}>
-
-
-                  { loginType !== "teacher" &&
-                  <img
-                  src={require("../../assets/img/edit.png")}
-                  alt=""
-                  width="20px"
-                  className="float-end"
-                />
-                  }
-
-
-                  
-                </Button>
-              </div>
+            <div>
+              <Input
+                type="select"
+                style={{ maxHeight: "35px", marginTop: "10px" }}
+                value={isActive}
+                  onChange={handleChangeActiveDeactive}
+              >
+                <option value="true">Active</option>
+                <option value="false">Deactivate</option>
+              </Input>
             </div>
+            <div>
+              <Button color="link" onClick={() => _toggleEditModal(true)}>
+
+
+                <img
+                src={require("../../assets/img/edit.png")}
+                alt=""
+                width="20px"
+                className="float-end"
+              />
+
+
+                
+              </Button>
+            </div>
+          </div>
+            }
+            
           </div>
 
           <div style={{ textAlign: "center" }}>
