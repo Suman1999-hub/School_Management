@@ -293,3 +293,18 @@ export const updateStudent = ({ payload, id }) => {
       });
   });
 };
+
+//get Student Progress Report
+
+export const getStudentProgressReport = ({ id, className, academicYear }) => {
+  return new Promise((resolve, reject) => {
+    makeGetRequest(`${BASE_URL}/admin/progressReport/getprogressreport/${id}?class=${className}&academicYear=${academicYear}`, true)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
