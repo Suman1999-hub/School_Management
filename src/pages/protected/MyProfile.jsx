@@ -315,15 +315,31 @@ const MyProfile = () => {
                     )}
                   </Col>
 
-                  <Col md="6" lg="4">
-                    {/* Login Type */}
-                    {userDetails.loginType && (
+                  {userDetails?.class?.name ? (
+                    <Col md="6" lg="4">
+                      {/* Login Type */}(
                       <div className="form-group">
-                        <Label>Role</Label>
-                        <Input readOnly value={userDetails.loginType} />
+                        <Label>Class</Label>
+                        <Input readOnly value={userDetails.class.name} />
                       </div>
-                    )}
-                  </Col>
+                      )
+                    </Col>
+                  ) : (
+                    ""
+                  )}
+
+                  {userDetails?.class?.section ? (
+                    <Col md="6" lg="4">
+                      {/* Login Type */}(
+                      <div className="form-group">
+                        <Label>Section</Label>
+                        <Input readOnly value={userDetails.class.section} />
+                      </div>
+                      )
+                    </Col>
+                  ) : (
+                    ""
+                  )}
                 </Row>
                 <h6>Address</h6>
                 {/* Current Address */}
