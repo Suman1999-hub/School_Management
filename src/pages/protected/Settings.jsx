@@ -370,7 +370,7 @@ const Settings = () => {
         </TabContent>
 
         <TabContent
-          style={{ maxWidth: "800px", margin: "auto" }}
+          style={{ maxWidth: "900px", margin: "auto" }}
           activeTab={activeTab}
         >
           {/* <h6 style={{ textAlign: "center" }}>Settings</h6> */}
@@ -383,44 +383,312 @@ const Settings = () => {
                   style={{ textAlign: "center" }}
                   className={activeTab === "7" ? "active" : ""}
                 >
-                  <div style={{ textAlign: "center" }}>
-                    <Label>School Name</Label>
+                  <div
+                    style={{
+                      textAlign: "center",
+                      display: "flex",
+                      flexWrap: "wrap",
+                      alignItems: "baseline",
+                    }}
+                  >
+                    <Label>School Name :</Label>
                     <Input
                       style={{ textAlign: "center" }}
                       type="text"
-                      value={"DPS school"}
+                      value={"DPS school, Delhi"}
                     ></Input>
 
-                    <Label>Location</Label>
+                    <Label>Location :</Label>
                     <Input
                       style={{ textAlign: "center" }}
                       type="text"
                       value={"Saket, Delhi"}
                     ></Input>
 
-                    <Label>Map URL</Label>
+                    <Label>Map URL :</Label>
                     <Input
                       style={{ textAlign: "center" }}
                       type="text"
                       value={"SHGHSHHShhahhshhsshshsh"}
                     ></Input>
 
-                    <Label>Website</Label>
+                    <Label>Website :</Label>
                     <Input
                       style={{ textAlign: "center" }}
                       type="text"
                       value={"www.dpsschool.com"}
                     ></Input>
 
-                    <Label>Phone no.</Label>
+                    <Label>Email :</Label>
+                    <Input
+                      style={{ textAlign: "center" }}
+                      type="text"
+                      value={"dpsdelhi@gmail.com"}
+                    ></Input>
+
+                    <Label>Phone no. :</Label>
                     <Input
                       style={{ textAlign: "center" }}
                       type="text"
                       value={"9002306785"}
                     ></Input>
+                  </div>
+                  <Button style={{ marginTop: "30px" }} color="primary">
+                    Update
+                  </Button>
+                </NavLink>
+              </Card>
+            </section>
+          </TabPane>
+        </TabContent>
+
+        <TabContent
+          style={{ maxWidth: "900px", margin: "auto" }}
+          activeTab={activeTab}
+        >
+          <TabPane tabId="6">
+            {/* Personal Information */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+              }}
+            >
+              <h6 style={{ textAlign: "center"}}>List of Holidays</h6>
+              <Button className="custom-button" outline >
+                <i className="fa fa-plus"></i>
+              </Button>
+            </div>
+            <section>
+              <Card body>
+                <Table responsive style={{ textAlign: "center" }}>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Occasion</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>10/09/2024</td>
+                      <td>Ganesh Chaturthi</td>
+                      <td>
+                        <Button
+                          color="success"
+                          style={{ border: "none" }}
+                          outline
+                        >
+                          <i className="fa fa-edit"></i>
+                        </Button>
+                        <Button
+                          color="danger"
+                          style={{ border: "none" }}
+                          outline
+                        >
+                          <i className="fa fa-trash"></i>
+                        </Button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>11/10/2024</td>
+                      <td>Diwali</td>
+                      <td>
+                        <Button
+                          color="success"
+                          style={{ border: "none" }}
+                          outline
+                        >
+                          <i className="fa fa-edit"></i>
+                        </Button>
+                        <Button
+                          color="danger"
+                          style={{ border: "none" }}
+                          outline
+                        >
+                          <i className="fa fa-trash"></i>
+                        </Button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>10/09/2024</td>
+                      <td>Chhath Puja</td>
+                      <td>
+                        <Button
+                          color="success"
+                          style={{ border: "none" }}
+                          outline
+                        >
+                          <i className="fa fa-edit"></i>
+                        </Button>
+                        <Button
+                          color="danger"
+                          style={{ border: "none" }}
+                          outline
+                        >
+                          <i className="fa fa-trash"></i>
+                        </Button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>25/12/2024</td>
+                      <td>Chritmas</td>
+                      <td>
+                        <Button
+                          color="success"
+                          style={{ border: "none" }}
+                          outline
+                        >
+                          <i className="fa fa-edit"></i>
+                        </Button>
+                        <Button
+                          color="danger"
+                          style={{ border: "none" }}
+                          outline
+                        >
+                          <i className="fa fa-trash"></i>
+                        </Button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>10/09/2024</td>
+                      <td>Ganesh Chaturthi</td>
+                      <td>
+                        <Button
+                          color="success"
+                          style={{ border: "none" }}
+                          outline
+                        >
+                          <i className="fa fa-edit"></i>
+                        </Button>
+                        <Button
+                          color="danger"
+                          style={{ border: "none" }}
+                          outline
+                        >
+                          <i className="fa fa-trash"></i>
+                        </Button>
+                      </td>
+                    </tr>
+                  </tbody>
+
+                  {/* <tbody>
+              {allStudents.map((curr) => {
+                console.log(curr);
+                return (
+                  <>
+                    <tr>
+                      <td>
+                        {curr.firstName || curr.lastName
+                          ? curr.firstName + " " + curr.lastName
+                          : ""}
+                      </td>
+
+                      <td>{curr._class.name ? curr._class.name : ""}</td>
+                      <td>{curr._class.section ? curr._class.section : ""}</td>
+                      <td>{curr.rollNo ? curr.rollNo : ""}</td>
+                      <td>{curr.gender ? curr.gender : ""}</td>
+                      <td>
+                        {curr.address
+                          ? getAddressFormate(
+                              curr.address.locality,
+                              curr.address.city,
+                              curr.address.state,
+                              curr.address.country,
+                              curr.address.pin
+                            )
+                          : ""}
+                      </td>
+                      <td>{curr.phone ? curr.phone : ""}</td>
+                      <td>
+                        <CircularProgressbar
+                          value="97"
+                          text="97%"
+                          className="success"
+                          styles={buildStyles({
+                            strokeLinecap: "round",
+                          })}
+                        />
+                      </td>
+                      <td>
+                        <div className="action">
+                        <Link to={`/student/${curr._id}`}>
+                          <Button color="link">
+                            <i className="fa fa-eye"></i>
+                          </Button>
+                          </Link>
+                        </div>
+                      </td>
+                    </tr>
+                  </>
+                );
+              })}
+            </tbody> */}
+                </Table>
+
+                {/* <PaginatedItems itemsPerPage={4} /> */}
+              </Card>
+            </section>
+          </TabPane>
+        </TabContent>
+
+        <TabContent
+          style={{ maxWidth: "800px", margin: "auto" }}
+          activeTab={activeTab}
+        >
+          <TabPane tabId="1">
+            <section>
+              <Card body>
+                <NavLink
+                  style={{ textAlign: "center" }}
+                  className={activeTab === "5" ? "active" : ""}
+                >
+                  <div className="innerHeader">
+                    <h2>Bus Service</h2>
+
+                    <div>
+                      <Button color="dark" outline>
+                        <i className="fa fa-plus"></i>
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div
+                    style={{
+                      textAlign: "center",
+                      display: "flex",
+                      flexWrap: "wrap",
+                      justifyContent: "space-evenly",
+                    }}
+                  >
+                    <Input
+                      style={{
+                        marginTop: "30px",
+                        maxWidth: "350px",
+                        textAlign: "center",
+                      }}
+                      type="select"
+                    >
+                      <option hidden>Range in kms</option>
+                      <option>1-5 (kms)</option>
+                      <option>5-10 (kms)</option>
+                      <option>10-20 (kms)</option>
+                      <option>20-25 (kms)</option>
+                      <option>25-30 (kms)</option>
+                    </Input>
+
+                    <Input
+                      style={{
+                        marginTop: "30px",
+                        maxWidth: "350px",
+                        textAlign: "center",
+                      }}
+                      type="number"
+                    ></Input>
 
                     <Button style={{ marginTop: "30px" }} color="primary">
-                      Edit 
+                      Save
                     </Button>
                   </div>
                 </NavLink>
