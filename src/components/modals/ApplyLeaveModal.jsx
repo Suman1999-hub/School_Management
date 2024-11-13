@@ -124,7 +124,11 @@ function ApplyLeaveModal({ isOpen, toggle, setApplyLeaveData }) {
               Cancel
             </Button>
 
-            <Button color="primary" onClick={() => _ApplyLeaveApiCall()}>
+            <Button
+              color="primary"
+              onClick={() => _ApplyLeaveApiCall()}
+              style={{ marginLeft: "2%" }}
+            >
               Submit
             </Button>
           </div>
