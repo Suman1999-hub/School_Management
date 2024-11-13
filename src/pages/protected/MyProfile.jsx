@@ -10,7 +10,11 @@ import {
   Input,
   InputGroupText,
 } from "reactstrap";
-import { CheckFormUpdate, errorHandler, formatDate } from "../../helper-methods";
+import {
+  CheckFormUpdate,
+  errorHandler,
+  formatDate,
+} from "../../helper-methods";
 import { getLoggedInUserDetail, updateProfile } from "../../http/http-calls";
 import { useSelector } from "react-redux";
 
@@ -51,7 +55,7 @@ const states = [
   "Delhi ",
   "Puducherry",
   "Jammu and Kashmir",
-  "Ladakh"  
+  "Ladakh",
 ];
 
 const AllGender = ["Male", "Female", "Transgender"];
@@ -86,7 +90,7 @@ const MyProfile = () => {
       const response = await getLoggedInUserDetail();
       // console.log("response>>", response.user);
       setUserDetails(response.user);
-      setData(response.user)
+      setData(response.user);
     } catch (error) {
       errorHandler(error);
     }
@@ -100,7 +104,7 @@ const MyProfile = () => {
     if (userDetails) {
       const formattedDOB = formatDate(userDetails.dob);
       setDOB(formattedDOB);
-      setAddress(userDetails.address)
+      setAddress(userDetails.address);
     }
   }, [userDetails.dob]);
 
@@ -117,24 +121,24 @@ const MyProfile = () => {
     const updatedAddress = { ...address };
     updatedAddress[field] = event.target.value;
     setAddress(updatedAddress);
-    setUserDetails(prev => ({
+    setUserDetails((prev) => ({
       ...prev,
-      address: updatedAddress
+      address: updatedAddress,
     }));
   };
 
   const handleSave = async () => {
-    const payload = CheckFormUpdate(data, userDetails)
+    const payload = CheckFormUpdate(data, userDetails);
     console.log("payload>>>", payload);
-    
+
     try {
       if (payload) {
         const response = await updateProfile(payload);
-      // console.log("response>>", response.user);
-      setUserDetails(response.user);
-      alert("successfully updated");
+        // console.log("response>>", response.user);
+        setUserDetails(response.user);
+        alert("successfully updated");
       } else {
-        alert("Changes up-to-date")
+        alert("Changes up-to-date");
       }
     } catch (error) {
       errorHandler(error);
@@ -148,10 +152,14 @@ const MyProfile = () => {
           <Col xl="4">
             <Card body className="profileCard">
               <div className="cardImg">
-                <img
-                  src={userDetails.profileImage}
-                  alt=""
-                />
+                {userDetails?.profileImage ? (
+                  <img src={userDetails.profileImage} alt="" />
+                ) : (
+                  <img
+                    src={require("../../assets/img/SidebarMenu/profile.png")}
+                    alt="defult profile image"
+                  />
+                )}
               </div>
               <CardTitle>{userDetails.fullname}</CardTitle>
               {/* <span>{userDetails.email}</span> */}
@@ -161,8 +169,11 @@ const MyProfile = () => {
                   <Input type="file" id="customFileUpload" />
                   {true ? (
                     <Label for="customFileUpload" className="p-3">
-                      <i className="fa fa-edit" style={{ fontSize: '25px' }}></i> 
-                      
+                      <i
+                        className="fa fa-edit"
+                        style={{ fontSize: "25px" }}
+                      ></i>
+
                       <div className="customUploadText">
                         <h6>Change Profile Picture</h6>
                         <span>File size must be less than 5mb</span>
@@ -187,8 +198,6 @@ const MyProfile = () => {
             </Card>
 
             <hr />
-
-           
           </Col>
           <Col xl="8">
             <Card body>
@@ -375,7 +384,6 @@ const MyProfile = () => {
                           placeholder="Enter your Zip Code"
                           value={userDetails.address.pin}
                           onChange={(e) => handleAddress(e, "pin")}
-
                         />
                       </div>
                     )}
@@ -390,7 +398,6 @@ const MyProfile = () => {
                           type="select"
                           value={userDetails.address.country}
                           onChange={(e) => handleAddress(e, "country")}
-
                         >
                           <option hidden>Select Country</option>
                           <option>India</option>
@@ -417,10 +424,3 @@ const MyProfile = () => {
 };
 
 export default MyProfile;
-
-
-
-
-
-
-
