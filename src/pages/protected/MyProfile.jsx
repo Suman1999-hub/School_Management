@@ -10,7 +10,7 @@ import {
   Input,
   InputGroupText,
 } from "reactstrap";
-import { errorHandler, formatDate } from "../../helper-methods";
+import { CheckFormUpdate, errorHandler, formatDate } from "../../helper-methods";
 import { getLoggedInUserDetail, updateProfile } from "../../http/http-calls";
 import { useSelector } from "react-redux";
 
@@ -61,6 +61,7 @@ const MyProfile = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState("1");
   const [userDetails, setUserDetails] = useState({});
+  const [data, setData] = useState({});
   const [address, setAddress] = useState({});
   const [DOB, setDOB] = useState(null);
 
@@ -68,9 +69,9 @@ const MyProfile = () => {
     if (activeTab !== newTab) setActiveTab(newTab);
   };
 
-  console.log("DOB>>", DOB);
+  console.log("data>>", data);
   console.log("userDetails>>", userDetails);
-  console.log("address>>", address);
+  // console.log("address>>", address);
 
   // console.log("address>>", userDetails.address.city);
 
@@ -85,6 +86,7 @@ const MyProfile = () => {
       const response = await getLoggedInUserDetail();
       // console.log("response>>", response.user);
       setUserDetails(response.user);
+      setData(response.user)
     } catch (error) {
       errorHandler(error);
     }
@@ -122,11 +124,18 @@ const MyProfile = () => {
   };
 
   const handleSave = async () => {
+    const payload = CheckFormUpdate(data, userDetails)
+    console.log("payload>>>", payload);
+    
     try {
-      const response = await updateProfile(userDetails);
+      if (payload) {
+        const response = await updateProfile(payload);
       // console.log("response>>", response.user);
       setUserDetails(response.user);
       alert("successfully updated");
+      } else {
+        alert("Changes up-to-date")
+      }
     } catch (error) {
       errorHandler(error);
     }

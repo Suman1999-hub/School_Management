@@ -44,7 +44,6 @@ const Settings = () => {
     <>
       <div className="disputes_tab">
         <Nav pills>
-
           <NavItem>
             {userType === "admin" && (
               <NavLink
@@ -118,7 +117,18 @@ const Settings = () => {
             >
               Personal
             </NavLink>
-          </NavItem>         
+          </NavItem>
+
+          <NavItem>
+            {userType === "admin" && (
+              <NavLink
+                className={activeTab === "8" ? "active" : ""}
+                onClick={() => _toggleTab("8")}
+              >
+                Organization
+              </NavLink>
+            )}
+          </NavItem>
         </Nav>
 
         <TabContent
@@ -351,6 +361,66 @@ const Settings = () => {
                       color="primary"
                     >
                       Promote Class
+                    </Button>
+                  </div>
+                </NavLink>
+              </Card>
+            </section>
+          </TabPane>
+        </TabContent>
+
+        <TabContent
+          style={{ maxWidth: "800px", margin: "auto" }}
+          activeTab={activeTab}
+        >
+          {/* <h6 style={{ textAlign: "center" }}>Settings</h6> */}
+          <TabPane tabId="8">
+            {/* Personal Information */}
+
+            <section>
+              <Card body>
+                <NavLink
+                  style={{ textAlign: "center" }}
+                  className={activeTab === "7" ? "active" : ""}
+                >
+                  <div style={{ textAlign: "center" }}>
+                    <Label>School Name</Label>
+                    <Input
+                      style={{ textAlign: "center" }}
+                      type="text"
+                      value={"DPS school"}
+                    ></Input>
+
+                    <Label>Location</Label>
+                    <Input
+                      style={{ textAlign: "center" }}
+                      type="text"
+                      value={"Saket, Delhi"}
+                    ></Input>
+
+                    <Label>Map URL</Label>
+                    <Input
+                      style={{ textAlign: "center" }}
+                      type="text"
+                      value={"SHGHSHHShhahhshhsshshsh"}
+                    ></Input>
+
+                    <Label>Website</Label>
+                    <Input
+                      style={{ textAlign: "center" }}
+                      type="text"
+                      value={"www.dpsschool.com"}
+                    ></Input>
+
+                    <Label>Phone no.</Label>
+                    <Input
+                      style={{ textAlign: "center" }}
+                      type="text"
+                      value={"9002306785"}
+                    ></Input>
+
+                    <Button style={{ marginTop: "30px" }} color="primary">
+                      Edit 
                     </Button>
                   </div>
                 </NavLink>
