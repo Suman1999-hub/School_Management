@@ -1,7 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Card, Table } from "reactstrap";
+import { getStudentProgressReport } from "../http/http-calls";
+import { useSelector } from "react-redux";
 
 function MidExam() {
+
+  const [progressReport, setProgressReport] = useState(null)
+  console.log("progressReport", progressReport);
+
+  const _getStudentProgressReport = async (id) => {
+    try {
+      const Response = await getStudentProgressReport({ id });
+      console.log("Response", Response);
+
+      setProgressReport(Response);
+    } catch (error) {
+      console.error("Error fetching student details:", error);
+    }
+  };
+
+  const UserID = useSelector((state) => state.userCredential.user.id);
+  console.log("UserID >>>", UserID);
+  
+  useEffect(() => {
+    _getStudentProgressReport(UserID);
+  }, [])
+
   return (
     <>
       <Card style={{ maxWidth: "50%", margin: "auto", padding: "50px" }}>

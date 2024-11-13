@@ -237,7 +237,7 @@ export const updateTeacher = ({ payload, id }) => {
   });
 };
 
-//Active and In
+//Activate and Deactivate
 export const ActivateDeactivate = ({ payload, id }) => {
   return new Promise((resolve, reject) => {
     makePostRequest(`${BASE_URL}/activatedeactivate/${id}`, true, payload)
@@ -326,6 +326,23 @@ export const updateStudent = ({ payload, id }) => {
 export const getNoticedetails = ({ id }) => {
   return new Promise((resolve, reject) => {
     makeGetRequest(`${BASE_URL}/admin/notice/getNotice/${id}`, true)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+//get Student Progress Report
+
+export const getStudentProgressReport = ({ id }) => {
+  return new Promise((resolve, reject) => {
+    makeGetRequest(
+      `${BASE_URL}/admin/progressReport/getprogressreport/${id}`,
+      true
+    )
       .then((res) => {
         resolve(res);
       })

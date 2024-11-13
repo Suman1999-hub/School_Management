@@ -53,7 +53,7 @@ function Report() {
   console.log(loginUser);
   return (
     <>
-      {loginUser === "admin" ? (
+      {loginUser !== "student" ? (
         <>
           <div className="innerHeader">
             <h2>Report</h2>
@@ -422,7 +422,7 @@ function Report() {
 
                 <div className="filterForm">
                   <div className="formGroup">
-                    <Label>Academic Years</Label>
+                    <Label>Academic Year</Label>
                     <Input type="select">
                       <option>Select Academic Years </option>
                       <option>2024 - 2025</option>

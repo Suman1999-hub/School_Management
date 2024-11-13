@@ -44,13 +44,16 @@ const Settings = () => {
     <>
       <div className="disputes_tab">
         <Nav pills>
+
           <NavItem>
-            <NavLink
-              className={activeTab === "1" ? "active" : ""}
-              onClick={() => _toggleTab("1")}
-            >
-              Personal Settings
-            </NavLink>
+            {userType === "admin" && (
+              <NavLink
+                className={activeTab === "1" ? "active" : ""}
+                onClick={() => _toggleTab("1")}
+              >
+                Bus Service
+              </NavLink>
+            )}
           </NavItem>
 
           <NavItem>
@@ -59,10 +62,63 @@ const Settings = () => {
                 className={activeTab === "2" ? "active" : ""}
                 onClick={() => _toggleTab("2")}
               >
-                Organization Settings
+                Salary
               </NavLink>
             )}
           </NavItem>
+
+          <NavItem>
+            {userType === "admin" && (
+              <NavLink
+                className={activeTab === "3" ? "active" : ""}
+                onClick={() => _toggleTab("3")}
+              >
+                Fee
+              </NavLink>
+            )}
+          </NavItem>
+
+          <NavItem>
+            {userType === "admin" && (
+              <NavLink
+                className={activeTab === "4" ? "active" : ""}
+                onClick={() => _toggleTab("4")}
+              >
+                Schedule
+              </NavLink>
+            )}
+          </NavItem>
+
+          <NavItem>
+            {userType === "admin" && (
+              <NavLink
+                className={activeTab === "5" ? "active" : ""}
+                onClick={() => _toggleTab("5")}
+              >
+                Class
+              </NavLink>
+            )}
+          </NavItem>
+
+          <NavItem>
+            {userType === "admin" && (
+              <NavLink
+                className={activeTab === "6" ? "active" : ""}
+                onClick={() => _toggleTab("6")}
+              >
+                Holidays
+              </NavLink>
+            )}
+          </NavItem>
+
+          <NavItem>
+            <NavLink
+              className={activeTab === "7" ? "active" : ""}
+              onClick={() => _toggleTab("7")}
+            >
+              Personal
+            </NavLink>
+          </NavItem>         
         </Nav>
 
         <TabContent
@@ -70,13 +126,13 @@ const Settings = () => {
           activeTab={activeTab}
         >
           <h6 style={{ textAlign: "center" }}>Settings</h6>
-          <TabPane tabId="1">
+          <TabPane tabId="7">
             {/* Personal Information */}
             <section>
               <Card body>
                 <NavLink
                   style={{ textAlign: "center" }}
-                  className={activeTab === "1" ? "active" : ""}
+                  className={activeTab === "7" ? "active" : ""}
                 >
                   Theme
                   <Input
@@ -94,7 +150,7 @@ const Settings = () => {
               <Card body>
                 <NavLink
                   style={{ textAlign: "center" }}
-                  className={activeTab === "1" ? "active" : ""}
+                  className={activeTab === "7" ? "active" : ""}
                 >
                   Change your Password
                   <div style={{ textAlign: "center" }}>
@@ -127,12 +183,12 @@ const Settings = () => {
           style={{ maxWidth: "800px", margin: "auto" }}
           activeTab={activeTab}
         >
-          <TabPane tabId="2">
+          <TabPane tabId="5">
             <section>
               <Card body>
                 <NavLink
                   style={{ textAlign: "center" }}
-                  className={activeTab === "1" ? "active" : ""}
+                  className={activeTab === "5" ? "active" : ""}
                 >
                   Create Class
                   <div
@@ -209,7 +265,7 @@ const Settings = () => {
               <Card body>
                 <NavLink
                   style={{ textAlign: "center" }}
-                  className={activeTab === "1" ? "active" : ""}
+                  className={activeTab === "5" ? "active" : ""}
                 >
                   Promote
                   <div
