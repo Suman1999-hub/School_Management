@@ -13,6 +13,10 @@ import {
   InputGroup,
   InputGroupText,
   List,
+  CardTitle,
+  FormGroup,
+  Col,
+  Row,
 } from "reactstrap";
 
 import CustomDateRangePicker from "../../components/CustomDateRangePicker";
@@ -44,7 +48,6 @@ const Settings = () => {
     <>
       <div className="disputes_tab">
         <Nav pills>
-
           <NavItem>
             {userType === "admin" && (
               <NavLink
@@ -63,17 +66,6 @@ const Settings = () => {
                 onClick={() => _toggleTab("2")}
               >
                 Salary
-              </NavLink>
-            )}
-          </NavItem>
-
-          <NavItem>
-            {userType === "admin" && (
-              <NavLink
-                className={activeTab === "3" ? "active" : ""}
-                onClick={() => _toggleTab("3")}
-              >
-                Fee
               </NavLink>
             )}
           </NavItem>
@@ -118,7 +110,18 @@ const Settings = () => {
             >
               Personal
             </NavLink>
-          </NavItem>         
+          </NavItem>
+
+          <NavItem>
+            {userType === "admin" && (
+              <NavLink
+                className={activeTab === "8" ? "active" : ""}
+                onClick={() => _toggleTab("8")}
+              >
+                Organization
+              </NavLink>
+            )}
+          </NavItem>
         </Nav>
 
         <TabContent
@@ -134,14 +137,26 @@ const Settings = () => {
                   style={{ textAlign: "center" }}
                   className={activeTab === "7" ? "active" : ""}
                 >
-                  Theme
-                  <Input
-                    style={{ marginTop: "30px", textAlign: "center" }}
-                    type="select"
+                  <div
+                    style={{
+                      textAlign: "center",
+                      display: "flex",
+                      flexDirection: "column",
+                      // flexWrap: "wrap",
+                      maxWidth: "90%",
+                      margin: "auto",
+                      marginTop: "5px",
+                    }}
                   >
-                    <option>Light Mode</option>
-                    <option>Dark Mode</option>
-                  </Input>
+                    Theme
+                    <Input
+                      style={{ marginTop: "10px", textAlign: "center" }}
+                      type="select"
+                    >
+                      <option>Light Mode</option>
+                      <option>Dark Mode</option>
+                    </Input>
+                  </div>
                 </NavLink>
               </Card>
             </section>
@@ -152,27 +167,37 @@ const Settings = () => {
                   style={{ textAlign: "center" }}
                   className={activeTab === "7" ? "active" : ""}
                 >
-                  Change your Password
-                  <div style={{ textAlign: "center" }}>
+                  <div
+                    style={{
+                      textAlign: "center",
+                      display: "flex",
+                      flexDirection: "column",
+                      // flexWrap: "wrap",
+                      maxWidth: "90%",
+                      margin: "auto",
+                      marginTop: "5px",
+                    }}
+                  >
+                    Change your Password
                     <Input
-                      style={{ marginTop: "30px", textAlign: "center" }}
+                      style={{ marginTop: "10px", textAlign: "center" }}
                       type="password"
                       placeholder="Old Password"
                     ></Input>
                     <Input
-                      style={{ marginTop: "30px", textAlign: "center" }}
+                      style={{ marginTop: "10px", textAlign: "center" }}
                       type="password"
                       placeholder="New Password"
                     ></Input>
                     <Input
-                      style={{ marginTop: "30px", textAlign: "center" }}
+                      style={{ marginTop: "10px", textAlign: "center" }}
                       type="password"
                       placeholder="Confirm New Password"
                     ></Input>
-                    <Button style={{ marginTop: "30px" }} color="primary">
-                      Change
-                    </Button>
                   </div>
+                  <Button style={{ marginTop: "30px" }} color="primary">
+                    Change
+                  </Button>
                 </NavLink>
               </Card>
             </section>
@@ -180,7 +205,7 @@ const Settings = () => {
         </TabContent>
 
         <TabContent
-          style={{ maxWidth: "800px", margin: "auto" }}
+          style={{ maxWidth: "800px", margin: "auto", padding: "0" }}
           activeTab={activeTab}
         >
           <TabPane tabId="5">
@@ -190,7 +215,15 @@ const Settings = () => {
                   style={{ textAlign: "center" }}
                   className={activeTab === "5" ? "active" : ""}
                 >
-                  Create Class
+                  <div className="innerHeader">
+                    <h2> Create Class</h2>
+
+                    <div>
+                      <Button color="dark" outline>
+                        <i className="fa fa-plus"></i>
+                      </Button>
+                    </div>
+                  </div>
                   <div
                     style={{
                       textAlign: "center",
@@ -201,25 +234,10 @@ const Settings = () => {
                   >
                     <Input
                       style={{
-                        marginTop: "30px",
-                        maxWidth: "350px",
-                        textAlign: "center",
-                      }}
-                      type="select"
-                    >
-                      <option hidden>Acedemic Year</option>
-                      <option>2024-2025</option>
-                      <option>2025-2026</option>
-                      <option>2026-2027</option>
-                      <option>2027-2028</option>
-                      <option>2028-2029</option>
-                      <option>2029-2030</option>
-                    </Input>
+                        marginTop: "10px",
 
-                    <Input
-                      style={{
-                        marginTop: "30px",
-                        maxWidth: "350px",
+                        margin: "auto",
+                        maxWidth: "250px",
                         textAlign: "center",
                       }}
                       type="select"
@@ -239,25 +257,31 @@ const Settings = () => {
 
                     <Input
                       style={{
-                        marginTop: "30px",
-                        maxWidth: "720px",
+                        marginTop: "10px",
+
+                        margin: "auto",
+                        maxWidth: "250px",
                         textAlign: "center",
                       }}
-                      type="select"
-                    >
-                      <option hidden>Fee</option>
-                      <option>1000 INR</option>
-                      <option>2000 INR</option>
-                      <option>3000 INR</option>
-                      <option>4000 INR</option>
-                      <option>5000 INR</option>
-                      <option>6000 INR</option>
-                      <option>7000 INR</option>
-                    </Input>
-                    <Button style={{ marginTop: "30px" }} color="primary">
-                      Create
-                    </Button>
+                      type="text"
+                      placeholder="Academic-Year"
+                    ></Input>
+
+                    <Input
+                      style={{
+                        marginTop: "10px",
+
+                        margin: "auto",
+                        maxWidth: "250px",
+                        textAlign: "center",
+                      }}
+                      placeholder="Fee"
+                      type="text"
+                    ></Input>
                   </div>
+                  <Button style={{ marginTop: "30px" }} color="primary">
+                    Create
+                  </Button>
                 </NavLink>
               </Card>
             </section>
@@ -345,14 +369,770 @@ const Settings = () => {
                       <option>2028-2029</option>
                       <option>2029-2030</option>
                     </Input>
+                  </div>
+                  <Button
+                    style={{ marginTop: "30px", textAlign: "center" }}
+                    color="primary"
+                  >
+                    Promote Class
+                  </Button>
+                </NavLink>
+              </Card>
+            </section>
+          </TabPane>
+        </TabContent>
 
-                    <Button
-                      style={{ marginTop: "30px", textAlign: "center" }}
-                      color="primary"
-                    >
-                      Promote Class
+        <TabContent
+          style={{ maxWidth: "900px", margin: "auto", padding: "0" }}
+          activeTab={activeTab}
+        >
+          {/* <h6 style={{ textAlign: "center" }}>Settings</h6> */}
+          <TabPane tabId="8">
+            {/* Personal Information */}
+
+            <section>
+              <Card body>
+                <NavLink
+                  style={{ textAlign: "center" }}
+                  className={activeTab === "8" ? "active" : ""}
+                >
+                  <Card body className="profileCard">
+                    <div className="cardImg">
+                      {/* {userDetails?.profileImage ? (
+                  <img src={userDetails.profileImage} alt="" />
+                ) : ( */}
+                      <img
+                        src={require("../../assets/img/school management logo.jpg")}
+                        alt="defult profile image"
+                      />
+                      {/* )} */}
+                    </div>
+                    {/* <CardTitle>{userDetails.fullname}</CardTitle> */}
+                    {/* <span>{userDetails.email}</span> */}
+                    <div className="form-group">
+                      {/* <Label>Change Profile Photo</Label> */}
+                      <div className="customFileUpload">
+                        <Input type="file" id="customFileUpload" />
+                        {true ? (
+                          <Label for="customFileUpload" className="p-3">
+                            <i
+                              className="fa fa-edit"
+                              style={{ fontSize: "25px" }}
+                            ></i>
+
+                            <div className="customUploadText">
+                              <h6>Change Logo</h6>
+                              <span>File size must be less than 1mb</span>
+                            </div>
+                          </Label>
+                        ) : (
+                          <Label
+                            for="customFileUpload"
+                            className="uploaded p-3"
+                          >
+                            <img
+                              src={
+                                require("../../assets/img/sign-up-doc.svg")
+                                  .default
+                              }
+                              alt=""
+                            />
+                            <div className="customUploadText">
+                              <span>File size must be less than 5mb</span>
+                            </div>
+                          </Label>
+                        )}
+                      </div>
+                    </div>
+                  </Card>
+                  <div
+                    style={{
+                      textAlign: "center",
+                      display: "flex",
+                      flexDirection: "column",
+                      // flexWrap: "wrap",
+                      alignItems: "baseline",
+                      maxWidth: "80%",
+                      margin: "auto",
+                      marginTop: "5px",
+                    }}
+                  >
+                    <Label>School Name :</Label>
+                    <Input type="text"></Input>
+
+                    <Label>Map URL :</Label>
+                    <Input type="text"></Input>
+
+                    <Label>Website :</Label>
+                    <Input type="text"></Input>
+
+                    <Label>Email :</Label>
+                    <Input type="text"></Input>
+
+                    <Label>Phone no. :</Label>
+                    <Input type="number"></Input>
+
+                    <h6 style={{ marginTop: "2%" }}>Address</h6>
+
+                    <Label>Locality</Label>
+                    <Input type="text" name="Locality" />
+
+                    <Label>City</Label>
+                    <Input
+                      style={{
+                        maxWidth: "100%",
+                        padding: "0",
+                        margin: "0",
+                      }}
+                      type="text"
+                      name="city"
+                    />
+
+                    <Label>State</Label>
+                    <Input type="text" name="state"></Input>
+
+                    <Label>Country</Label>
+                    <Input type="text" name="country"></Input>
+
+                    <Label>PinCode</Label>
+                    <Input type="text" name="pinCode" />
+                  </div>
+
+                  <Button style={{ marginTop: "30px" }} color="primary">
+                    Update
+                  </Button>
+                </NavLink>
+              </Card>
+            </section>
+          </TabPane>
+        </TabContent>
+
+        <TabContent
+          style={{ maxWidth: "900px", margin: "auto", padding: "0" }}
+          activeTab={activeTab}
+        >
+          <TabPane tabId="6">
+            {/* Personal Information */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+              }}
+            ></div>
+            <section>
+              <Card body>
+                <div className="innerHeader">
+                  <h2> List of Holidays</h2>
+
+                  <div>
+                    <Button color="dark" outline>
+                      <i className="fa fa-plus"></i>
                     </Button>
                   </div>
+                </div>
+              </Card>
+            </section>
+            <section>
+              <Card body>
+                <Table responsive style={{ textAlign: "center" }}>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Occasion</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>10/09/2024</td>
+                      <td>Ganesh Chaturthi</td>
+                      <td>
+                        <Button
+                          color="success"
+                          style={{ border: "none" }}
+                          outline
+                        >
+                          <i className="fa fa-edit"></i>
+                        </Button>
+                        <Button
+                          color="danger"
+                          style={{ border: "none" }}
+                          outline
+                        >
+                          <i className="fa fa-trash"></i>
+                        </Button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>11/10/2024</td>
+                      <td>Diwali</td>
+                      <td>
+                        <Button
+                          color="success"
+                          style={{ border: "none" }}
+                          outline
+                        >
+                          <i className="fa fa-edit"></i>
+                        </Button>
+                        <Button
+                          color="danger"
+                          style={{ border: "none" }}
+                          outline
+                        >
+                          <i className="fa fa-trash"></i>
+                        </Button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>10/09/2024</td>
+                      <td>Chhath Puja</td>
+                      <td>
+                        <Button
+                          color="success"
+                          style={{ border: "none" }}
+                          outline
+                        >
+                          <i className="fa fa-edit"></i>
+                        </Button>
+                        <Button
+                          color="danger"
+                          style={{ border: "none" }}
+                          outline
+                        >
+                          <i className="fa fa-trash"></i>
+                        </Button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>25/12/2024</td>
+                      <td>Chritmas</td>
+                      <td>
+                        <Button
+                          color="success"
+                          style={{ border: "none" }}
+                          outline
+                        >
+                          <i className="fa fa-edit"></i>
+                        </Button>
+                        <Button
+                          color="danger"
+                          style={{ border: "none" }}
+                          outline
+                        >
+                          <i className="fa fa-trash"></i>
+                        </Button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>10/09/2024</td>
+                      <td>Ganesh Chaturthi</td>
+                      <td>
+                        <Button
+                          color="success"
+                          style={{ border: "none" }}
+                          outline
+                        >
+                          <i className="fa fa-edit"></i>
+                        </Button>
+                        <Button
+                          color="danger"
+                          style={{ border: "none" }}
+                          outline
+                        >
+                          <i className="fa fa-trash"></i>
+                        </Button>
+                      </td>
+                    </tr>
+                  </tbody>
+
+                  {/* <tbody>
+              {allStudents.map((curr) => {
+                console.log(curr);
+                return (
+                  <>
+                    <tr>
+                      <td>
+                        {curr.firstName || curr.lastName
+                          ? curr.firstName + " " + curr.lastName
+                          : ""}
+                      </td>
+
+                      <td>{curr._class.name ? curr._class.name : ""}</td>
+                      <td>{curr._class.section ? curr._class.section : ""}</td>
+                      <td>{curr.rollNo ? curr.rollNo : ""}</td>
+                      <td>{curr.gender ? curr.gender : ""}</td>
+                      <td>
+                        {curr.address
+                          ? getAddressFormate(
+                              curr.address.locality,
+                              curr.address.city,
+                              curr.address.state,
+                              curr.address.country,
+                              curr.address.pin
+                            )
+                          : ""}
+                      </td>
+                      <td>{curr.phone ? curr.phone : ""}</td>
+                      <td>
+                        <CircularProgressbar
+                          value="97"
+                          text="97%"
+                          className="success"
+                          styles={buildStyles({
+                            strokeLinecap: "round",
+                          })}
+                        />
+                      </td>
+                      <td>
+                        <div className="action">
+                        <Link to={`/student/${curr._id}`}>
+                          <Button color="link">
+                            <i className="fa fa-eye"></i>
+                          </Button>
+                          </Link>
+                        </div>
+                      </td>
+                    </tr>
+                  </>
+                );
+              })}
+            </tbody> */}
+                </Table>
+
+                {/* <PaginatedItems itemsPerPage={4} /> */}
+              </Card>
+            </section>
+          </TabPane>
+        </TabContent>
+
+        <TabContent
+          style={{ maxWidth: "800px", margin: "auto", padding: "0" }}
+          activeTab={activeTab}
+        >
+          <TabPane tabId="1">
+            <section>
+              <Card body>
+                <NavLink
+                  style={{ textAlign: "center" }}
+                  className={activeTab === "1" ? "active" : ""}
+                >
+                  <div className="innerHeader">
+                    <h2>Bus Service</h2>
+
+                    <div>
+                      <Button color="dark" outline>
+                        <i className="fa fa-plus"></i>
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div
+                    style={{
+                      textAlign: "center",
+                      display: "flex",
+                      flexWrap: "wrap",
+                      justifyContent: "space-evenly",
+                    }}
+                  >
+                    <Input
+                      style={{
+                        marginTop: "30px",
+                        maxWidth: "350px",
+                        textAlign: "center",
+                      }}
+                      type="select"
+                    >
+                      <option hidden>Range in kms</option>
+                      <option>1-5 (kms)</option>
+                      <option>6-10 (kms)</option>
+                      <option>11-20 (kms)</option>
+                      <option>21-25 (kms)</option>
+                      <option>26-30 (kms)</option>
+                    </Input>
+
+                    <Input
+                      style={{
+                        marginTop: "30px",
+                        maxWidth: "350px",
+                        textAlign: "center",
+                      }}
+                      type="number"
+                    ></Input>
+
+                    <Input
+                      style={{
+                        marginTop: "30px",
+                        maxWidth: "350px",
+                        textAlign: "center",
+                      }}
+                      type="select"
+                    >
+                      <option hidden>Range in kms</option>
+                      <option>1-5 (kms)</option>
+                      <option>6-10 (kms)</option>
+                      <option>11-20 (kms)</option>
+                      <option>21-25 (kms)</option>
+                      <option>26-30 (kms)</option>
+                    </Input>
+
+                    <Input
+                      style={{
+                        marginTop: "30px",
+                        maxWidth: "350px",
+                        textAlign: "center",
+                      }}
+                      type="number"
+                    ></Input>
+
+                    <Input
+                      style={{
+                        marginTop: "30px",
+                        maxWidth: "350px",
+                        textAlign: "center",
+                      }}
+                      type="select"
+                    >
+                      <option hidden>Range in kms</option>
+                      <option>1-5 (kms)</option>
+                      <option>6-10 (kms)</option>
+                      <option>11-20 (kms)</option>
+                      <option>21-25 (kms)</option>
+                      <option>26-30 (kms)</option>
+                    </Input>
+
+                    <Input
+                      style={{
+                        marginTop: "30px",
+                        maxWidth: "350px",
+                        textAlign: "center",
+                      }}
+                      type="number"
+                    ></Input>
+
+                    <Button style={{ marginTop: "30px" }} color="primary">
+                      Save
+                    </Button>
+                  </div>
+                </NavLink>
+              </Card>
+            </section>
+          </TabPane>
+        </TabContent>
+
+        <TabContent
+          style={{ maxWidth: "800px", margin: "auto", padding: "0" }}
+          activeTab={activeTab}
+        >
+          <TabPane tabId="2">
+            <section>
+              <Card body>
+                <NavLink
+                  style={{ textAlign: "center" }}
+                  className={activeTab === "2" ? "active" : ""}
+                >
+                  <div className="innerHeader">
+                    <h2>Salary</h2>
+
+                    <div>
+                      <Button color="dark" outline>
+                        <i className="fa fa-plus"></i>
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div
+                    style={{
+                      textAlign: "center",
+                      display: "flex",
+                      flexWrap: "wrap",
+                      justifyContent: "space-evenly",
+                    }}
+                  >
+                    <Input
+                      style={{
+                        marginTop: "30px",
+                        maxWidth: "350px",
+                        textAlign: "center",
+                      }}
+                      type="select"
+                    >
+                      <option hidden>Experience</option>
+                      <option>Freshers</option>
+                      <option>1- 2 yrs experience</option>
+                      <option>2- 4 yrs experience</option>
+                      <option>4- 6 yrs experience</option>
+                      <option>Above 6 yrs experience</option>
+                    </Input>
+
+                    <Input
+                      style={{
+                        marginTop: "30px",
+                        maxWidth: "350px",
+                        textAlign: "center",
+                      }}
+                      type="number"
+                      value={"10000"}
+                    ></Input>
+
+                    <Input
+                      style={{
+                        marginTop: "30px",
+                        maxWidth: "350px",
+                        textAlign: "center",
+                      }}
+                      type="select"
+                    >
+                      <option hidden>Experience</option>
+                      <option>Freshers</option>
+                      <option>1- 2 yrs experience</option>
+                      <option>2- 4 yrs experience</option>
+                      <option>4- 6 yrs experience</option>
+                      <option>Above 6 yrs experience</option>
+                    </Input>
+
+                    <Input
+                      style={{
+                        marginTop: "30px",
+                        maxWidth: "350px",
+                        textAlign: "center",
+                      }}
+                      type="number"
+                      value={"10000"}
+                    ></Input>
+
+                    <Input
+                      style={{
+                        marginTop: "30px",
+                        maxWidth: "350px",
+                        textAlign: "center",
+                      }}
+                      type="select"
+                    >
+                      <option hidden>Experience</option>
+                      <option>Freshers</option>
+                      <option>1- 2 yrs experience</option>
+                      <option>2- 4 yrs experience</option>
+                      <option>4- 6 yrs experience</option>
+                      <option>Above 6 yrs experience</option>
+                    </Input>
+
+                    <Input
+                      style={{
+                        marginTop: "30px",
+                        maxWidth: "350px",
+                        textAlign: "center",
+                      }}
+                      type="number"
+                      value={"10000"}
+                    ></Input>
+
+                    <Button style={{ marginTop: "30px" }} color="primary">
+                      Save
+                    </Button>
+                  </div>
+                </NavLink>
+              </Card>
+            </section>
+          </TabPane>
+        </TabContent>
+
+        <TabContent
+          style={{ maxWidth: "1200px", margin: "auto", padding: "0" }}
+          activeTab={activeTab}
+        >
+          <TabPane tabId="4">
+            <section>
+              <Card body>
+                <NavLink
+                  style={{ textAlign: "center" }}
+                  className={activeTab === "4" ? "active" : ""}
+                >
+                  <Table responsive>
+                    <thead>
+                      <tr>
+                        <th>Days</th>
+                        <th>Start-Time</th>
+                        <th>End-Time</th>
+                        <th>Class Duration</th>
+                        <th>Recess Time</th>
+                        <th>Recess Duration</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <tr>
+                        <td>
+                          <Input type="select">
+                            <option hidden>Select</option>
+                            <option>Monday</option>
+                            <option>Tuesday</option>
+                            <option>Wednesday</option>
+                            <option>Thursday</option>
+                            <option>Friday</option>
+                            <option>Saturday</option>
+                          </Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <Input type="select">
+                            <option hidden>Select</option>
+                            <option>Monday</option>
+                            <option>Tuesday</option>
+                            <option>Wednesday</option>
+                            <option>Thursday</option>
+                            <option>Friday</option>
+                            <option>Saturday</option>
+                          </Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <Input type="select">
+                            <option hidden>Select</option>
+                            <option>Monday</option>
+                            <option>Tuesday</option>
+                            <option>Wednesday</option>
+                            <option>Thursday</option>
+                            <option>Friday</option>
+                            <option>Saturday</option>
+                          </Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <Input type="select">
+                            <option hidden>Select</option>
+                            <option>Monday</option>
+                            <option>Tuesday</option>
+                            <option>Wednesday</option>
+                            <option>Thursday</option>
+                            <option>Friday</option>
+                            <option>Saturday</option>
+                          </Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <Input type="select">
+                            <option hidden>Select</option>
+                            <option>Monday</option>
+                            <option>Tuesday</option>
+                            <option>Wednesday</option>
+                            <option>Thursday</option>
+                            <option>Friday</option>
+                            <option>Saturday</option>
+                          </Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <Input type="select">
+                            <option hidden>Select</option>
+                            <option>Monday</option>
+                            <option>Tuesday</option>
+                            <option>Wednesday</option>
+                            <option>Thursday</option>
+                            <option>Friday</option>
+                            <option>Saturday</option>
+                          </Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                  <Button color="primary">Save</Button>
                 </NavLink>
               </Card>
             </section>
