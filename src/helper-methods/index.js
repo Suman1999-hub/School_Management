@@ -58,7 +58,7 @@ export const extractQueryParams = () => {
   return params;
 };
 
-export const showToast = (message, type = "error", duration = 4000) => {
+export const showToast = (message, type = "success", duration = 4000) => {
   toast[type](message, { duration });
 };
 

@@ -92,12 +92,13 @@ console.log("studentDetails",studentDetails);
       const createStudentRes = await createStudent(payload);
       if (!createStudentRes?.error) {
         fetchAllStudentData();
-        toggle();
       }
       console.log(payload);
     } catch (err) {
       console.log(err);
     }
+    _closeModal();
+
   };
 
   //Edit
@@ -109,12 +110,12 @@ console.log("studentDetails",studentDetails);
           getStudentAPICall(id);
         }
 
-        toggle();
         console.log(updateStudentRes);
       }
     } catch (error) {
       console.log(error);
     }
+    _closeModal();
   };
 
   // Handle form input changes
