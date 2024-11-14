@@ -121,7 +121,7 @@ const Settings = () => {
         </Nav>
 
         <TabContent
-          style={{ maxWidth: "800px", margin: "auto" }}
+          style={{ maxWidth: "800px", margin: "auto", padding:"0" }}
           activeTab={activeTab}
         >
           <h6 style={{ textAlign: "center" }}>Settings</h6>
@@ -179,7 +179,7 @@ const Settings = () => {
         </TabContent>
 
         <TabContent
-          style={{ maxWidth: "800px", margin: "auto" }}
+          style={{ maxWidth: "800px", margin: "auto", padding:"0" }}
           activeTab={activeTab}
         >
           <TabPane tabId="5">
@@ -345,7 +345,7 @@ const Settings = () => {
         </TabContent>
 
         <TabContent
-          style={{ maxWidth: "900px", margin: "auto" }}
+          style={{ maxWidth: "900px", margin: "auto", padding:"0" }}
           activeTab={activeTab}
         >
           {/* <h6 style={{ textAlign: "center" }}>Settings</h6> */}
@@ -418,7 +418,7 @@ const Settings = () => {
         </TabContent>
 
         <TabContent
-          style={{ maxWidth: "900px", margin: "auto" }}
+          style={{ maxWidth: "900px", margin: "auto", padding:"0" }}
           activeTab={activeTab}
         >
           <TabPane tabId="6">
@@ -609,7 +609,7 @@ const Settings = () => {
         </TabContent>
 
         <TabContent
-          style={{ maxWidth: "800px", margin: "auto" }}
+          style={{ maxWidth: "800px", margin: "auto", padding:"0" }}
           activeTab={activeTab}
         >
           <TabPane tabId="1">
@@ -726,7 +726,7 @@ const Settings = () => {
         </TabContent>
 
         <TabContent
-          style={{ maxWidth: "800px", margin: "auto" }}
+          style={{ maxWidth: "800px", margin: "auto", padding:"0" }}
           activeTab={activeTab}
         >
           <TabPane tabId="2">
@@ -843,7 +843,7 @@ const Settings = () => {
         </TabContent>
 
         <TabContent
-          style={{ maxWidth: "1200px", margin: "auto" }}
+          style={{ maxWidth: "1200px", margin: "auto", padding:"0" }}
           activeTab={activeTab}
         >
           <TabPane tabId="4">
