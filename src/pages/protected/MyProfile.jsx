@@ -259,7 +259,7 @@ const MyProfile = () => {
                             onChange={(e) => handleChange(e, "gender")}
                             readOnly={userDetails.loginType === "student"}
                           >
-                            <option value="">Select</option>
+                            <option hidden>Select</option>
                             {AllGender.map((gender, index) => (
                               <option key={index} value={gender}>
                                 {gender}
