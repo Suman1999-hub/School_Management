@@ -16,6 +16,7 @@ import {
   createStudent,
   updateStudent,
 } from "../../http/http-calls";
+import { errorHandler } from "../../helper-methods";
 
 const AddStudentModal = ({
   isOpen,
@@ -91,8 +92,8 @@ console.log("studentDetails",studentDetails);
         fetchAllStudentData();
       }
       console.log(payload);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      errorHandler(error);
     }
     _closeModal();
 
@@ -110,7 +111,7 @@ console.log("studentDetails",studentDetails);
         console.log(updateStudentRes);
       }
     } catch (error) {
-      console.log(error);
+      errorHandler(error);
     }
     _closeModal();
   };

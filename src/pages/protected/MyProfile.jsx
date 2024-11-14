@@ -18,48 +18,8 @@ import {
 import { getLoggedInUserDetail, updateProfile } from "../../http/http-calls";
 import { useSelector } from "react-redux";
 
-const states = [
-  "Andhra Pradesh",
-  "Arunachal Pradesh",
-  "Assam",
-  "Bihar",
-  "Chhattisgarh",
-  "Goa",
-  "Gujarat",
-  "Haryana",
-  "Himachal Pradesh",
-  "Jharkhand",
-  "Karnataka",
-  "Kerala",
-  "Madhya Pradesh",
-  "Maharashtra",
-  "Manipur",
-  "Meghalaya",
-  "Mizoram",
-  "Nagaland",
-  "Odisha",
-  "Punjab",
-  "Rajasthan",
-  "Sikkim",
-  "Tamil Nadu",
-  "Telangana",
-  "Tripura",
-  "Uttar Pradesh",
-  "Uttarakhand",
-  "West Bengal",
-  "Andaman and Nicobar Islands",
-  "Chandigarh",
-  "Dadra and Nagar Haveli",
-  "Daman and Diu",
-  "Lakshadweep",
-  "Delhi ",
-  "Puducherry",
-  "Jammu and Kashmir",
-  "Ladakh",
-];
 
-const AllGender = ["Male", "Female", "Transgender"];
-const Roles = ["admin", "teacher", "student"];
+const AllGender = ["Male", "Female"];
 
 const MyProfile = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -73,18 +33,9 @@ const MyProfile = () => {
     if (activeTab !== newTab) setActiveTab(newTab);
   };
 
-  console.log("data>>", data);
-  console.log("userDetails>>", userDetails);
-  // console.log("address>>", address);
-
-  // console.log("address>>", userDetails.address.city);
-
-  // userDetails.address.country
-  // const userID = useSelector((state) => {
-  //   return state.userCredential.user.id;
-  // });
-  // // console.log("userID>>>", userID);
-
+  // console.log("data>>", data);
+  // console.log("userDetails>>", userDetails);
+  
   const fetchData = async () => {
     try {
       const response = await getLoggedInUserDetail();
@@ -376,16 +327,11 @@ const MyProfile = () => {
                       <div className="form-group mb-0">
                         <Label>State</Label>
                         <Input
-                          type="select"
+                          type="text"
                           value={userDetails.address.state}
                           onChange={(e) => handleAddress(e, "state")}
                         >
-                          <option hidden>Select State</option>
-                          {states.map((state, index) => (
-                            <option key={index} value={state}>
-                              {state}
-                            </option>
-                          ))}
+                          
                         </Input>
                       </div>
                     )}
@@ -411,13 +357,11 @@ const MyProfile = () => {
                       <div className="form-group mb-0">
                         <Label>Country</Label>
                         <Input
-                          type="select"
+                          type="text"
                           value={userDetails.address.country}
                           onChange={(e) => handleAddress(e, "country")}
                         >
-                          <option hidden>Select Country</option>
-                          <option>India</option>
-                          <option>USA</option>
+                          
                         </Input>
                       </div>
                     )}
