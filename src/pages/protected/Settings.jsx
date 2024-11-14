@@ -189,7 +189,15 @@ const Settings = () => {
                   style={{ textAlign: "center" }}
                   className={activeTab === "5" ? "active" : ""}
                 >
-                  Create Class
+                  <div className="innerHeader">
+                    <h2> Create Class</h2>
+
+                    <div>
+                      <Button color="dark" outline>
+                        <i className="fa fa-plus"></i>
+                      </Button>
+                    </div>
+                  </div>
                   <div
                     style={{
                       textAlign: "center",
@@ -236,9 +244,7 @@ const Settings = () => {
                       <option>6000 INR</option>
                       <option>7000 INR</option>
                     </Input>
-                    <Button>
-                      <i className="fa fa-plus"></i>
-                    </Button>
+
                     <Button style={{ marginTop: "30px" }} color="primary">
                       Create
                     </Button>
@@ -362,50 +368,42 @@ const Settings = () => {
                     style={{
                       textAlign: "center",
                       display: "flex",
-                      flexWrap: "wrap",
+                      flexDirection: "column",
+                      // flexWrap: "wrap",
                       alignItems: "baseline",
+                      maxWidth:"90%",
+                      margin:"auto",
+                      marginTop:"5px"
                     }}
                   >
                     <Label>School Name :</Label>
                     <Input
-                      style={{ textAlign: "center" }}
                       type="text"
-                      value={"DPS school, Delhi"}
                     ></Input>
 
                     <Label>Location :</Label>
                     <Input
-                      style={{ textAlign: "center" }}
                       type="text"
-                      value={"Saket, Delhi"}
                     ></Input>
 
                     <Label>Map URL :</Label>
                     <Input
-                      style={{ textAlign: "center" }}
                       type="text"
-                      value={"SHGHSHHShhahhshhsshshsh"}
                     ></Input>
 
                     <Label>Website :</Label>
                     <Input
-                      style={{ textAlign: "center" }}
                       type="text"
-                      value={"www.dpsschool.com"}
                     ></Input>
 
                     <Label>Email :</Label>
                     <Input
-                      style={{ textAlign: "center" }}
                       type="text"
-                      value={"dpsdelhi@gmail.com"}
                     ></Input>
 
                     <Label>Phone no. :</Label>
                     <Input
-                      style={{ textAlign: "center" }}
-                      type="text"
-                      value={"9002306785"}
+                      type="number"
                     ></Input>
                   </div>
                   <Button style={{ marginTop: "30px" }} color="primary">
@@ -430,13 +428,24 @@ const Settings = () => {
                 alignItems: "baseline",
               }}
             >
-              <h6 style={{ textAlign: "center" }}>List of Holidays</h6>
-              <Button className="custom-button" outline>
-                <i className="fa fa-plus"></i>
-              </Button>
+              
             </div>
             <section>
               <Card body>
+              <div className="innerHeader">
+                    <h2> List of Holidays</h2>
+
+                    <div>
+                      <Button color="dark" outline>
+                        <i className="fa fa-plus"></i>
+                      </Button>
+                    </div>
+                  </div>
+              </Card>
+            </section>
+            <section>
+              <Card body>
+              
                 <Table responsive style={{ textAlign: "center" }}>
                   <thead>
                     <tr>
@@ -660,7 +669,6 @@ const Settings = () => {
                         textAlign: "center",
                       }}
                       type="number"
-                      value={"500"}
                     ></Input>
 
                     <Input
@@ -686,7 +694,6 @@ const Settings = () => {
                         textAlign: "center",
                       }}
                       type="number"
-                      value={"1000"}
                     ></Input>
 
                     <Input
@@ -712,7 +719,6 @@ const Settings = () => {
                         textAlign: "center",
                       }}
                       type="number"
-                      value={"1500"}
                     ></Input>
 
                     <Button style={{ marginTop: "30px" }} color="primary">
