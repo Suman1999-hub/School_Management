@@ -234,8 +234,10 @@ const Settings = () => {
                   >
                     <Input
                       style={{
-                        marginTop: "30px",
-                        maxWidth: "350px",
+                        marginTop: "10px",
+
+                        margin: "auto",
+                        maxWidth: "250px",
                         textAlign: "center",
                       }}
                       type="select"
@@ -255,26 +257,31 @@ const Settings = () => {
 
                     <Input
                       style={{
-                        marginTop: "30px",
-                        maxWidth: "350px",
+                        marginTop: "10px",
+
+                        margin: "auto",
+                        maxWidth: "250px",
                         textAlign: "center",
                       }}
-                      type="select"
-                    >
-                      <option hidden>Fee</option>
-                      <option>1000 INR</option>
-                      <option>2000 INR</option>
-                      <option>3000 INR</option>
-                      <option>4000 INR</option>
-                      <option>5000 INR</option>
-                      <option>6000 INR</option>
-                      <option>7000 INR</option>
-                    </Input>
+                      type="text"
+                      placeholder="Academic-Year"
+                    ></Input>
 
-                    <Button style={{ marginTop: "30px" }} color="primary">
-                      Create
-                    </Button>
+                    <Input
+                      style={{
+                        marginTop: "10px",
+
+                        margin: "auto",
+                        maxWidth: "250px",
+                        textAlign: "center",
+                      }}
+                      placeholder="Fee"
+                      type="text"
+                    ></Input>
                   </div>
+                  <Button style={{ marginTop: "30px" }} color="primary">
+                    Create
+                  </Button>
                 </NavLink>
               </Card>
             </section>
@@ -362,14 +369,13 @@ const Settings = () => {
                       <option>2028-2029</option>
                       <option>2029-2030</option>
                     </Input>
-
-                    <Button
-                      style={{ marginTop: "30px", textAlign: "center" }}
-                      color="primary"
-                    >
-                      Promote Class
-                    </Button>
                   </div>
+                  <Button
+                    style={{ marginTop: "30px", textAlign: "center" }}
+                    color="primary"
+                  >
+                    Promote Class
+                  </Button>
                 </NavLink>
               </Card>
             </section>
@@ -454,29 +460,6 @@ const Settings = () => {
                     <Label>School Name :</Label>
                     <Input type="text"></Input>
 
-                    {/* <h6>Address:</h6>
-
-
-                    <div style={{maxWidth:"100%", display:"flex", flexWrap:"wrap", alignItems:"baseline"}}>
-
-                    <Label>Locality :</Label>
-                    <Input type="text"></Input>
-
-                    <div style={{ maxWidth: "100%", display: "flex", flexWrap: "wrap" }}>
-                    <Label>City :</Label>
-                    <Input style={{maxWidth:"20%", margin:"1%"}} type="text"></Input>
-
-                    <Label>State :</Label>
-                    <Input style={{maxWidth:"20%", margin:"1%"}} type="text"></Input>
-
-                    <Label>Country :</Label>
-                    <Input style={{maxWidth:"20%", margin:"1%"}} type="text"></Input>
-
-                    <Label>Pin :</Label>
-                    <Input style={{maxWidth:"20%", margin:"1%"}} type="text"></Input>
-                    </div>
-                    </div> */}
-
                     <Label>Map URL :</Label>
                     <Input type="text"></Input>
 
@@ -489,33 +472,30 @@ const Settings = () => {
                     <Label>Phone no. :</Label>
                     <Input type="number"></Input>
 
-                    <h6>Address</h6>
-                    
-                          <Label>Locality</Label>
-                          <Input type="text" name="Locality" />
-                        
-                      
-                          <Label>City</Label>
-                          <Input
-                            style={{
-                              maxWidth: "100%",
-                              padding: "0",
-                              margin: "0",
-                            }}
-                            type="text"
-                            name="city"
-                          />
-                       
-                          <Label>State</Label>
-                          <Input type="text" name="state"></Input>
-                       
-                    
-                          <Label>Country</Label>
-                          <Input type="text" name="country"></Input>
-                       
-                          <Label>PinCode</Label>
-                          <Input type="text" name="pinCode" />
-                       
+                    <h6 style={{ marginTop: "2%" }}>Address</h6>
+
+                    <Label>Locality</Label>
+                    <Input type="text" name="Locality" />
+
+                    <Label>City</Label>
+                    <Input
+                      style={{
+                        maxWidth: "100%",
+                        padding: "0",
+                        margin: "0",
+                      }}
+                      type="text"
+                      name="city"
+                    />
+
+                    <Label>State</Label>
+                    <Input type="text" name="state"></Input>
+
+                    <Label>Country</Label>
+                    <Input type="text" name="country"></Input>
+
+                    <Label>PinCode</Label>
+                    <Input type="text" name="pinCode" />
                   </div>
 
                   <Button style={{ marginTop: "30px" }} color="primary">
