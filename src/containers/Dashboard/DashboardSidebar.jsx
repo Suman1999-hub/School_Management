@@ -79,25 +79,26 @@ const DashboardSidebar = ({ isShow, setIsShow }) => {
                   {ROUTES?.[routeKey]?.map(
                     (curr) => (
                       console.log(curr.text),
-                      curr.text === "Report" ? (
-                        <ListGroupItem
-                          key={curr.route} // Add a unique key
-                          className={_isActiveTab(curr.route) ? "active" : ""}
-                          onClick={() =>
-                            navigate(
-                              `${curr.route}?class=10&academicYear=2024-2025`
-                            )
-                          }
-                        >
-                          <img
-                            src={require(`../../assets/img/SidebarMenu/payment${
-                              _isActiveTab(curr.route) ? "Active" : ""
-                            }.png`)}
-                            alt=""
-                          />
-                          <span>{curr.text}</span>
-                        </ListGroupItem>
-                      ) : (
+                      (
+                        // curr.text === "Report" ? (
+                        //   <ListGroupItem
+                        //     key={curr.route} // Add a unique key
+                        //     className={_isActiveTab(curr.route) ? "active" : ""}
+                        //     onClick={() =>
+                        //       navigate(
+                        //         `${curr.route}?class=10&academicYear=2024-2025`
+                        //       )
+                        //     }
+                        //   >
+                        //     <img
+                        //       src={require(`../../assets/img/SidebarMenu/payment${
+                        //         _isActiveTab(curr.route) ? "Active" : ""
+                        //       }.png`)}
+                        //       alt=""
+                        //     />
+                        //     <span>{curr.text}</span>
+                        //   </ListGroupItem>
+                        // ) : (
                         <ListGroupItem
                           key={curr.route} // Add a unique key
                           className={_isActiveTab(curr.route) ? "active" : ""}
@@ -112,6 +113,7 @@ const DashboardSidebar = ({ isShow, setIsShow }) => {
                           <span>{curr.text}</span>
                         </ListGroupItem>
                       )
+                      // )
                     )
                   )}
                 </ListGroup>

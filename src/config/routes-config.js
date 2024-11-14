@@ -13,7 +13,8 @@ import CreateSchedule from "../pages/protected/CreateSchedule";
 import ApplyLeave from "../pages/protected/ApplyLeave";
 import Report from "../pages/protected/Report";
 import Settings from "../pages/protected/Settings";
-  
+import Approval from "../pages/protected/Approval";
+
 const SUPER_ADMIN_ROUTES = [
   { text: "School", route: "/school", element: <ViewAllSchool /> },
   // { text: "Admin", route: "/admin" },
@@ -25,7 +26,7 @@ const ADMIN_ROUTES = [
   { text: "Techer", route: "/teacher", element: <Teachers /> },
   { text: "Schedule", route: "/schedule", element: <AdminSchedule /> },
   { text: "Notice", route: "/notice", element: <Notice /> },
-  { text: "Approval", route: "/approval" },
+  { text: "Approval", route: "/approval", element: <Approval /> },
   // { text: "Attendance", route: "/attendance", element: <Attendance /> },
   { text: "Report", route: "/report", element: <Report /> },
   { text: "Student", route: "/student", element: <AllStudents /> },

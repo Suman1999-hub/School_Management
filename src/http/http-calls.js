@@ -251,6 +251,34 @@ export const ActivateDeactivate = ({ payload, id }) => {
   });
 };
 
+//All Notice
+export const getAllNotices = (payload) => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/admin/notices/allnotices`, true, payload)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+//Create Notice
+export const createNoticeApi = (payload) => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/admin/notice/createnotice`, true, payload)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
 //Create Teacher
 export const createStudent = (payload) => {
   return new Promise((resolve, reject) => {
@@ -294,13 +322,121 @@ export const updateStudent = ({ payload, id }) => {
   });
 };
 
-//get Student Progress Report
-
-export const getStudentProgressReport = ({ id }) => {
+//get notice by id
+export const getNoticedetails = ({ id }) => {
   return new Promise((resolve, reject) => {
-    makeGetRequest(`${BASE_URL}/admin/progressReport/getprogressreport/${id}`, true)
+    makeGetRequest(`${BASE_URL}/admin/notice/getNotice/${id}`, true)
       .then((res) => {
         resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+//get Student Progress Report
+
+// export const getStudentProgressReport = ({ id }) => {
+//   return new Promise((resolve, reject) => {
+//     makeGetRequest(
+//       `${BASE_URL}/admin/progressReport/getprogressreport/${id}`,
+//       true
+//     )
+//       .then((res) => {
+//         resolve(res);
+//       })
+//       .catch((e) => {
+//         console.log("API call error>>", e);
+//         reject(e);
+//       });
+//   });
+// };
+
+//Update Notice
+export const updateNotice = ({ payload, id }) => {
+  return new Promise((resolve, reject) => {
+    makePutRequest(`${BASE_URL}/admin/notice/editnotice/${id}`, true, payload)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+//Get Leave
+export const getAllLeaves = () => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/leaves`, true)
+      .then((res) => {
+        resolve(res);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+//Apply Leave
+export const ApplyLeave = (payload) => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/teacher/leave`, true, payload)
+      .then((res) => {
+        resolve(res);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+//get All Student report
+
+export const getAllStudentReport = (payload) => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/getallprogressreport`, true, payload)
+      .then((res) => {
+        resolve(res);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+// Update Leave Status
+
+export const UpdateLeaveStatus = ({ id, payload }) => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/leavestatus/${id}`, true, payload)
+      .then((res) => {
+        resolve(res);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+// Get Class Students
+
+export const getClassStudents = ({ payload }) => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/class/students`, true, payload)
+      .then((res) => {
+        resolve(res);
+        console.log(res);
       })
       .catch((e) => {
         console.log("API call error>>", e);

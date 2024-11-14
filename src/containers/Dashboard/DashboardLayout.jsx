@@ -13,7 +13,9 @@ import CreateSchedule from "../../pages/protected/CreateSchedule";
 import CreateNotice from "../../pages/protected/CreateNotice";
 import ViewSchool from "../../pages/protected/ViewSchool";
 import ViewDetailsTeacher from "../../pages/protected/ViewDetailsTeacher";
+import ViewNotice from "../../pages/protected/ViewNotice";
 import ViewDetailsStudent from "../../pages/protected/ViewDetailsStudent";
+import EditNotice from "../../pages/protected/EditNotice";
 
 const DashboardLayout = () => {
   const [isShow, setIsShow] = useState(false);
@@ -37,7 +39,10 @@ const DashboardLayout = () => {
               {ROUTES?.[routeKey]?.map((curr) => {
                 return <Route exact path={curr.route} element={curr.element} />;
               })}
-              <Route path="/notice/createnotice" element={<CreateNotice />} />
+              <Route
+                path="/notice/createnotice"
+                element={<CreateNotice pageName="Create Notice" />}
+              />
             </Route>
             <Route
               path="/schedule/createschedule"
@@ -45,6 +50,12 @@ const DashboardLayout = () => {
             />
             <Route path="/school/:id" element={<ViewSchool />} />
             <Route path="/teacher/:id" element={<ViewDetailsTeacher />} />
+            <Route path="/notice/:id" element={<ViewNotice />} />
+            <Route
+              path="/notice/:id/edit"
+              element={<CreateNotice pageName="Edit Notice" />}
+            />
+
             <Route path="/student/:id" element={<ViewDetailsStudent />} />
             <Route path="*" element={<Navigate replace to="/dashboard" />} />
           </Routes>
