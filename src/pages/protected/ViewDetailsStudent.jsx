@@ -171,6 +171,17 @@ function ViewDetailsStudent() {
 
             <Row className="mt-3">
               <Col md="6">
+                <Label style={{ fontWeight: "bold" }}>Father's Occupation</Label>
+                <div>{studentData?.guardian?.fathersOccupation || "-"}</div>
+              </Col>
+              <Col md="6">
+                <Label style={{ fontWeight: "bold" }}>Mother's Occupation</Label>
+                <div>{studentData?.guardian?.mothersOccupation || "-"}</div>
+              </Col>
+            </Row>
+
+            <Row className="mt-3">
+              <Col md="6">
                 <Label style={{ fontWeight: "bold" }}>Roll No</Label>
                 <div>{studentData?.rollNo || "-"}</div>
               </Col>
@@ -188,6 +199,17 @@ function ViewDetailsStudent() {
               <Col md="6">
                 <Label style={{ fontWeight: "bold" }}>Section</Label>
                 <div>{studentData?._class?.section || "-"}</div>
+              </Col>
+            </Row>
+
+            <Row className="mt-3">
+              <Col md="6">
+                <Label style={{ fontWeight: "bold" }}>Academic-Year</Label>
+                <div>{studentData?.currentAcademicYear || "-"}</div>
+              </Col>
+              <Col md="6">
+                <Label style={{ fontWeight: "bold" }}>Username</Label>
+                <div>{studentData?.username || "-"}</div>
               </Col>
             </Row>
 

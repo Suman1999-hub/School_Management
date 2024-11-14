@@ -49,8 +49,8 @@ console.log("studentDetails",studentDetails);
     phoneNumber: studentDetails?.phone || "",
     FatherName: studentDetails?.guardian?.fathersName || "",
     MotherName: studentDetails?.guardian?.mothersName || "",
-    MotherOccupation: studentDetails?.mothersOccupation || "",
-    FatherOccupation: studentDetails?.fathersOccupation || "",
+    MotherOccupation: studentDetails?.guardian?.mothersOccupation || "",
+    FatherOccupation: studentDetails?.guardian?.fathersOccupation || "",
     session : studentDetails?.currentAcademicYear || "",
     joinDate: studentDetails?.joinDate || "",
     profileUrl: studentDetails?.profileUrl || ""
@@ -76,11 +76,8 @@ console.log("studentDetails",studentDetails);
     phone: formData?.phoneNumber,
     currentAcademicYear: formData?.session,
     dob: formData?.DOB,
-    rollNo: "",
-    joinDate: "2024",
     classname: formData?.class,
     section: formData?.section,
-    signature: "base64EncodedString",
     profileImage: formData?.profileUrl,
     autoAssignRoll: true,
    
