@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -20,6 +20,7 @@ import CustomDateRangePicker from "../../components/CustomDateRangePicker";
 import PaginatedItems from "../../components/PaginatedItems";
 import { useSelector } from "react-redux";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
+import { getAllStudentReport } from "../../http/http-calls";
 
 function Report() {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -38,7 +39,7 @@ function Report() {
       endDate: null,
     },
   });
-
+  const [allReport, setAllReport] = useState();
   const _onDatesChange = (startDate = null, endDate = null) => {
     const newFilters = { ...filters };
 
@@ -50,7 +51,27 @@ function Report() {
   };
 
   const loginUser = useSelector((state) => state.userCredential.user.loginType);
-  console.log(loginUser);
+  // console.log(loginUser);
+  const payload = {
+    academicYear: "",
+    className: "",
+    section: "",
+  };
+  // console.log("getAllStudentReportRes", allReport);
+  const _getAllStudentReportApiCall = async () => {
+    try {
+      const getAllStudentReportRes = await getAllStudentReport(payload);
+      setAllReport(getAllStudentReportRes.progressReports);
+    } catch (err) {
+      console.log("Error is :", err);
+      setAllReport(err.progressReports);
+    }
+  };
+
+  useEffect(() => {
+    _getAllStudentReportApiCall();
+  }, []);
+
   return (
     <>
       {loginUser !== "student" ? (
@@ -158,232 +179,42 @@ function Report() {
                       <th>Class</th>
                       <th>Section</th>
                       <th>Mobile no.</th>
-                      <th>Attendence(%)</th>
+                      {/* <th>Attendence(%)</th> */}
                       <th>Marks(%)</th>
                       <th>Status</th>
                     </tr>
                   </thead>
 
                   <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>Yash Agarwal</td>
-                      <td>Male</td>
-                      <td>VI</td>
-                      <td>A</td>
-                      <td>9004569812</td>
-                      <td>
-                        <CircularProgressbar
-                          value="89"
-                          text="89%"
-                          className="success"
-                          styles={buildStyles({
-                            strokeLinecap: "round",
-                          })}
-                        />
-                      </td>
-                      <td>
-                        <CircularProgressbar
-                          value="89"
-                          text="89%"
-                          className="success"
-                          styles={buildStyles({
-                            strokeLinecap: "round",
-                          })}
-                        />
-                      </td>
-                      <td>
-                        <span className="badge-success">Pass</span>
-                      </td>
-                    </tr>
-
-                    <tr>
-                      <td>12</td>
-                      <td>Aveek mehotra</td>
-                      <td>Male</td>
-                      <td>VII</td>
-                      <td>B</td>
-
-                      <td>9004569812</td>
-                      <td>
-                        <CircularProgressbar
-                          value="89"
-                          text="89%"
-                          className="success"
-                          styles={buildStyles({
-                            strokeLinecap: "round",
-                          })}
-                        />
-                      </td>
-                      <td>
-                        <CircularProgressbar
-                          value="89"
-                          text="89%"
-                          className="success"
-                          styles={buildStyles({
-                            strokeLinecap: "round",
-                          })}
-                        />
-                      </td>
-                      <td>
-                        <span className="badge-success">Pass</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>19</td>
-                      <td>Priti Agarwal</td>
-                      <td>Female</td>
-                      <td>VI</td>
-                      <td>C</td>
-
-                      <td>8643668432</td>
-                      <td>
-                        <CircularProgressbar
-                          value="93"
-                          text="93%"
-                          className="success"
-                          styles={buildStyles({
-                            strokeLinecap: "round",
-                          })}
-                        />
-                      </td>
-                      <td>
-                        <CircularProgressbar
-                          value="89"
-                          text="89%"
-                          className="success"
-                          styles={buildStyles({
-                            strokeLinecap: "round",
-                          })}
-                        />
-                      </td>
-                      <td>
-                        <span className="badge-success">Pass</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td>Yash Agarwal</td>
-                      <td>Male</td>
-                      <td>VI</td>
-                      <td>B</td>
-
-                      <td>9004569812</td>
-                      <td>
-                        <CircularProgressbar
-                          value="99"
-                          text="99%"
-                          className="success"
-                          styles={buildStyles({
-                            strokeLinecap: "round",
-                          })}
-                        />
-                      </td>
-                      <td>
-                        <CircularProgressbar
-                          value="89"
-                          text="89%"
-                          className="success"
-                          styles={buildStyles({
-                            strokeLinecap: "round",
-                          })}
-                        />
-                      </td>
-                      <td>
-                        <span className="badge-success">Pass</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>17</td>
-                      <td>Abhishek Mehra</td>
-                      <td>Male</td>
-                      <td>V</td>
-                      <td>A</td>
-
-                      <td>9432669812</td>
-                      <td>
-                        <CircularProgressbar
-                          value="64"
-                          text="64%"
-                          className="danger"
-                          styles={buildStyles({
-                            strokeLinecap: "round",
-                          })}
-                        />
-                      </td>
-                      <td>
-                        <CircularProgressbar
-                          value="89"
-                          text="89%"
-                          className="success"
-                          styles={buildStyles({
-                            strokeLinecap: "round",
-                          })}
-                        />
-                      </td>
-                      <td>
-                        <span className="badge-danger">Fail</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>10</td>
-                      <td>Trina Bose</td>
-                      <td>Female</td>
-                      <td>VIII</td>
-                      <td>C</td>
-
-                      <td>9004512312</td>
-                      <td>
-                        <CircularProgressbar
-                          value="97"
-                          text="97%"
-                          className="success"
-                          styles={buildStyles({
-                            strokeLinecap: "round",
-                          })}
-                        />
-                      </td>
-                      <td>
-                        <CircularProgressbar
-                          value="89"
-                          text="89%"
-                          className="success"
-                          styles={buildStyles({
-                            strokeLinecap: "round",
-                          })}
-                        />
-                      </td>
-                      <td>
-                        <span className="badge-success">Pass</span>
-                      </td>
-                    </tr>
-                    {/* {allStudents.map((curr) => {
-                    console.log(curr);
-                    return (
-                      <>
+                    {allReport?.map((curr) => {
+                      console.log(curr);
+                      return curr.termType === "final" ? (
                         <tr>
+                          <td>{curr?._user?.rollNo}</td>
+                          <td>{curr?._user?.fullName}</td>
+                          <td>{curr?._user?.gender}</td>
+                          <td>{curr?._class?.name}</td>
+                          <td>{curr?._class?.section}</td>
+                          <td>{curr?._user?.phone}</td>
+
                           <td>
-                            {curr.imageUrl ? (
-                              <img src={curr.imageUrl} width="100px" />
-                            ) : (
-                              "null"
-                            )}
+                            <CircularProgressbar
+                              value="89"
+                              text="89%"
+                              className="success"
+                              styles={buildStyles({
+                                strokeLinecap: "round",
+                              })}
+                            />
                           </td>
-                          <td>{curr.name}</td>
                           <td>
-                            {getAddressFormate(
-                              curr.address.city,
-                              curr.address.state,
-                              curr.address.country,
-                              curr.address.pinCode
-                            )}
+                            <span className="badge-success">Pass</span>
                           </td>
-                          <td>{curr.registrationNumber}</td>
-                         
                         </tr>
-                      </>
-                    );
-                  })} */}
+                      ) : (
+                        ""
+                      );
+                    })}
                   </tbody>
                 </Table>
 

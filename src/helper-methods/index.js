@@ -478,3 +478,7 @@ export const dateFormat = (date) => {
   console.log("gdsjds>>>>", momentDate.format("L"));
   return momentDate.format("L");
 };
+
+export const getFormattedDate = () => {
+  return new Date().toISOString().split("T")[0];
+};

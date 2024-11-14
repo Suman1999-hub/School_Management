@@ -14,27 +14,24 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useSelector } from "react-redux";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
+import {
+  dateFormatl,
+  formatDate,
+  formatDatell,
+  getFormattedDate,
+} from "../../helper-methods";
 const localizer = momentLocalizer(moment);
 
 function Attendance() {
-  const [filters, setFilters] = useState({
-    dateRange: {
-      startDate: null,
-      endDate: null,
-    },
-  });
   const [state, setState] = useState("Absent");
-  const _onDatesChange = (startDate = null, endDate = null) => {
-    const newFilters = { ...filters };
 
-    newFilters["dateRange"] = {
-      startDate,
-      endDate,
-    };
-    setFilters(newFilters);
-  };
   const [value, onChange] = useState(new Date());
 
+  const [selectedDate, setSelectedDate] = useState(getFormattedDate());
+
+  const handleDateChange = (e) => {
+    setSelectedDate(e.target.value);
+  };
   const userLoginType = useSelector(
     (state) => state.userCredential.user.loginType
   );
@@ -60,6 +57,23 @@ function Attendance() {
               style={{ display: "flex", flexWrap: "wrap" }}
             >
               <div className="formGroup" style={{ marginRight: "20px" }}>
+                <Label>Acedemic Year</Label>
+                <Input type="select">
+                  <option>2024-2025</option>
+                  <option>2023-2024</option>
+                  <option>2022-2023</option>
+                  <option>2021-2022</option>
+                  <option>2020-2021</option>
+                  <option>2019-2020</option>
+                  <option>2018-2019</option>
+                  <option>2017-2018</option>
+                  <option>2016-2017</option>
+                  <option>2015-2016</option>
+                  <option>2014-2015</option>
+                  <option>2013-2014</option>
+                </Input>
+              </div>
+              <div className="formGroup" style={{ marginRight: "20px" }}>
                 <Label>Class</Label>
                 <Input type="select">
                   <option>Select Class</option>
@@ -78,10 +92,7 @@ function Attendance() {
                   <option>C</option>
                 </Input>
               </div>
-              <div className="formGroup" style={{ marginRight: "20px" }}>
-                <Label>Date</Label>
-                <Input type="date" />
-              </div>
+
               <div className="d-flex justify-content-center mt-4">
                 <Button color="primary" className="btn-submit">
                   Search
@@ -93,6 +104,19 @@ function Attendance() {
             <section>
               <div className="innerHeader">
                 <h2>Attendance</h2>
+                <div style={{ display: "flex" }}>
+                  <img
+                    src={require("../../assets/img/schedule-unscreen.gif")}
+                    style={{ maxWidth: "50px" }}
+                    alt=""
+                  />
+                  <Input
+                    type="date"
+                    value={selectedDate}
+                    style={{ maxWidth: "150px" }}
+                    onChange={(e) => handleDateChange(e)}
+                  />
+                </div>
               </div>
               <Card body>
                 <Table responsive>
