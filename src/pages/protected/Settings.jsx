@@ -133,14 +133,26 @@ const Settings = () => {
                   style={{ textAlign: "center" }}
                   className={activeTab === "7" ? "active" : ""}
                 >
-                  Theme
-                  <Input
-                    style={{ marginTop: "30px", textAlign: "center" }}
-                    type="select"
+                  <div
+                    style={{
+                      textAlign: "center",
+                      display: "flex",
+                      flexDirection: "column",
+                      // flexWrap: "wrap",
+                      maxWidth: "90%",
+                      margin: "auto",
+                      marginTop: "5px",
+                    }}
                   >
-                    <option>Light Mode</option>
-                    <option>Dark Mode</option>
-                  </Input>
+                    Theme
+                    <Input
+                      style={{ marginTop: "10px", textAlign: "center" }}
+                      type="select"
+                    >
+                      <option>Light Mode</option>
+                      <option>Dark Mode</option>
+                    </Input>
+                  </div>
                 </NavLink>
               </Card>
             </section>
@@ -151,27 +163,37 @@ const Settings = () => {
                   style={{ textAlign: "center" }}
                   className={activeTab === "7" ? "active" : ""}
                 >
-                  Change your Password
-                  <div style={{ textAlign: "center" }}>
+                  <div
+                    style={{
+                      textAlign: "center",
+                      display: "flex",
+                      flexDirection: "column",
+                      // flexWrap: "wrap",
+                      maxWidth: "90%",
+                      margin: "auto",
+                      marginTop: "5px",
+                    }}
+                  >
+                    Change your Password
                     <Input
-                      style={{ marginTop: "30px", textAlign: "center" }}
+                      style={{ marginTop: "10px", textAlign: "center" }}
                       type="password"
                       placeholder="Old Password"
                     ></Input>
                     <Input
-                      style={{ marginTop: "30px", textAlign: "center" }}
+                      style={{ marginTop: "10px", textAlign: "center" }}
                       type="password"
                       placeholder="New Password"
                     ></Input>
                     <Input
-                      style={{ marginTop: "30px", textAlign: "center" }}
+                      style={{ marginTop: "10px", textAlign: "center" }}
                       type="password"
                       placeholder="Confirm New Password"
                     ></Input>
-                    <Button style={{ marginTop: "30px" }} color="primary">
-                      Change
-                    </Button>
                   </div>
+                  <Button style={{ marginTop: "30px" }} color="primary">
+                    Change
+                  </Button>
                 </NavLink>
               </Card>
             </section>
@@ -371,40 +393,28 @@ const Settings = () => {
                       flexDirection: "column",
                       // flexWrap: "wrap",
                       alignItems: "baseline",
-                      maxWidth:"90%",
-                      margin:"auto",
-                      marginTop:"5px"
+                      maxWidth: "90%",
+                      margin: "auto",
+                      marginTop: "5px",
                     }}
                   >
                     <Label>School Name :</Label>
-                    <Input
-                      type="text"
-                    ></Input>
+                    <Input type="text"></Input>
 
                     <Label>Location :</Label>
-                    <Input
-                      type="text"
-                    ></Input>
+                    <Input type="text"></Input>
 
                     <Label>Map URL :</Label>
-                    <Input
-                      type="text"
-                    ></Input>
+                    <Input type="text"></Input>
 
                     <Label>Website :</Label>
-                    <Input
-                      type="text"
-                    ></Input>
+                    <Input type="text"></Input>
 
                     <Label>Email :</Label>
-                    <Input
-                      type="text"
-                    ></Input>
+                    <Input type="text"></Input>
 
                     <Label>Phone no. :</Label>
-                    <Input
-                      type="number"
-                    ></Input>
+                    <Input type="number"></Input>
                   </div>
                   <Button style={{ marginTop: "30px" }} color="primary">
                     Update
@@ -427,25 +437,22 @@ const Settings = () => {
                 justifyContent: "space-between",
                 alignItems: "baseline",
               }}
-            >
-              
-            </div>
+            ></div>
             <section>
               <Card body>
-              <div className="innerHeader">
-                    <h2> List of Holidays</h2>
+                <div className="innerHeader">
+                  <h2> List of Holidays</h2>
 
-                    <div>
-                      <Button color="dark" outline>
-                        <i className="fa fa-plus"></i>
-                      </Button>
-                    </div>
+                  <div>
+                    <Button color="dark" outline>
+                      <i className="fa fa-plus"></i>
+                    </Button>
                   </div>
+                </div>
               </Card>
             </section>
             <section>
               <Card body>
-              
                 <Table responsive style={{ textAlign: "center" }}>
                   <thead>
                     <tr>
