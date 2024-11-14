@@ -121,7 +121,7 @@ const Settings = () => {
         </Nav>
 
         <TabContent
-          style={{ maxWidth: "800px", margin: "auto", padding:"0" }}
+          style={{ maxWidth: "800px", margin: "auto" }}
           activeTab={activeTab}
         >
           <h6 style={{ textAlign: "center" }}>Settings</h6>
@@ -179,7 +179,7 @@ const Settings = () => {
         </TabContent>
 
         <TabContent
-          style={{ maxWidth: "800px", margin: "auto", padding:"0" }}
+          style={{ maxWidth: "800px", margin: "auto", padding: "0" }}
           activeTab={activeTab}
         >
           <TabPane tabId="5">
@@ -345,7 +345,7 @@ const Settings = () => {
         </TabContent>
 
         <TabContent
-          style={{ maxWidth: "900px", margin: "auto", padding:"0" }}
+          style={{ maxWidth: "900px", margin: "auto", padding: "0" }}
           activeTab={activeTab}
         >
           {/* <h6 style={{ textAlign: "center" }}>Settings</h6> */}
@@ -418,7 +418,7 @@ const Settings = () => {
         </TabContent>
 
         <TabContent
-          style={{ maxWidth: "900px", margin: "auto", padding:"0" }}
+          style={{ maxWidth: "900px", margin: "auto", padding: "0" }}
           activeTab={activeTab}
         >
           <TabPane tabId="6">
@@ -609,7 +609,7 @@ const Settings = () => {
         </TabContent>
 
         <TabContent
-          style={{ maxWidth: "800px", margin: "auto", padding:"0" }}
+          style={{ maxWidth: "800px", margin: "auto", padding: "0" }}
           activeTab={activeTab}
         >
           <TabPane tabId="1">
@@ -726,7 +726,7 @@ const Settings = () => {
         </TabContent>
 
         <TabContent
-          style={{ maxWidth: "800px", margin: "auto", padding:"0" }}
+          style={{ maxWidth: "800px", margin: "auto", padding: "0" }}
           activeTab={activeTab}
         >
           <TabPane tabId="2">
@@ -843,7 +843,7 @@ const Settings = () => {
         </TabContent>
 
         <TabContent
-          style={{ maxWidth: "1200px", margin: "auto", padding:"0" }}
+          style={{ maxWidth: "1200px", margin: "auto", padding: "0" }}
           activeTab={activeTab}
         >
           <TabPane tabId="4">
@@ -853,100 +853,191 @@ const Settings = () => {
                   style={{ textAlign: "center" }}
                   className={activeTab === "4" ? "active" : ""}
                 >
-                  
                   <Table responsive>
-            <thead>
-              <tr>
-                <th>Days</th>
-                <th>Start-Time</th>
-                <th>End-Time</th>
-                <th>Class Duration</th>
-                <th>Recess Time</th>
-                <th>Recess Duration</th>
-                <th>Add rows</th>
-              </tr>
-              
-            </thead>
+                    <thead>
+                      <tr>
+                        <th>Days</th>
+                        <th>Start-Time</th>
+                        <th>End-Time</th>
+                        <th>Class Duration</th>
+                        <th>Recess Time</th>
+                        <th>Recess Duration</th>
+                        <th></th>
+                      </tr>
+                    </thead>
 
-            <tbody>
-              <tr>
-                <td>
-                  <Input type="select">
-                  <option hidden>Select</option>
-                  <option>Monday</option>
-                  <option>Tuesday</option>
-                  <option>Wednesday</option>
-                  <option>Thursday</option>
-                  <option>Friday</option>
-                  <option>Saturday</option>
-
-                  </Input></td>
-                  <td>
-                  <Input>
-                  </Input></td>
-                  <td>
-                  <Input>
-                  </Input></td>
-                  <td>
-                  <Input>
-                  </Input></td>
-                  <td>
-                  <Input>
-                  </Input></td>
-                  <td>
-                  <Input>
-                  </Input></td>
-                
-                <td>
-                  <Button>+</Button>
-                </td>
-              </tr>
-              {/* <tr>
-                <td>Tuesday</td>
-                <td>10:00 AM</td>
-                <td>2:00 PM</td>
-                <td>40 Mins</td>
-                <td>12:00 PM</td>
-                <td>30 Mins</td>
-              </tr>
-              <tr>
-                <td>Wednesday</td>
-                <td>10:00 AM</td>
-                <td>2:00 PM</td>
-                <td>40 Mins</td>
-                <td>12:00 PM</td>
-                <td>30 Mins</td>
-              </tr>
-              <tr>
-                <td>Thursday</td>
-                <td>10:00 AM</td>
-                <td>2:00 PM</td>
-                <td>40 Mins</td>
-                <td>12:00 PM</td>
-                <td>30 Mins</td>
-              </tr>
-              <tr>
-                <td>Friday</td>
-                <td>10:00 AM</td>
-                <td>2:00 PM</td>
-                <td>40 Mins</td>
-                <td>12:00 PM</td>
-                <td>30 Mins</td>
-              </tr>
-              <tr>
-                <td>Saturday</td>
-                <td>10:00 AM</td>
-                <td>2:00 PM</td>
-                <td>40 Mins</td>
-                <td>12:00 PM</td>
-                <td>30 Mins</td>
-              </tr> */}
-            </tbody>
-            <Button style={{ marginTop: "30px"}} color="primary">
-                      Save
-                    </Button>
-          </Table>
-                  
+                    <tbody>
+                      <tr>
+                        <td>
+                          <Input type="select">
+                            <option hidden>Select</option>
+                            <option>Monday</option>
+                            <option>Tuesday</option>
+                            <option>Wednesday</option>
+                            <option>Thursday</option>
+                            <option>Friday</option>
+                            <option>Saturday</option>
+                          </Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <Input type="select">
+                            <option hidden>Select</option>
+                            <option>Monday</option>
+                            <option>Tuesday</option>
+                            <option>Wednesday</option>
+                            <option>Thursday</option>
+                            <option>Friday</option>
+                            <option>Saturday</option>
+                          </Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <Input type="select">
+                            <option hidden>Select</option>
+                            <option>Monday</option>
+                            <option>Tuesday</option>
+                            <option>Wednesday</option>
+                            <option>Thursday</option>
+                            <option>Friday</option>
+                            <option>Saturday</option>
+                          </Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <Input type="select">
+                            <option hidden>Select</option>
+                            <option>Monday</option>
+                            <option>Tuesday</option>
+                            <option>Wednesday</option>
+                            <option>Thursday</option>
+                            <option>Friday</option>
+                            <option>Saturday</option>
+                          </Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <Input type="select">
+                            <option hidden>Select</option>
+                            <option>Monday</option>
+                            <option>Tuesday</option>
+                            <option>Wednesday</option>
+                            <option>Thursday</option>
+                            <option>Friday</option>
+                            <option>Saturday</option>
+                          </Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <Input type="select">
+                            <option hidden>Select</option>
+                            <option>Monday</option>
+                            <option>Tuesday</option>
+                            <option>Wednesday</option>
+                            <option>Thursday</option>
+                            <option>Friday</option>
+                            <option>Saturday</option>
+                          </Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                        <td>
+                          <Input></Input>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                  <Button color="primary">Save</Button>
                 </NavLink>
               </Card>
             </section>
