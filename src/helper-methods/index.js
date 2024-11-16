@@ -58,13 +58,26 @@ export const extractQueryParams = () => {
   return params;
 };
 
-export const showToast = (message, type = "success", duration = 4000) => {
+export const showsuccessToast = (message, type = "success", duration = 4000) => {
   toast[type](message, { duration });
+};
+
+export const showerrorToast = (message, type = "error", duration = 4000) => {
+  toast[type](message, { duration });
+};
+
+export const successHandler = (error) => {
+  console.log("error>>", error);
+  showsuccessToast(
+    error?.reason?.length || error?.message?.length
+      ? error?.reason || error?.message
+      : "Something went wrong, Try again later."
+  );
 };
 
 export const errorHandler = (error) => {
   console.log("error>>", error);
-  showToast(
+  showerrorToast(
     error?.reason?.length || error?.message?.length
       ? error?.reason || error?.message
       : "Something went wrong, Try again later."

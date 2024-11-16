@@ -14,85 +14,89 @@ import {
   CheckFormUpdate,
   errorHandler,
   formatDate,
+  successHandler,
 } from "../../helper-methods";
 import { getLoggedInUserDetail, updateProfile } from "../../http/http-calls";
 import { useSelector } from "react-redux";
-
 
 const AllGender = ["Male", "Female"];
 
 const MyProfile = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState("1");
+  const [updatedUserDetails, setUpdatedUserDetails] = useState({});
   const [userDetails, setUserDetails] = useState({});
-  const [data, setData] = useState({});
   const [address, setAddress] = useState({});
   const [DOB, setDOB] = useState(null);
+  const [isChanged, setIsChanged] = useState(false);
 
   const _toggleTab = (newTab = "1") => {
     if (activeTab !== newTab) setActiveTab(newTab);
   };
 
-  // console.log("data>>", data);
   // console.log("userDetails>>", userDetails);
-  
-  const fetchData = async () => {
+  console.log("updatedUserDetails>>", updatedUserDetails);
+
+  const fetchuserDetails = async () => {
     try {
       const response = await getLoggedInUserDetail();
       // console.log("response>>", response.user);
+      setUpdatedUserDetails(response.user);
       setUserDetails(response.user);
-      setData(response.user);
     } catch (error) {
       errorHandler(error);
     }
   };
 
   useEffect(() => {
-    fetchData();
+    fetchuserDetails();
   }, []);
 
   useEffect(() => {
-    if (userDetails) {
-      const formattedDOB = formatDate(userDetails.dob);
+    if (updatedUserDetails) {
+      const formattedDOB = formatDate(updatedUserDetails.dob);
       setDOB(formattedDOB);
-      setAddress(userDetails.address);
+      setAddress(updatedUserDetails.address);
     }
-  }, [userDetails.dob]);
+  }, [updatedUserDetails.dob]);
 
   const handleChange = (event, field) => {
     if (field === "dob") {
       setDOB(event.target.value);
     }
-    const updatedNewDetails = { ...userDetails };
+    const updatedNewDetails = { ...updatedUserDetails };
     updatedNewDetails[field] = event.target.value;
-    setUserDetails(updatedNewDetails);
+    setUpdatedUserDetails(updatedNewDetails);
   };
 
   const handleAddress = (event, field) => {
     const updatedAddress = { ...address };
     updatedAddress[field] = event.target.value;
     setAddress(updatedAddress);
-    setUserDetails((prev) => ({
+    setUpdatedUserDetails((prev) => ({
       ...prev,
       address: updatedAddress,
     }));
   };
 
   const handleSave = async () => {
-    const payload = CheckFormUpdate(data, userDetails);
+    const payload = CheckFormUpdate(userDetails, updatedUserDetails);
     console.log("payload>>>", payload);
 
     try {
       if (payload) {
+        setIsChanged(true)
         const response = await updateProfile(payload);
         // console.log("response>>", response.user);
-        setUserDetails(response.user);
+        setUpdatedUserDetails(response.user);
         alert("successfully updated");
       } else {
-        alert("Changes up-to-date");
+        const message = "Changes up-to-date"
+        successHandler(message);
+        // alert("Changes up-to-date");
       }
     } catch (error) {
-      errorHandler(error);
+      successHandler(error);
     }
   };
 
@@ -103,8 +107,8 @@ const MyProfile = () => {
           <Col xl="4">
             <Card body className="profileCard">
               <div className="cardImg">
-                {userDetails?.profileImage ? (
-                  <img src={userDetails.profileImage} alt="" />
+                {updatedUserDetails?.profileImage ? (
+                  <img src={updatedUserDetails.profileImage} alt="" />
                 ) : (
                   <img
                     src={require("../../assets/img/SidebarMenu/profile.png")}
@@ -112,8 +116,8 @@ const MyProfile = () => {
                   />
                 )}
               </div>
-              <CardTitle>{userDetails.fullname}</CardTitle>
-              {/* <span>{userDetails.email}</span> */}
+              <CardTitle>{updatedUserDetails.fullname}</CardTitle>
+              {/* <span>{updatedUserDetails.email}</span> */}
               <div className="form-group">
                 {/* <Label>Change Profile Photo</Label> */}
                 <div className="customFileUpload">
@@ -158,12 +162,12 @@ const MyProfile = () => {
                 <Row>
                   <Col md="6" lg="4">
                     {/* name */}
-                    {userDetails.firstName && (
+                    {updatedUserDetails.firstName && (
                       <div className="form-group">
                         <Label>First Name</Label>
                         <Input
                           placeholder="Enter your name"
-                          value={userDetails.firstName}
+                          value={updatedUserDetails.firstName}
                           onChange={(e) => handleChange(e, "firstName")}
                         />
                       </div>
@@ -171,44 +175,32 @@ const MyProfile = () => {
                   </Col>
                   <Col md="6" lg="4">
                     {/* name */}
-                    {userDetails.lastName && (
+                    {updatedUserDetails.lastName && (
                       <div className="form-group">
                         <Label>Last Name</Label>
                         <Input
                           placeholder="Enter your name"
-                          value={userDetails.lastName}
+                          value={updatedUserDetails.lastName}
                           onChange={(e) => handleChange(e, "lastName")}
                         />
                       </div>
                     )}
                   </Col>
                   <Col md="6" lg="4">
-                    {/* Email */}
-                    {userDetails.email && (
-                      <div className="form-group">
-                        <Label>Email</Label>
-                        <Input
-                          readOnly={userDetails.loginType === "student"}
-                          placeholder="Enter your email"
-                          value={userDetails.email}
-                          onChange={(e) => handleChange(e, "email")}
-                        />
-                      </div>
-                    )}
-                  </Col>
-                  <Col md="6" lg="4">
                     {/* phone number */}
-                    {userDetails.gender && (
+                    {updatedUserDetails.gender && (
                       <div className="form-group">
                         <Label>Gender</Label>
-                        {userDetails.loginType === "student" ? (
-                          <Input readOnly value={userDetails.gender} />
+                        {updatedUserDetails.loginType === "student" ? (
+                          <Input disabled value={updatedUserDetails.gender} />
                         ) : (
                           <Input
                             type="select"
-                            value={userDetails.gender}
+                            value={updatedUserDetails.gender}
                             onChange={(e) => handleChange(e, "gender")}
-                            readOnly={userDetails.loginType === "student"}
+                            disabled={
+                              updatedUserDetails.loginType === "student"
+                            }
                           >
                             <option hidden>Select</option>
                             {AllGender.map((gender, index) => (
@@ -221,27 +213,65 @@ const MyProfile = () => {
                       </div>
                     )}
                   </Col>
-                  <Col md="6" lg="4">
-                    {/* phone number */}
-                    {userDetails.phone && (
+                  {updatedUserDetails?.class?.name ? (
+                    <Col md="6" lg="4">
+                      {/* Login Type */}
                       <div className="form-group">
-                        <Label>Phone Number</Label>
+                        <Label>Class</Label>
+                        <Input disabled value={updatedUserDetails.class.name} />
+                      </div>
+                    </Col>
+                  ) : (
+                    ""
+                  )}
+
+                  {updatedUserDetails?.class?.section ? (
+                    <Col md="6" lg="4">
+                      {/* Login Type */}
+                      <div className="form-group">
+                        <Label>Section</Label>
                         <Input
-                          readOnly={userDetails.loginType === "student"}
-                          placeholder="Enter your Phone Number"
-                          value={userDetails.phone}
-                          onChange={(e) => handleChange(e, "phone")}
+                          disabled
+                          value={updatedUserDetails.class.section}
                         />
                       </div>
-                    )}
-                  </Col>
+                    </Col>
+                  ) : (
+                    ""
+                  )}
+                  {updatedUserDetails?.rollNo ? (
+                    <Col md="6" lg="4">
+                      {/* Login Type */}
+                      <div className="form-group">
+                        <Label>Roll No.</Label>
+                        <Input disabled value={updatedUserDetails.rollNo} />
+                      </div>
+                    </Col>
+                  ) : (
+                    ""
+                  )}
+
+                  {updatedUserDetails?.currentAcademicYear ? (
+                    <Col md="6" lg="4">
+                      {/* Login Type */}
+                      <div className="form-group">
+                        <Label>Academic-Year</Label>
+                        <Input
+                          disabled
+                          value={updatedUserDetails.currentAcademicYear}
+                        />
+                      </div>
+                    </Col>
+                  ) : (
+                    ""
+                  )}
                   <Col md="6" lg="4">
                     {/* Year of Birth */}
                     {DOB && (
                       <div className="form-group">
                         <Label>Date of Birth</Label>
                         <Input
-                          readOnly={userDetails.loginType === "student"}
+                          disabled={updatedUserDetails.loginType === "student"}
                           type="date"
                           value={DOB}
                           onChange={(e) => handleChange(e, "dob")}
@@ -251,56 +281,131 @@ const MyProfile = () => {
                   </Col>
                   <Col md="6" lg="4">
                     {/* Last 4 SSN */}
-                    {userDetails.username && (
+                    {updatedUserDetails.username && (
                       <div className="form-group">
                         <Label>Username</Label>
                         <InputGroup>
                           <Input
-                            readOnly
+                            disabled
                             placeholder="Enter your Username"
                             type="text"
-                            value={userDetails.username}
+                            value={updatedUserDetails.username}
                           />
                         </InputGroup>
                       </div>
                     )}
                   </Col>
 
-                  {userDetails?.class?.name ? (
+                  {updatedUserDetails?.guardian?.fathersName ? (
                     <Col md="6" lg="4">
-                      {/* Login Type */}(
+                      {/* Login Type */}
                       <div className="form-group">
-                        <Label>Class</Label>
-                        <Input readOnly value={userDetails.class.name} />
+                        <Label>Father's Name</Label>
+                        <Input
+                          disabled
+                          value={updatedUserDetails.guardian.fathersName}
+                        />
                       </div>
-                      )
                     </Col>
                   ) : (
                     ""
                   )}
 
-                  {userDetails?.class?.section ? (
+                  {updatedUserDetails?.guardian?.fathersOccupation ? (
                     <Col md="6" lg="4">
-                      {/* Login Type */}(
+                      {/* Login Type */}
                       <div className="form-group">
-                        <Label>Section</Label>
-                        <Input readOnly value={userDetails.class.section} />
+                        <Label>Father's Occupation</Label>
+                        <Input
+                          disabled
+                          value={updatedUserDetails.guardian.fathersOccupation}
+                        />
                       </div>
-                      )
                     </Col>
                   ) : (
                     ""
                   )}
+
+                  {updatedUserDetails?.guardian?.mothersName ? (
+                    <Col md="6" lg="4">
+                      {/* Login Type */}
+                      <div className="form-group">
+                        <Label>Mother's Name</Label>
+                        <Input
+                          disabled
+                          value={updatedUserDetails.guardian.mothersName}
+                        />
+                      </div>
+                    </Col>
+                  ) : (
+                    ""
+                  )}
+
+                  {updatedUserDetails?.guardian?.mothersOccupation ? (
+                    <Col md="6" lg="4">
+                      {/* Login Type */}
+                      <div className="form-group">
+                        <Label>Mother's Name</Label>
+                        <Input
+                          disabled
+                          value={updatedUserDetails.guardian.mothersOccupation}
+                        />
+                      </div>
+                    </Col>
+                  ) : (
+                    ""
+                  )}
+
+                  <Col md="6" lg="4">
+                    {/* Email */}
+                    {updatedUserDetails.email ? (
+                      <div className="form-group">
+                        <Label>Email</Label>
+                        <Input
+                          disabled={updatedUserDetails.loginType === "student"}
+                          placeholder="Enter your email"
+                          value={updatedUserDetails.email}
+                          onChange={(e) => handleChange(e, "email")}
+                        />
+                      </div>
+                    ) : (
+                      <div className="form-group">
+                        <Label>Email</Label>
+                        <Input
+                          disabled={updatedUserDetails.loginType === "student"}
+                          placeholder="No email ID Given"
+                          value={""}
+                          onChange={(e) => handleChange(e, "email")}
+                        />
+                      </div>
+                    )}
+                  </Col>
+
+                  <Col md="6" lg="4">
+                    {/* phone number */}
+                    {updatedUserDetails.phone && (
+                      <div className="form-group">
+                        <Label>Phone Number</Label>
+                        <Input
+                          type="number"
+                          disabled={updatedUserDetails.loginType === "student"}
+                          placeholder="Enter your Phone Number"
+                          value={updatedUserDetails.phone}
+                          onChange={(e) => handleChange(e, "phone")}
+                        />
+                      </div>
+                    )}
+                  </Col>
                 </Row>
                 <h6>Address</h6>
                 {/* Current Address */}
-                {userDetails.address && (
+                {updatedUserDetails.address && (
                   <div className="form-group">
                     <Label>Locality</Label>
                     <Input
                       type="text"
                       placeholder="Enter your Address"
-                      value={userDetails.address.locality}
+                      value={updatedUserDetails.address.locality}
                       onChange={(e) => handleAddress(e, "locality")}
                     />
                   </div>
@@ -308,13 +413,13 @@ const MyProfile = () => {
                 <Row className="gy-3 gy-xl-0">
                   <Col lg="6" xl="4">
                     {/* City */}
-                    {userDetails.address && (
+                    {updatedUserDetails.address && (
                       <div className="form-group mb-0">
                         <Label>City</Label>
                         <Input
                           placeholder="Enter your City"
                           type="text"
-                          value={userDetails.address.city}
+                          value={updatedUserDetails.address.city}
                           onChange={(e) => handleAddress(e, "city")}
                         ></Input>
                       </div>
@@ -323,28 +428,27 @@ const MyProfile = () => {
 
                   <Col lg="6" xl="4">
                     {/* State */}
-                    {userDetails.address && (
+                    {updatedUserDetails.address && (
                       <div className="form-group mb-0">
                         <Label>State</Label>
                         <Input
                           type="text"
-                          value={userDetails.address.state}
+                          value={updatedUserDetails.address.state}
                           onChange={(e) => handleAddress(e, "state")}
-                        >
-                          
-                        </Input>
+                        ></Input>
                       </div>
                     )}
                   </Col>
 
                   <Col lg="6" xl="4">
                     {/* Zip */}
-                    {userDetails.address && (
+                    {updatedUserDetails.address && (
                       <div className="form-group mb-0">
-                        <Label>Zip</Label>
+                        <Label>Pin</Label>
                         <Input
-                          placeholder="Enter your Zip Code"
-                          value={userDetails.address.pin}
+                          type="number"
+                          placeholder="Enter your Pin Code"
+                          value={updatedUserDetails.address.pin}
                           onChange={(e) => handleAddress(e, "pin")}
                         />
                       </div>
@@ -353,16 +457,14 @@ const MyProfile = () => {
 
                   <Col lg="6" xl="4">
                     {/* Zip */}
-                    {userDetails.address && (
+                    {updatedUserDetails.address && (
                       <div className="form-group mb-0">
                         <Label>Country</Label>
                         <Input
                           type="text"
-                          value={userDetails.address.country}
+                          value={updatedUserDetails.address.country}
                           onChange={(e) => handleAddress(e, "country")}
-                        >
-                          
-                        </Input>
+                        ></Input>
                       </div>
                     )}
                   </Col>
@@ -374,7 +476,7 @@ const MyProfile = () => {
 
         {/* submit button */}
         <div className="d-flex justify-content-center mt-5">
-          <Button color="primary" className="btn-submit" onClick={handleSave}>
+          <Button hidden={userDetails === updatedUserDetails}  color="primary" className="btn-submit" onClick={handleSave}>
             Save Changes
           </Button>
         </div>
