@@ -29,13 +29,10 @@ const MyProfile = () => {
   const [address, setAddress] = useState({});
   const [DOB, setDOB] = useState(null);
   const [isChanged, setIsChanged] = useState(false);
-
+  console.log("isChanged>>", isChanged);
   const _toggleTab = (newTab = "1") => {
     if (activeTab !== newTab) setActiveTab(newTab);
   };
-
-  // console.log("userDetails>>", userDetails);
-  console.log("updatedUserDetails>>", updatedUserDetails);
 
   const fetchuserDetails = async () => {
     try {
@@ -60,16 +57,38 @@ const MyProfile = () => {
     }
   }, [updatedUserDetails.dob]);
 
+  // const checkChanges = (userDetails, updatedNewDetails) => {
+  //   console.log("updatedNewDetails>>", updatedNewDetails);
+  //   console.log("userDetails>>", userDetails);
+
+  //   const updatedChange = CheckFormUpdate(userDetails, updatedNewDetails);
+  //   console.log("updatedChange>>", updatedChange);
+
+  //   if (updatedChange) {
+  //     setIsChanged(true)
+  //   } else {
+  //     setIsChanged(false)
+  //   }
+  // }
+
   const handleChange = (event, field) => {
+    setIsChanged(true);
     if (field === "dob") {
       setDOB(event.target.value);
     }
     const updatedNewDetails = { ...updatedUserDetails };
     updatedNewDetails[field] = event.target.value;
     setUpdatedUserDetails(updatedNewDetails);
+    if (_CheckFormUpdate(userDetails, updatedNewDetails)) {
+      setIsChanged(true);
+    } else {
+      setIsChanged(false);
+    }
   };
 
   const handleAddress = (event, field) => {
+    setIsChanged(true);
+    // const changedUserDetails = { ...updatedUserDetails }
     const updatedAddress = { ...address };
     updatedAddress[field] = event.target.value;
     setAddress(updatedAddress);
@@ -77,21 +96,69 @@ const MyProfile = () => {
       ...prev,
       address: updatedAddress,
     }));
+
+    if (
+      _CheckFormUpdate(userDetails, {
+        ...updatedUserDetails,
+        address: updatedAddress,
+      })
+    ) {
+      setIsChanged(true);
+    } else {
+      setIsChanged(false);
+    }
+  };
+
+  const _CheckFormUpdate = (initialState, updatedState) => {
+    if (typeof initialState !== "object" || typeof updatedState !== "object") {
+      throw new Error("Both initialState and updatedState should be objects.");
+    }
+
+    const changes = {}; // Initialize an empty object to store changes
+
+    for (const key in initialState) {
+      // If the key is not "address", or any other key you'd like to handle
+      if (initialState.hasOwnProperty(key)) {
+        // If the key is an object, compare nested fields
+        if (
+          typeof initialState[key] === "object" &&
+          initialState[key] !== null
+        ) {
+          if (
+            JSON.stringify(initialState[key]) !==
+            JSON.stringify(updatedState[key])
+          ) {
+            changes[key] = updatedState[key]; // Push the whole object if it has changed
+          }
+        } else {
+          // Compare simple field values
+          if (initialState[key] !== updatedState[key]) {
+            changes[key] = updatedState[key]; // Store only the changed field
+          }
+        }
+      }
+    }
+
+    // Return the changes object with updated fields, or null if no changes
+    return Object.keys(changes).length > 0 ? changes : null;
   };
 
   const handleSave = async () => {
-    const payload = CheckFormUpdate(userDetails, updatedUserDetails);
+    setIsChanged(false);
+    console.log("updatedUserDetails>>", updatedUserDetails);
+    console.log("userDetails>>", userDetails);
+
+    const payload = _CheckFormUpdate(userDetails, updatedUserDetails);
     console.log("payload>>>", payload);
 
     try {
       if (payload) {
-        setIsChanged(true)
         const response = await updateProfile(payload);
         // console.log("response>>", response.user);
         setUpdatedUserDetails(response.user);
         alert("successfully updated");
       } else {
-        const message = "Changes up-to-date"
+        const message = "Changes up-to-date";
         successHandler(message);
         // alert("Changes up-to-date");
       }
@@ -162,29 +229,29 @@ const MyProfile = () => {
                 <Row>
                   <Col md="6" lg="4">
                     {/* name */}
-                    {updatedUserDetails.firstName && (
+                    {/* {updatedUserDetails.firstName && ( */}
                       <div className="form-group">
                         <Label>First Name</Label>
                         <Input
                           placeholder="Enter your name"
-                          value={updatedUserDetails.firstName}
+                          value={updatedUserDetails?.firstName || ""}
                           onChange={(e) => handleChange(e, "firstName")}
                         />
                       </div>
-                    )}
+                    {/* )} */}
                   </Col>
                   <Col md="6" lg="4">
                     {/* name */}
-                    {updatedUserDetails.lastName && (
+                    {/* {updatedUserDetails.lastName && ( */}
                       <div className="form-group">
                         <Label>Last Name</Label>
                         <Input
                           placeholder="Enter your name"
-                          value={updatedUserDetails.lastName}
+                          value={updatedUserDetails?.lastName || ""}
                           onChange={(e) => handleChange(e, "lastName")}
                         />
                       </div>
-                    )}
+                    {/* )} */}
                   </Col>
                   <Col md="6" lg="4">
                     {/* phone number */}
@@ -273,7 +340,7 @@ const MyProfile = () => {
                         <Input
                           disabled={updatedUserDetails.loginType === "student"}
                           type="date"
-                          value={DOB}
+                          value={DOB || ""}
                           onChange={(e) => handleChange(e, "dob")}
                         ></Input>
                       </div>
@@ -289,7 +356,7 @@ const MyProfile = () => {
                             disabled
                             placeholder="Enter your Username"
                             type="text"
-                            value={updatedUserDetails.username}
+                            value={updatedUserDetails?.username || ""}
                           />
                         </InputGroup>
                       </div>
@@ -303,7 +370,7 @@ const MyProfile = () => {
                         <Label>Father's Name</Label>
                         <Input
                           disabled
-                          value={updatedUserDetails.guardian.fathersName}
+                          value={updatedUserDetails?.guardian?.fathersName || ""}
                         />
                       </div>
                     </Col>
@@ -318,7 +385,7 @@ const MyProfile = () => {
                         <Label>Father's Occupation</Label>
                         <Input
                           disabled
-                          value={updatedUserDetails.guardian.fathersOccupation}
+                          value={updatedUserDetails?.guardian?.fathersOccupation || ""}
                         />
                       </div>
                     </Col>
@@ -333,7 +400,7 @@ const MyProfile = () => {
                         <Label>Mother's Name</Label>
                         <Input
                           disabled
-                          value={updatedUserDetails.guardian.mothersName}
+                          value={updatedUserDetails?.guardian?.mothersName || ""}
                         />
                       </div>
                     </Col>
@@ -348,7 +415,7 @@ const MyProfile = () => {
                         <Label>Mother's Name</Label>
                         <Input
                           disabled
-                          value={updatedUserDetails.guardian.mothersOccupation}
+                          value={updatedUserDetails?.guardian?.mothersOccupation || ""}
                         />
                       </div>
                     </Col>
@@ -364,7 +431,7 @@ const MyProfile = () => {
                         <Input
                           disabled={updatedUserDetails.loginType === "student"}
                           placeholder="Enter your email"
-                          value={updatedUserDetails.email}
+                          value={updatedUserDetails?.email || ""}
                           onChange={(e) => handleChange(e, "email")}
                         />
                       </div>
@@ -476,7 +543,12 @@ const MyProfile = () => {
 
         {/* submit button */}
         <div className="d-flex justify-content-center mt-5">
-          <Button hidden={userDetails === updatedUserDetails}  color="primary" className="btn-submit" onClick={handleSave}>
+          <Button
+            hidden={!isChanged}
+            color="primary"
+            className="btn-submit"
+            onClick={handleSave}
+          >
             Save Changes
           </Button>
         </div>
