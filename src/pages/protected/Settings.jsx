@@ -31,18 +31,40 @@ const Settings = () => {
   console.log("userType>>", userType);
   console.log("loginType>>", loginType);
 
+  const [formFields, setFormFields] = useState([{
+    class : "",
+    academicYear : "",
+    Fee : ""
+  }])
+
   useEffect(() => {
     if (loginType === "admin") {
       setUserType(loginType);
     }
   }, []);
 
-  const [activeTab, setActiveTab] = useState("1");
+  const [activeTab, setActiveTab] = useState("7");
   const _toggleTab = (newTab = "1") => {
     if (activeTab !== newTab) setActiveTab(newTab);
   };
 
-  const handleClick = () => {};
+  // const handleInputChange = (index, event) => {
+  //   // console.log("index>>>", index);
+  //   // console.log("event>>>", event);
+
+  //   const updatedFormFields = [...formFields]
+  //   updatedFormFields[field] = event.target.value
+  // }
+
+  const handlePlusButton = () => {
+
+    const newClass = formFields[formFields.length - 1]?.class || '';
+    setFormFields([...formFields, {
+      class : "",
+    academicYear : "",
+    Fee : ""
+    }])
+  };
 
   return (
     <>
@@ -119,6 +141,17 @@ const Settings = () => {
                 onClick={() => _toggleTab("8")}
               >
                 Organization
+              </NavLink>
+            )}
+          </NavItem>
+
+          <NavItem>
+            {userType === "admin" && (
+              <NavLink
+                className={activeTab === "9" ? "active" : ""}
+                onClick={() => _toggleTab("9")}
+              >
+                Leave
               </NavLink>
             )}
           </NavItem>
@@ -241,6 +274,8 @@ const Settings = () => {
                         textAlign: "center",
                       }}
                       type="select"
+                      name="class"
+                      // onChange={(e) => handleInputChange(index, e)}
                     >
                       <option hidden>Select Class</option>
                       <option>1</option>
@@ -265,6 +300,8 @@ const Settings = () => {
                       }}
                       type="text"
                       placeholder="Academic-Year"
+                      name="academicYear"
+                      // onChange={(e) => handleInputChange(index, e)}
                     ></Input>
 
                     <Input
@@ -277,9 +314,11 @@ const Settings = () => {
                       }}
                       placeholder="Fee"
                       type="text"
+                      name="fee"
+                      // onChange={(e) => handleInputChange(index, e)}
                     ></Input>
                   </div>
-                  <Button style={{ marginTop: "30px" }} color="primary">
+                  <Button style={{ marginTop: "30px" }} color="primary" onClick={handlePlusButton}>
                     Create
                   </Button>
                 </NavLink>

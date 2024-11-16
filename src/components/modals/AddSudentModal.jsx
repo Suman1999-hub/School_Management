@@ -16,6 +16,7 @@ import {
   createStudent,
   updateStudent,
 } from "../../http/http-calls";
+import { errorHandler } from "../../helper-methods";
 
 const AddStudentModal = ({
   isOpen,
@@ -33,24 +34,24 @@ const AddStudentModal = ({
   console.log("studentDetails", studentDetails);
 
   const [formData, setFormData] = useState({
-    Locality: studentDetails?.address?.locality || "",
+    locality: studentDetails?.address?.locality || "",
     city: studentDetails?.address?.city || "",
     state: studentDetails?.address?.state || "",
     country: studentDetails?.address?.country || "",
-    pinCode: studentDetails?.address?.pin || "",
+    pin: studentDetails?.address?.pin || "",
     email: studentDetails?.email || "",
     firstName: studentDetails?.firstName || "",
     lastName: studentDetails?.lastName || "",
-    DOB: studentDetails?.dob || "",
+    dob: studentDetails?.dob || "",
     gender: studentDetails?.gender || "",
     section: studentDetails?._class?.section || "",
     class: studentDetails?._class?.name || "",
-    phoneNumber: studentDetails?.phone || "",
-    FatherName: studentDetails?.guardian?.fathersName || "",
-    MotherName: studentDetails?.guardian?.mothersName || "",
-    MotherOccupation: studentDetails?.mothersOccupation || "",
-    FatherOccupation: studentDetails?.fathersOccupation || "",
-    session: studentDetails?.currentAcademicYear || "",
+    phone: studentDetails?.phone || "",
+    fathersName: studentDetails?.guardian?.fathersName || "",
+    mothersName: studentDetails?.guardian?.mothersName || "",
+    mothersOccupation: studentDetails?.guardian?.mothersOccupation || "",
+    fathersOccupation: studentDetails?.guardian?.fathersOccupation || "",
+    currentAcademicYear : studentDetails?.currentAcademicYear || "",
     joinDate: studentDetails?.joinDate || "",
     profileUrl: studentDetails?.profileUrl || "",
   });
@@ -58,28 +59,26 @@ const AddStudentModal = ({
   const payload = {
     firstName: formData?.firstName,
     lastName: formData?.lastName,
+    email: formData?.email,
     gender: formData?.gender,
     guardian: {
-      fathersName: formData?.FatherName,
-      fathersOccupation: formData?.FatherOccupation,
-      mothersName: formData?.MotherName,
-      mothersOccupation: formData?.MotherOccupation,
+      fathersName: formData?.fathersName,
+      fathersOccupation: formData?.fathersOccupation,
+      mothersName: formData?.mothersName,
+      mothersOccupation: formData?.mothersOccupation,
     },
     address: {
-      locality: formData?.Locality,
+      locality: formData?.locality,
       city: formData?.city,
       state: formData?.state,
-      pin: formData?.pinCode,
+      pin: formData?.pin,
       country: formData?.country,
     },
-    phone: formData?.phoneNumber,
-    currentAcademicYear: formData?.session,
-    dob: formData?.DOB,
-    rollNo: "",
-    joinDate: "2024",
+    phone: formData?.phone,
+    currentAcademicYear: formData?.currentAcademicYear,
+    dob: formData?.dob,
     classname: formData?.class,
     section: formData?.section,
-    signature: "base64EncodedString",
     profileImage: formData?.profileUrl,
     autoAssignRoll: true,
   };
@@ -90,12 +89,13 @@ const AddStudentModal = ({
       const createStudentRes = await createStudent(payload);
       if (!createStudentRes?.error) {
         fetchAllStudentData();
-        toggle();
       }
       console.log(payload);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      errorHandler(error);
     }
+    _closeModal();
+
   };
 
   //Edit
@@ -107,12 +107,12 @@ const AddStudentModal = ({
           getStudentAPICall(id);
         }
 
-        toggle();
         console.log(updateStudentRes);
       }
     } catch (error) {
-      console.log(error);
+      errorHandler(error);
     }
+    _closeModal();
   };
 
   // Handle form input changes
@@ -227,14 +227,14 @@ const AddStudentModal = ({
             </Col>
             <Col md="6">
               <FormGroup>
-                <Label>Session</Label>
+                <Label>Academic-Year</Label>
                 <Input
                   type="select"
-                  name="session"
-                  value={formData.session}
+                  name="currentAcademicYear"
+                  value={formData.currentAcademicYear}
                   onChange={handleInputChange}
                 >
-                  <option value="">Select Session</option>
+                  <option value="">Select Academic-Year</option>
                   <option value="2024-2025">2024-2025</option>
                   <option value="2025-2026<">2025-2026</option>
                   <option value="2026-2027">2026-2027</option>
@@ -261,11 +261,11 @@ const AddStudentModal = ({
             </Col>
             <Col md="6">
               <FormGroup>
-                <Label>DOB</Label>
+                <Label>dob</Label>
                 <Input
                   type="date"
-                  name="DOB"
-                  value={formData.DOB}
+                  name="dob"
+                  value={formData.dob}
                   onChange={handleInputChange}
                 />
               </FormGroup>
@@ -276,8 +276,8 @@ const AddStudentModal = ({
             <Label>Father's Name</Label>
             <Input
               type="text"
-              name="FatherName"
-              value={formData.FatherName}
+              name="fathersName"
+              value={formData.fathersName}
               onChange={handleInputChange}
             />
           </FormGroup>
@@ -285,17 +285,17 @@ const AddStudentModal = ({
             <Label>Father's Occupation</Label>
             <Input
               type="text"
-              name="FatherOccupation"
-              value={formData.FatherOccupation}
+              name="fathersOccupation"
+              value={formData.fathersOccupation}
               onChange={handleInputChange}
             />
           </FormGroup>
           <FormGroup>
-            <Label>MotherName</Label>
+            <Label>mothersName</Label>
             <Input
               type="text"
-              name="MotherName"
-              value={formData.MotherName}
+              name="mothersName"
+              value={formData.mothersName}
               onChange={handleInputChange}
             />
           </FormGroup>
@@ -303,19 +303,19 @@ const AddStudentModal = ({
             <Label>Mother's Occupation</Label>
             <Input
               type="text"
-              name="MotherOccupation"
-              value={formData.MotherOccupation}
+              name="mothersOccupation"
+              value={formData.mothersOccupation}
               onChange={handleInputChange}
             />
           </FormGroup>
           <h6>Address</h6>
           <Row>
             <FormGroup>
-              <Label>Locality</Label>
+              <Label>locality</Label>
               <Input
                 type="text"
-                name="Locality"
-                value={formData.Locality}
+                name="locality"
+                value={formData.locality}
                 onChange={handleInputChange}
               />
             </FormGroup>
@@ -366,11 +366,11 @@ const AddStudentModal = ({
             </Col>
             <Col md="6">
               <FormGroup>
-                <Label>PinCode</Label>
+                <Label>pin</Label>
                 <Input
                   type="text"
-                  name="pinCode"
-                  value={formData.pinCode}
+                  name="pin"
+                  value={formData.pin}
                   onChange={handleInputChange}
                 />
               </FormGroup>
@@ -389,8 +389,8 @@ const AddStudentModal = ({
             <Label>Mobile no.</Label>
             <Input
               type="text"
-              name="phoneNumber"
-              value={formData.phoneNumber}
+              name="phone"
+              value={formData.phone}
               onChange={handleInputChange}
             />
           </FormGroup>
