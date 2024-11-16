@@ -10,9 +10,11 @@ import {
   Col,
   Input,
   Spinner,
+  Alert,
 } from "reactstrap";
 import stateData from "../../State.json";
 import { createSchool, updateSchool } from "../../http/http-calls";
+import { LatitudeLongitudeFind } from "../../helper-methods";
 
 const CreateSchoolModal = ({
   isOpen,
@@ -29,6 +31,7 @@ const CreateSchoolModal = ({
   };
   const [schoolId, setSchoolId] = useState();
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
   const [formData, setFormData] = useState({
     schoolName: "",
     city: "",
@@ -45,6 +48,8 @@ const CreateSchoolModal = ({
     SchoolPhNumber: "",
     schoolEmail: "",
     locationUrl: "",
+    principalName: "",
+    establishYear: "",
   });
 
   const createPayload = {
@@ -60,6 +65,12 @@ const CreateSchoolModal = ({
       email: formData.schoolEmail,
       website: formData.website,
     },
+    location: {
+      type: "Point",
+      coordinates: LatitudeLongitudeFind(formData.locationUrl),
+    },
+    establishYear: formData.establishYear,
+    principalName: formData.principalName,
     locationUrl: formData.locationUrl,
     email: formData.email,
     firstName: formData.firstName,
@@ -81,6 +92,12 @@ const CreateSchoolModal = ({
       email: formData.schoolEmail,
       website: formData.website,
     },
+    location: {
+      type: "Point",
+      coordinates: LatitudeLongitudeFind(formData.locationUrl),
+    },
+    principalName: formData.principalName,
+    establishYear: formData.establishYear,
     locationUrl: formData.locationUrl,
     admin: {
       email: formData.email,
@@ -91,18 +108,45 @@ const CreateSchoolModal = ({
       phone: formData.phoneNumber,
     },
   };
+  const validateForm = () => {
+    if (!formData.schoolName) return "School Name is required.";
+    if (!formData.SchoolPhNumber) return "School Phone Number is required.";
+    if (!formData.schoolEmail) return "School Email is required.";
+    if (!formData.city) return "City is required.";
+    if (!formData.state || formData.state === "Select State")
+      return "State is required.";
+    if (!formData.country || formData.country === "Select Country")
+      return "Country is required.";
+    if (!formData.pinCode) return "Pin Code is required.";
+    if (!formData.email) return "Admin Email is required.";
+    if (!formData.firstName) return "Admin First Name is required.";
+    if (!formData.lastName) return "Admin Last Name is required.";
+    if (!formData.phoneNumber) return "Admin Phone Number is required.";
+    return null;
+  };
   const _createSchoolAPiCall = async () => {
+    const validationError = validateForm();
+    if (validationError) {
+      setErrorMessage(validationError);
+      return;
+    }
     setLoading(true);
+    setErrorMessage(null);
     try {
       const createSchoolApiRes = await createSchool(createPayload);
       if (!createSchoolApiRes.error) {
         fetchAllSchoolData(currentPage, itemsPerPage);
         toggle();
+      } else {
+        setErrorMessage(
+          createSchoolApiRes.message || "Failed to create school."
+        );
       }
     } catch (error) {
-      console.log(error);
+      setErrorMessage("An error occurred while creating the school.");
+      console.error(error);
     } finally {
-      setLoading(false); // Set loading to false after the API call finishes
+      setLoading(false);
     }
   };
 
@@ -134,6 +178,8 @@ const CreateSchoolModal = ({
           SchoolPhNumber: found.contact?.phoneNo || "",
           schoolEmail: found.contact?.email || "",
           locationUrl: found.locationUrl || "",
+          principalName: found.principalName || "",
+          establishYear: found.establishYear || "",
         });
         setSchoolId(found._id);
       }
@@ -141,20 +187,28 @@ const CreateSchoolModal = ({
   }, [index, data]);
 
   const _updateSchoolAPiCall = async () => {
+    const validationError = validateForm();
+    if (validationError) {
+      setErrorMessage(validationError);
+      return;
+    }
     setLoading(true);
+    setErrorMessage(null);
     try {
       if (schoolId !== undefined) {
         const updateSchoolRes = await updateSchool({ editPayload, schoolId });
         if (!updateSchoolRes?.error) {
           fetchAllSchoolData(currentPage, itemsPerPage);
+          toggle();
+        } else {
+          setErrorMessage(
+            updateSchoolRes.message || "Failed to update school."
+          );
         }
-        console.log(schoolId);
-
-        toggle();
-        console.log(updateSchoolRes);
       }
     } catch (error) {
-      console.log(error);
+      setErrorMessage("An error occurred while updating the school.");
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -257,7 +311,9 @@ const CreateSchoolModal = ({
           <Row>
             <Col md="6">
               <FormGroup>
-                <Label>Location Url</Label>
+                <Label>
+                  Location Url<span style={{ color: "red" }}>*</span>
+                </Label>
                 <Input
                   type="text"
                   name="locationUrl"
@@ -340,6 +396,28 @@ const CreateSchoolModal = ({
                   type="text"
                   name="website"
                   value={formData.website}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="3">
+              <FormGroup>
+                <Label>Principal Name</Label>
+                <Input
+                  type="text"
+                  name="principalName"
+                  value={formData.principalName}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="3">
+              <FormGroup>
+                <Label>Establish Year</Label>
+                <Input
+                  type="text"
+                  name="establishYear"
+                  value={formData.establishYear}
                   onChange={handleInputChange}
                 />
               </FormGroup>
@@ -438,6 +516,11 @@ const CreateSchoolModal = ({
             </Col>
           </Row>
         </div>
+        {errorMessage && (
+          <Alert color="danger" style={{ marginTop: "5px" }}>
+            {errorMessage}
+          </Alert>
+        )}
         <div className="inlineBtnWrapper">
           <Button color="primary" outline onClick={_closeModal}>
             Cancel
