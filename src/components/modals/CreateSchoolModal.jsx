@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
   Modal,
@@ -9,6 +9,7 @@ import {
   Row,
   Col,
   Input,
+  Spinner,
 } from "reactstrap";
 import stateData from "../../State.json";
 import { createSchool, updateSchool } from "../../http/http-calls";
@@ -20,11 +21,14 @@ const CreateSchoolModal = ({
   index,
   data,
   fetchAllSchoolData,
+  currentPage,
+  itemsPerPage,
 }) => {
   const _closeModal = () => {
     toggle();
   };
   const [schoolId, setSchoolId] = useState();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     schoolName: "",
     city: "",
@@ -43,7 +47,7 @@ const CreateSchoolModal = ({
     locationUrl: "",
   });
 
-  const payload = {
+  const createPayload = {
     name: formData.schoolName,
     schoolAddress: {
       city: formData.city,
@@ -56,10 +60,7 @@ const CreateSchoolModal = ({
       email: formData.schoolEmail,
       website: formData.website,
     },
-    location: {
-      type: "Point",
-      coordinates: [73.323, 88.323],
-    },
+    locationUrl: formData.locationUrl,
     email: formData.email,
     firstName: formData.firstName,
     lastName: formData.lastName,
@@ -67,14 +68,41 @@ const CreateSchoolModal = ({
     gender: formData.gender,
     phone: formData.phoneNumber,
   };
-
+  const editPayload = {
+    name: formData.schoolName,
+    address: {
+      city: formData.city,
+      state: formData.state,
+      country: formData.country,
+      pinCode: formData.pinCode,
+    },
+    contact: {
+      phoneNo: formData.SchoolPhNumber,
+      email: formData.schoolEmail,
+      website: formData.website,
+    },
+    locationUrl: formData.locationUrl,
+    admin: {
+      email: formData.email,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      dob: formData.DOB,
+      gender: formData.gender,
+      phone: formData.phoneNumber,
+    },
+  };
   const _createSchoolAPiCall = async () => {
+    setLoading(true);
     try {
-      const createSchoolApi = await createSchool(payload);
-      toggle();
-      console.log(createSchoolApi);
+      const createSchoolApiRes = await createSchool(createPayload);
+      if (!createSchoolApiRes.error) {
+        fetchAllSchoolData(currentPage, itemsPerPage);
+        toggle();
+      }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false); // Set loading to false after the API call finishes
     }
   };
 
@@ -102,7 +130,7 @@ const CreateSchoolModal = ({
           lastName: found.admin?.lastName || "",
           DOB: found.admin?.dob || "",
           gender: found.admin?.gender || "",
-          phoneNumber: found.admin?.phoneNumber || "",
+          phoneNumber: found.admin?.phone || "",
           SchoolPhNumber: found.contact?.phoneNo || "",
           schoolEmail: found.contact?.email || "",
           locationUrl: found.locationUrl || "",
@@ -113,11 +141,12 @@ const CreateSchoolModal = ({
   }, [index, data]);
 
   const _updateSchoolAPiCall = async () => {
+    setLoading(true);
     try {
       if (schoolId !== undefined) {
-        const updateSchoolRes = await updateSchool({ payload, schoolId });
+        const updateSchoolRes = await updateSchool({ editPayload, schoolId });
         if (!updateSchoolRes?.error) {
-          fetchAllSchoolData();
+          fetchAllSchoolData(currentPage, itemsPerPage);
         }
         console.log(schoolId);
 
@@ -126,195 +155,289 @@ const CreateSchoolModal = ({
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
+  const [imageUrl, setImageUrl] = useState(""); // State to store image URL
+  const uploadedImage = useRef(null);
 
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imagePreviewUrl = URL.createObjectURL(file);
+      console.log(imagePreviewUrl);
+      setImageUrl(imagePreviewUrl);
+    }
+  };
   return (
     <Modal isOpen={isOpen} toggle={_closeModal} scrollable centered size="lg">
-      <ModalHeader>{pageName}</ModalHeader>
+      <ModalHeader toggle={toggle}>{pageName}</ModalHeader>
       <ModalBody>
-        {console.log("schoollId", schoolId)}
-        <h6>Add School details</h6>
-        <FormGroup>
-          <Label>School Name</Label>
-          <Input
-            type="text"
-            name="schoolName"
-            value={formData.schoolName}
-            onChange={handleInputChange}
+        <div className="userAvatar" style={{ textAlign: "center" }}>
+          <img
+            ref={uploadedImage}
+            src={
+              imageUrl
+                ? imageUrl
+                : "https://www.shutterstock.com/image-vector/image-icon-trendy-flat-style-260nw-643080895.jpg"
+            }
+            alt="Profile"
+            style={{
+              width: "200px",
+              height: "200px",
+              borderRadius: "50%",
+              objectFit: "cover",
+            }}
           />
-        </FormGroup>
-        <Row>
-          <Col md="6">
-            <FormGroup>
-              <Label>City</Label>
-              <Input
-                type="text"
-                name="city"
-                value={formData.city}
-                onChange={handleInputChange}
-              />
-            </FormGroup>
-          </Col>
-          <Col md="6">
-            <FormGroup>
-              <Label>State</Label>
-              <Input
-                type="select"
-                name="state"
-                value={formData.state}
-                onChange={handleInputChange}
-              >
-                <option>Select State</option>
-                {stateData.states?.map((curr) => (
-                  <option key={curr.value} value={curr.state}>
-                    {curr.state}
-                  </option>
-                ))}
-              </Input>
-            </FormGroup>
-          </Col>
-        </Row>
-        <Row>
-          <Col md="6">
-            <FormGroup>
-              <Label>Country</Label>
-              <Input
-                type="select"
-                name="country"
-                value={formData.country}
-                onChange={handleInputChange}
-              >
-                <option>Select Country</option>
-                <option value="India">India</option>
-              </Input>
-            </FormGroup>
-          </Col>
-          <Col md="6">
-            <FormGroup>
-              <Label>PinCode</Label>
-              <Input
-                type="text"
-                name="pinCode"
-                value={formData.pinCode}
-                onChange={handleInputChange}
-              />
-            </FormGroup>
-          </Col>
-        </Row>
-        <Row>
-          <Col md="6">
-            <FormGroup>
-              <Label>School Phone Number</Label>
-              <Input
-                type="text"
-                name="SchoolPhNumber"
-                value={formData.SchoolPhNumber}
-                onChange={handleInputChange}
-              />
-            </FormGroup>
-          </Col>
-          <Col md="6">
-            <FormGroup>
-              <Label>School Email</Label>
-              <Input
-                type="text"
-                name="schoolEmail"
-                value={formData.schoolEmail}
-                onChange={handleInputChange}
-              />
-            </FormGroup>
-          </Col>
-        </Row>
-        <FormGroup>
-          <Label>Location Url</Label>
-          <Input
-            type="text"
-            name="locationUrl"
-            value={formData.locationUrl}
-            onChange={handleInputChange}
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label>Website</Label>
-          <Input
-            type="text"
-            name="website"
-            value={formData.website}
-            onChange={handleInputChange}
-          />
-        </FormGroup>
-        <h6>Add Admin details</h6>
-        <FormGroup>
-          <Label>Email</Label>
-          <Input
-            type="text"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-          />
-        </FormGroup>
-        <Row>
-          <Col md="6">
-            <FormGroup>
-              <Label>First Name</Label>
-              <Input
-                type="text"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleInputChange}
-              />
-            </FormGroup>
-          </Col>
-          <Col md="6">
-            <FormGroup>
-              <Label>Last Name</Label>
-              <Input
-                type="text"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleInputChange}
-              />
-            </FormGroup>
-          </Col>
-        </Row>
-        <Row>
-          <Col md="6">
-            <FormGroup>
-              <Label>DOB</Label>
-              <Input
-                type="date"
-                name="DOB"
-                value={formData.DOB}
-                onChange={handleInputChange}
-              />
-            </FormGroup>
-          </Col>
-          <Col md="6">
-            <FormGroup>
-              <Label>Gender</Label>
-              <Input
-                type="select"
-                name="gender"
-                value={formData.gender}
-                onChange={handleInputChange}
-              >
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </Input>
-            </FormGroup>
-          </Col>
-        </Row>
-        <FormGroup>
-          <Label>Phone Number</Label>
-          <Input
-            type="text"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleInputChange}
-          />
-        </FormGroup>
+        </div>
+        <div style={{ margin: "auto", maxWidth: "300px", marginTop: "10px" }}>
+          <FormGroup>
+            <Input
+              name="file"
+              type="file"
+              accept="image/*"
+              multiple={false} // should be boolean not string
+              onChange={handleImageUpload}
+              style={{ maxHeight: "35px" }}
+            />
+          </FormGroup>
+        </div>
+        <h6>School details</h6>
+        <div
+          style={{
+            // border: "1px solid black",
+            padding: "3%",
+            backgroundColor: "#e6f4f5",
+            borderRadius: "10px",
+            marginBottom: "5px",
+          }}
+        >
+          <Row>
+            <Col md="4">
+              <FormGroup>
+                <Label>
+                  School Name<span style={{ color: "red" }}>*</span>
+                </Label>
+                <Input
+                  type="text"
+                  name="schoolName"
+                  value={formData.schoolName}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4">
+              <FormGroup>
+                <Label>
+                  School Phone Number<span style={{ color: "red" }}>*</span>
+                </Label>
+                <Input
+                  type="text"
+                  name="SchoolPhNumber"
+                  value={formData.SchoolPhNumber}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4">
+              <FormGroup>
+                <Label>
+                  School Email<span style={{ color: "red" }}>*</span>
+                </Label>
+                <Input
+                  type="text"
+                  name="schoolEmail"
+                  value={formData.schoolEmail}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row>
+            <Col md="6">
+              <FormGroup>
+                <Label>Location Url</Label>
+                <Input
+                  type="text"
+                  name="locationUrl"
+                  value={formData.locationUrl}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="6">
+              <FormGroup>
+                <Label>
+                  City<span style={{ color: "red" }}>*</span>
+                </Label>
+                <Input
+                  type="text"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col md="4">
+              <FormGroup>
+                <Label>
+                  State<span style={{ color: "red" }}>*</span>
+                </Label>
+                <Input
+                  type="select"
+                  name="state"
+                  value={formData.state}
+                  onChange={handleInputChange}
+                >
+                  <option>Select State</option>
+                  {stateData.states?.map((curr) => (
+                    <option key={curr.value} value={curr.state}>
+                      {curr.state}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
+            </Col>
+            <Col md="4">
+              <FormGroup>
+                <Label>
+                  Country <span style={{ color: "red" }}>*</span>
+                </Label>
+                <Input
+                  type="select"
+                  name="country"
+                  value={formData.country}
+                  onChange={handleInputChange}
+                >
+                  <option>Select Country</option>
+                  <option value="India">India</option>
+                </Input>
+              </FormGroup>
+            </Col>
+            <Col md="4">
+              <FormGroup>
+                <Label>
+                  PinCode<span style={{ color: "red" }}>*</span>
+                </Label>
+                <Input
+                  type="text"
+                  name="pinCode"
+                  value={formData.pinCode}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row>
+            <Col md="6">
+              <FormGroup>
+                <Label>Website</Label>
+                <Input
+                  type="text"
+                  name="website"
+                  value={formData.website}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+            </Col>
+          </Row>
+        </div>
+
+        <h6>Admin details</h6>
+        <div
+          style={{
+            padding: "3%",
+            backgroundColor: "#ebf7ff",
+            borderRadius: "10px",
+          }}
+        >
+          <Row>
+            <Col md="4">
+              <FormGroup>
+                <Label>
+                  Email<span style={{ color: "red" }}>*</span>
+                </Label>
+                <Input
+                  type="text"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4">
+              <FormGroup>
+                <Label>
+                  First Name<span style={{ color: "red" }}>*</span>
+                </Label>
+                <Input
+                  type="text"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="4">
+              <FormGroup>
+                <Label>
+                  Last Name<span style={{ color: "red" }}>*</span>
+                </Label>
+                <Input
+                  type="text"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row>
+            <Col md="3">
+              <FormGroup>
+                <Label>DOB</Label>
+                <Input
+                  type="date"
+                  name="DOB"
+                  value={formData.DOB}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md="3">
+              <FormGroup>
+                <Label>Gender</Label>
+                <Input
+                  type="select"
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </Input>
+              </FormGroup>
+            </Col>
+            <Col md="6">
+              <FormGroup>
+                <Label>
+                  Phone Number<span style={{ color: "red" }}>*</span>
+                </Label>
+                <Input
+                  type="text"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
+            </Col>
+          </Row>
+        </div>
         <div className="inlineBtnWrapper">
           <Button color="primary" outline onClick={_closeModal}>
             Cancel
@@ -324,16 +447,32 @@ const CreateSchoolModal = ({
               color="primary"
               className="ms-3"
               onClick={() => _createSchoolAPiCall()}
+              disabled={loading}
             >
-              {pageName}
+              {loading ? (
+                <>
+                  <Spinner size="sm">Loading...</Spinner>
+                  <span style={{ color: "white" }}> Creating...</span>
+                </>
+              ) : (
+                pageName
+              )}
             </Button>
           ) : (
             <Button
               color="primary"
               className="ms-3"
               onClick={() => _updateSchoolAPiCall()}
+              disabled={loading}
             >
-              {pageName}
+              {loading ? (
+                <>
+                  <Spinner size="sm">Loading...</Spinner>
+                  <span style={{ color: "white" }}> Update...</span>
+                </>
+              ) : (
+                pageName
+              )}
             </Button>
           )}
         </div>

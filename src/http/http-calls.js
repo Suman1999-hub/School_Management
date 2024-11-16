@@ -167,9 +167,9 @@ export const findAllTeacher = () => {
 };
 
 //edit School
-export const updateSchool = ({ payload, schoolId }) => {
+export const updateSchool = ({ editPayload, schoolId }) => {
   return new Promise((resolve, reject) => {
-    makePutRequest(`${BASE_URL}/school/${schoolId}`, true, payload)
+    makePutRequest(`${BASE_URL}/school/${schoolId}`, true, editPayload)
       .then((res) => {
         resolve(res);
       })
@@ -434,6 +434,22 @@ export const UpdateLeaveStatus = ({ id, payload }) => {
 export const getClassStudents = ({ payload }) => {
   return new Promise((resolve, reject) => {
     makePostRequest(`${BASE_URL}/class/students`, true, payload)
+      .then((res) => {
+        resolve(res);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+// Mark Student Attendance
+
+export const markStudentAttendance = ({ payload }) => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/markattendance`, true, payload)
       .then((res) => {
         resolve(res);
         console.log(res);
