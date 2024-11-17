@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
   Modal,
@@ -16,7 +16,7 @@ import {
   createStudent,
   updateStudent,
 } from "../../http/http-calls";
-import { errorHandler } from "../../helper-methods";
+import { errorHandler, successHandler } from "../../helper-methods";
 
 const AddStudentModal = ({
   isOpen,
@@ -32,7 +32,7 @@ const AddStudentModal = ({
   };
 
   console.log("studentDetails", studentDetails);
-
+  
   const [formData, setFormData] = useState({
     locality: studentDetails?.address?.locality || "",
     city: studentDetails?.address?.city || "",
@@ -55,6 +55,9 @@ const AddStudentModal = ({
     joinDate: studentDetails?.joinDate || "",
     profileUrl: studentDetails?.profileUrl || "",
   });
+
+  const [profileUrl, setProfileUrl] = useState(formData?.profileUrl || ""); // State to store image URL
+  const uploadedImage = useRef(null);
 
   const payload = {
     firstName: formData?.firstName,
@@ -110,7 +113,7 @@ const AddStudentModal = ({
         console.log(updateStudentRes);
       }
     } catch (error) {
-      errorHandler(error);
+      successHandler(error);
     }
     _closeModal();
   };
@@ -124,6 +127,15 @@ const AddStudentModal = ({
     }));
   };
 
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imagePreviewUrl = URL.createObjectURL(file);
+      console.log(imagePreviewUrl);
+      setProfileUrl(imagePreviewUrl);
+    }
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -132,7 +144,7 @@ const AddStudentModal = ({
       centered
       style={{ maxWidth: "600px" }}
     >
-      {pageName === "Create Student" ? (
+      {pageName === "Add Student" ? (
         <ModalHeader>Add Student</ModalHeader>
       ) : (
         <ModalHeader>Edit Student</ModalHeader>
@@ -141,9 +153,10 @@ const AddStudentModal = ({
       <ModalBody>
         <div className="userAvatar" style={{ textAlign: "center" }}>
           <img
+          ref={uploadedImage}
             src={
-              formData?.profileUrl
-                ? formData?.profileUrl
+              profileUrl
+                ? profileUrl
                 : "https://isobarscience-1bfd8.kxcdn.com/wp-content/uploads/2020/09/default-profile-picture1.jpg"
               // : require("../../assets/img/SidebarMenu/user .png")
             }
@@ -158,14 +171,15 @@ const AddStudentModal = ({
         </div>
         <div style={{ margin: "auto", maxWidth: "300px", marginTop: "10px" }}>
           <FormGroup>
-            <Input name="file" type="file" style={{ maxHeight: "35px" }} />
+            <Input name="file" type="file" style={{ maxHeight: "35px" }}               onChange={handleImageUpload}
+            />
           </FormGroup>
         </div>
         <div>
           <Row>
             <Col md="6">
               <FormGroup>
-                <Label>First Name</Label>
+                <Label>First Name<span style={{ color: "red" }}>*</span></Label>
                 <Input
                   type="text"
                   name="firstName"
@@ -187,7 +201,7 @@ const AddStudentModal = ({
             </Col>
             <Col md="6">
               <FormGroup>
-                <Label>Class</Label>
+                <Label>Class<span style={{ color: "red" }}>*</span></Label>
                 <Input
                   type="select"
                   name="class"
@@ -210,7 +224,7 @@ const AddStudentModal = ({
             </Col>
             <Col md="6">
               <FormGroup>
-                <Label>Section</Label>
+                <Label>Section<span style={{ color: "red" }}>*</span></Label>
                 <Input
                   type="select"
                   name="section"
@@ -229,22 +243,18 @@ const AddStudentModal = ({
               <FormGroup>
                 <Label>Academic-Year</Label>
                 <Input
-                  type="select"
-                  name="currentAcademicYear"
+                disabled
+                  // name="currentAcademicYear"
                   value={formData.currentAcademicYear}
-                  onChange={handleInputChange}
+                  // onChange={handleInputChange}
                 >
-                  <option value="">Select Academic-Year</option>
-                  <option value="2024-2025">2024-2025</option>
-                  <option value="2025-2026<">2025-2026</option>
-                  <option value="2026-2027">2026-2027</option>
-                  {/* <option value="Others">Others</option> */}
+                  
                 </Input>
               </FormGroup>
             </Col>
             <Col md="6">
               <FormGroup>
-                <Label>Gender</Label>
+                <Label>Gender<span style={{ color: "red" }}>*</span></Label>
                 <Input
                   type="select"
                   name="gender"
@@ -261,7 +271,7 @@ const AddStudentModal = ({
             </Col>
             <Col md="6">
               <FormGroup>
-                <Label>dob</Label>
+                <Label>dob<span style={{ color: "red" }}>*</span></Label>
                 <Input
                   type="date"
                   name="dob"
@@ -273,7 +283,7 @@ const AddStudentModal = ({
           </Row>
 
           <FormGroup>
-            <Label>Father's Name</Label>
+            <Label>Father's Name<span style={{ color: "red" }}>*</span></Label>
             <Input
               type="text"
               name="fathersName"
@@ -282,7 +292,7 @@ const AddStudentModal = ({
             />
           </FormGroup>
           <FormGroup>
-            <Label>Father's Occupation</Label>
+            <Label>Father's Occupation<span style={{ color: "red" }}>*</span></Label>
             <Input
               type="text"
               name="fathersOccupation"
@@ -291,7 +301,7 @@ const AddStudentModal = ({
             />
           </FormGroup>
           <FormGroup>
-            <Label>mothersName</Label>
+            <Label>mothersName<span style={{ color: "red" }}>*</span></Label>
             <Input
               type="text"
               name="mothersName"
@@ -300,7 +310,7 @@ const AddStudentModal = ({
             />
           </FormGroup>
           <FormGroup>
-            <Label>Mother's Occupation</Label>
+            <Label>Mother's Occupation<span style={{ color: "red" }}>*</span></Label>
             <Input
               type="text"
               name="mothersOccupation"
@@ -311,7 +321,7 @@ const AddStudentModal = ({
           <h6>Address</h6>
           <Row>
             <FormGroup>
-              <Label>locality</Label>
+              <Label>locality<span style={{ color: "red" }}>*</span></Label>
               <Input
                 type="text"
                 name="locality"
@@ -321,7 +331,7 @@ const AddStudentModal = ({
             </FormGroup>
             <Col md="6">
               <FormGroup>
-                <Label>City</Label>
+                <Label>City<span style={{ color: "red" }}>*</span></Label>
                 <Input
                   type="text"
                   name="city"
@@ -332,7 +342,7 @@ const AddStudentModal = ({
             </Col>
             <Col md="6">
               <FormGroup>
-                <Label>State</Label>
+                <Label>State<span style={{ color: "red" }}>*</span></Label>
                 <Input
                   type="select"
                   name="state"
@@ -352,7 +362,7 @@ const AddStudentModal = ({
           <Row>
             <Col md="6">
               <FormGroup>
-                <Label>Country</Label>
+                <Label>Country<span style={{ color: "red" }}>*</span></Label>
                 <Input
                   type="select"
                   name="country"
@@ -366,7 +376,7 @@ const AddStudentModal = ({
             </Col>
             <Col md="6">
               <FormGroup>
-                <Label>pin</Label>
+                <Label>pin<span style={{ color: "red" }}>*</span></Label>
                 <Input
                   type="text"
                   name="pin"
@@ -386,7 +396,7 @@ const AddStudentModal = ({
             />
           </FormGroup>
           <FormGroup>
-            <Label>Mobile no.</Label>
+            <Label>Mobile no.<span style={{ color: "red" }}>*</span></Label>
             <Input
               type="text"
               name="phone"
@@ -399,7 +409,7 @@ const AddStudentModal = ({
             <Button color="primary" outline onClick={() => _closeModal()}>
               Cancel
             </Button>
-            {pageName === "Create Student" ? (
+            {pageName === "Add Student" ? (
               <Button
                 color="primary"
                 className="ms-3"

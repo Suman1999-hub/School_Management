@@ -4,8 +4,6 @@ import {
   Card,
   FormGroup,
   Input,
-  InputGroup,
-  InputGroupText,
   Label,
   Table,
   TabPane,
@@ -20,21 +18,53 @@ import {
   formatDatell,
   getFormattedDate,
 } from "../../helper-methods";
+import { getClassStudents, markStudentAttendance } from "../../http/http-calls";
+
 const localizer = momentLocalizer(moment);
 
 function Attendance() {
-  const [state, setState] = useState("Absent");
-
+  const [btnState, setBtnState] = useState({});
+  const [error, setError] = useState("");
   const [value, onChange] = useState(new Date());
 
   const [selectedDate, setSelectedDate] = useState(getFormattedDate());
+  const [studentsData, setStudentsData] = useState();
 
   const handleDateChange = (e) => {
     setSelectedDate(e.target.value);
   };
+
   const userLoginType = useSelector(
     (state) => state.userCredential.user.loginType
   );
+
+  const [acedemicYear, setAcedemicYear] = useState("");
+  const [classInput, setClassInput] = useState("");
+  const [section, setSection] = useState("");
+
+  const _getAllStudent = async () => {
+    const payload = {
+      academicYear: acedemicYear,
+      classname: classInput,
+      section: section,
+    };
+    try {
+      const getClassStudentRes = await getClassStudents({ payload });
+      setStudentsData(getClassStudentRes);
+      console.log(getClassStudentRes);
+    } catch (err) {
+      console.log(err);
+      setError(err.reason);
+    }
+  };
+
+  const handleAttendance = (rollNo) => {
+    setBtnState((prevState) => ({
+      ...prevState,
+      [rollNo]: !prevState[rollNo],
+    }));
+  };
+
   return (
     <>
       {userLoginType === "student" && (
@@ -58,48 +88,57 @@ function Attendance() {
             >
               <div className="formGroup" style={{ marginRight: "20px" }}>
                 <Label>Acedemic Year</Label>
-                <Input type="select">
-                  <option>2024-2025</option>
-                  <option>2023-2024</option>
-                  <option>2022-2023</option>
-                  <option>2021-2022</option>
-                  <option>2020-2021</option>
-                  <option>2019-2020</option>
-                  <option>2018-2019</option>
-                  <option>2017-2018</option>
-                  <option>2016-2017</option>
-                  <option>2015-2016</option>
-                  <option>2014-2015</option>
-                  <option>2013-2014</option>
+                <Input
+                  type="select"
+                  onChange={(e) => setAcedemicYear(e.target.value)}
+                >
+                  <option value="">Select Acedemic Year</option>
+                  <option value="2024-2025">2024-2025</option>
+                  <option value="2023-2024">2023-2024</option>
+                  <option value="2022-2023">2022-2023</option>
+                  <option value="2021-2022">2021-2022</option>
+                  <option value="2020-2021">2020-2021</option>
                 </Input>
               </div>
               <div className="formGroup" style={{ marginRight: "20px" }}>
                 <Label>Class</Label>
-                <Input type="select">
-                  <option>Select Class</option>
-                  <option>5</option>
-                  <option>6</option>
-                  <option>7</option>
-                  <option>8</option>
+                <Input
+                  type="select"
+                  onChange={(e) => setClassInput(e.target.value)}
+                >
+                  <option value="">Select Class</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
                 </Input>
               </div>
               <div className="formGroup" style={{ marginRight: "20px" }}>
-                <Label>Sction</Label>
-                <Input type="select">
-                  <option>Select Section</option>
-                  <option>A</option>
-                  <option>B</option>
-                  <option>C</option>
+                <Label>Section</Label>
+                <Input
+                  type="select"
+                  onChange={(e) => setSection(e.target.value)}
+                >
+                  <option value="">Select Section</option>
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="C">C</option>
                 </Input>
               </div>
 
               <div className="d-flex justify-content-center mt-4">
-                <Button color="primary" className="btn-submit">
+                <Button
+                  color="primary"
+                  className="btn-submit"
+                  onClick={() => _getAllStudent()}
+                >
                   Search
                 </Button>
               </div>
             </div>
-
+            {error !== "" ? <span style={{ color: "red" }}>{error}</span> : ""}
             {/* Personal Information */}
             <section>
               <div className="innerHeader">
@@ -132,468 +171,106 @@ function Attendance() {
                   </thead>
 
                   <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>Jon roy</td>
-                      <td>Male</td>
-                      <td>8777667698</td>
-                      <td>
-                        <div
-                          style={{
-                            display: "flex", // Arrange radios horizontally
-                            gap: "10px", // Spacing between radios
-                          }}
-                        >
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio-absent.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <FormGroup switch>
-                          <Input
-                            type="switch"
-                            checked={state}
-                            onClick={() => setState(!state)}
-                            style={{
-                              width: "50px",
-                              height: "28px",
-                              position: "relative",
-                              accentColor: state ? "#0d6efd" : "#dd9aed",
-                              borderRadius: "50px",
-                              boxShadow:
-                                "rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px",
-                              transition: "all 0.3s ease",
-                              backgroundColor: state ? "#0d6efd" : "#dd9aed",
-                            }}
-                          />
-                          {/* <Label
-                        check
-                        style={{
-                          paddingLeft: "15px",
-                          fontWeight: "bold",
-                          fontSize: "1rem",
-                          color: state ? "#0d6efd" : "#797b85",
-                          transition: "color 0.3s ease",
-                        }}
-                      >
-                        {state ? "Present" : " Absent"}
-                      </Label> */}
-                        </FormGroup>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td>Jon roy</td>
-                      <td>Male</td>
-                      <td>8777667698</td>
-                      <td>
-                        <div
-                          style={{
-                            display: "flex", // Arrange radios horizontally
-                            gap: "10px", // Spacing between radios
-                          }}
-                        >
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio-absent.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <FormGroup switch>
-                          <Input
-                            type="switch"
-                            checked={state}
-                            onClick={() => setState(!state)}
-                            style={{
-                              width: "50px",
-                              height: "28px",
-                              position: "relative",
-                              accentColor: state ? "#0d6efd" : "#dd9aed",
-                              borderRadius: "50px",
-                              boxShadow:
-                                "rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px",
-                              transition: "all 0.3s ease",
-                              backgroundColor: state ? "#0d6efd" : "#dd9aed",
-                            }}
-                          />
-                          {/* <Label
-                        check
-                        style={{
-                          paddingLeft: "15px",
-                          fontWeight: "bold",
-                          fontSize: "1rem",
-                          color: state ? "#0d6efd" : "#797b85",
-                          transition: "color 0.3s ease",
-                        }}
-                      >
-                        {state ? "Present" : " Absent"}
-                      </Label> */}
-                        </FormGroup>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td>Jon roy</td>
-                      <td>Male</td>
-                      <td>8777667698</td>
-                      <td>
-                        <div
-                          style={{
-                            display: "flex", // Arrange radios horizontally
-                            gap: "10px", // Spacing between radios
-                          }}
-                        >
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio-absent.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <FormGroup switch>
-                          <Input
-                            type="switch"
-                            checked={state}
-                            onClick={() => setState(!state)}
-                            style={{
-                              width: "50px",
-                              height: "28px",
-                              position: "relative",
-                              accentColor: state ? "#0d6efd" : "#dd9aed",
-                              borderRadius: "50px",
-                              boxShadow:
-                                "rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px",
-                              transition: "all 0.3s ease",
-                              backgroundColor: state ? "#0d6efd" : "#dd9aed",
-                            }}
-                          />
-                          {/* <Label
-                        check
-                        style={{
-                          paddingLeft: "15px",
-                          fontWeight: "bold",
-                          fontSize: "1rem",
-                          color: state ? "#0d6efd" : "#797b85",
-                          transition: "color 0.3s ease",
-                        }}
-                      >
-                        {state ? "Present" : " Absent"}
-                      </Label> */}
-                        </FormGroup>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td>Jon roy</td>
-                      <td>Male</td>
-                      <td>8777667698</td>
-                      <td>
-                        <div
-                          style={{
-                            display: "flex", // Arrange radios horizontally
-                            gap: "10px", // Spacing between radios
-                          }}
-                        >
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio-absent.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <FormGroup switch>
-                          <Input
-                            type="switch"
-                            checked={state}
-                            onClick={() => setState(!state)}
-                            style={{
-                              width: "50px",
-                              height: "28px",
-                              position: "relative",
-                              accentColor: state ? "#0d6efd" : "#dd9aed",
-                              borderRadius: "50px",
-                              boxShadow:
-                                "rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px",
-                              transition: "all 0.3s ease",
-                              backgroundColor: state ? "#0d6efd" : "#dd9aed",
-                            }}
-                          />
-                          {/* <Label
-                        check
-                        style={{
-                          paddingLeft: "15px",
-                          fontWeight: "bold",
-                          fontSize: "1rem",
-                          color: state ? "#0d6efd" : "#797b85",
-                          transition: "color 0.3s ease",
-                        }}
-                      >
-                        {state ? "Present" : " Absent"}
-                      </Label> */}
-                        </FormGroup>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td>Jon roy</td>
-                      <td>Male</td>
-                      <td>8777667698</td>
-                      <td>
-                        <div
-                          style={{
-                            display: "flex", // Arrange radios horizontally
-                            gap: "10px", // Spacing between radios
-                          }}
-                        >
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio-absent.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <FormGroup switch>
-                          <Input
-                            type="switch"
-                            checked={state}
-                            onClick={() => setState(!state)}
-                            style={{
-                              width: "50px",
-                              height: "28px",
-                              position: "relative",
-                              accentColor: state ? "#0d6efd" : "#dd9aed",
-                              borderRadius: "50px",
-                              boxShadow:
-                                "rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px",
-                              transition: "all 0.3s ease",
-                              backgroundColor: state ? "#0d6efd" : "#dd9aed",
-                            }}
-                          />
-                          {/* <Label
-                        check
-                        style={{
-                          paddingLeft: "15px",
-                          fontWeight: "bold",
-                          fontSize: "1rem",
-                          color: state ? "#0d6efd" : "#797b85",
-                          transition: "color 0.3s ease",
-                        }}
-                      >
-                        {state ? "Present" : " Absent"}
-                      </Label> */}
-                        </FormGroup>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td>Jon roy</td>
-                      <td>Male</td>
-                      <td>8777667698</td>
-                      <td>
-                        <div
-                          style={{
-                            display: "flex", // Arrange radios horizontally
-                            gap: "10px", // Spacing between radios
-                          }}
-                        >
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio-absent.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                          <img
-                            src={require(`../../assets/img/radio.png`)}
-                            alt=""
-                            style={{ maxWidth: "30px", maxHeight: "30px" }}
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <FormGroup switch>
-                          <Input
-                            type="switch"
-                            checked={state}
-                            onClick={() => setState(!state)}
-                            style={{
-                              width: "50px",
-                              height: "28px",
-                              position: "relative",
-                              accentColor: state ? "#0d6efd" : "#dd9aed",
-                              borderRadius: "50px",
-                              boxShadow:
-                                "rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px",
-                              transition: "all 0.3s ease",
-                              backgroundColor: state ? "#0d6efd" : "#dd9aed",
-                            }}
-                          />
-                          {/* <Label
-                        check
-                        style={{
-                          paddingLeft: "15px",
-                          fontWeight: "bold",
-                          fontSize: "1rem",
-                          color: state ? "#0d6efd" : "#797b85",
-                          transition: "color 0.3s ease",
-                        }}
-                      >
-                        {state ? "Present" : " Absent"}
-                      </Label> */}
-                        </FormGroup>
-                      </td>
-                    </tr>
+                    {studentsData?.students?.length > 0 ? (
+                      studentsData?.students?.map((curr) => {
+                        return (
+                          <tr key={curr.rollNo}>
+                            <td>{curr.rollNo}</td>
+                            <td>
+                              {curr.firstName} {curr.lastName}
+                            </td>
+                            <td>{curr.gender}</td>
+                            <td>{curr.phone}</td>
+                            <td>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  gap: "10px",
+                                }}
+                              >
+                                {/* Example attendance icons, customize as needed */}
+                                <img
+                                  src={require(`../../assets/img/radio.png`)}
+                                  alt=""
+                                  style={{
+                                    maxWidth: "30px",
+                                    maxHeight: "30px",
+                                  }}
+                                />
+                                <img
+                                  src={require(`../../assets/img/radio.png`)}
+                                  alt=""
+                                  style={{
+                                    maxWidth: "30px",
+                                    maxHeight: "30px",
+                                  }}
+                                />
+                                <img
+                                  src={require(`../../assets/img/radio.png`)}
+                                  alt=""
+                                  style={{
+                                    maxWidth: "30px",
+                                    maxHeight: "30px",
+                                  }}
+                                />
+                                <img
+                                  src={require(`../../assets/img/radio-absent.png`)}
+                                  alt=""
+                                  style={{
+                                    maxWidth: "30px",
+                                    maxHeight: "30px",
+                                  }}
+                                />
+                                <img
+                                  src={require(`../../assets/img/radio.png`)}
+                                  alt=""
+                                  style={{
+                                    maxWidth: "30px",
+                                    maxHeight: "30px",
+                                  }}
+                                />
+                                <img
+                                  src={require(`../../assets/img/radio.png`)}
+                                  alt=""
+                                  style={{
+                                    maxWidth: "30px",
+                                    maxHeight: "30px",
+                                  }}
+                                />
+                              </div>
+                            </td>
+                            <td>
+                              <FormGroup switch>
+                                <Input
+                                  type="switch"
+                                  checked={btnState[curr?._id] || false}
+                                  onClick={() => handleAttendance(curr?._id)}
+                                  style={{
+                                    width: "50px",
+                                    height: "28px",
+                                    position: "relative",
+                                    accentColor: btnState[curr?._id]
+                                      ? "#0d6efd"
+                                      : "#dd9aed",
+                                    borderRadius: "50px",
+                                    boxShadow:
+                                      "rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px",
+                                    transition: "all 0.3s ease",
+                                    backgroundColor: btnState[curr?._id]
+                                      ? "#0d6efd"
+                                      : "#dd9aed",
+                                  }}
+                                />
+                              </FormGroup>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    ) : (
+                      <h6 style={{ textAlign: "center", color: "red" }}>
+                        No Data Found
+                      </h6>
+                    )}
                   </tbody>
                 </Table>
               </Card>

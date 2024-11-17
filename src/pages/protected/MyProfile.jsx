@@ -18,6 +18,7 @@ import {
 } from "../../helper-methods";
 import { getLoggedInUserDetail, updateProfile } from "../../http/http-calls";
 import { useSelector } from "react-redux";
+import SpinnerLoading from "../../components/SpinnerLoading";
 
 const AllGender = ["Male", "Female"];
 
@@ -29,12 +30,18 @@ const MyProfile = () => {
   const [address, setAddress] = useState({});
   const [DOB, setDOB] = useState(null);
   const [isChanged, setIsChanged] = useState(false);
-  console.log("isChanged>>", isChanged);
+  const [isLoading, setIsLoading] = useState(true);
+  const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+  const phoneRegex = /^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/;
+  const [errors, setErrors] = useState({});
+  console.log("updatedUserDetails>>", updatedUserDetails);
   const _toggleTab = (newTab = "1") => {
     if (activeTab !== newTab) setActiveTab(newTab);
   };
 
   const fetchuserDetails = async () => {
+    setIsLoading(true);
+
     try {
       const response = await getLoggedInUserDetail();
       // console.log("response>>", response.user);
@@ -42,6 +49,8 @@ const MyProfile = () => {
       setUserDetails(response.user);
     } catch (error) {
       errorHandler(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -57,20 +66,6 @@ const MyProfile = () => {
     }
   }, [updatedUserDetails.dob]);
 
-  // const checkChanges = (userDetails, updatedNewDetails) => {
-  //   console.log("updatedNewDetails>>", updatedNewDetails);
-  //   console.log("userDetails>>", userDetails);
-
-  //   const updatedChange = CheckFormUpdate(userDetails, updatedNewDetails);
-  //   console.log("updatedChange>>", updatedChange);
-
-  //   if (updatedChange) {
-  //     setIsChanged(true)
-  //   } else {
-  //     setIsChanged(false)
-  //   }
-  // }
-
   const handleChange = (event, field) => {
     setIsChanged(true);
     if (field === "dob") {
@@ -84,6 +79,7 @@ const MyProfile = () => {
     } else {
       setIsChanged(false);
     }
+    validateForm(updatedNewDetails);
   };
 
   const handleAddress = (event, field) => {
@@ -143,6 +139,68 @@ const MyProfile = () => {
     return Object.keys(changes).length > 0 ? changes : null;
   };
 
+  const validateForm = (updatedUserDetails) => {
+    const updatedErrors = { ...errors };
+    let isFormValid = true;
+    return new Promise((resolve) => {
+      Object.keys(updatedUserDetails).forEach((each) => {
+        switch (each) {
+          case "firstName":
+            if (updatedUserDetails?.firstName) {
+              delete updatedErrors?.firstName;
+            } else {
+              updatedErrors.firstName = "*Required";
+              isFormValid = false;
+            }
+            setErrors(updatedErrors);
+            break;
+          case "lastName":
+            if (updatedUserDetails?.lastName) {
+              delete updatedErrors?.lastName;
+            } else {
+              updatedErrors.lastName = "*Required";
+              isFormValid = false;
+            }
+            setErrors(updatedErrors);
+            break;
+          case "email":
+            if (updatedUserDetails?.email) {
+              if (emailRegex.test(updatedUserDetails?.email)) {
+                delete updatedErrors?.email;
+              } else {
+                updatedErrors.email = "Invalid email!";
+                isFormValid = false;
+              }
+            } else {
+              updatedErrors.email = "*Required";
+              isFormValid = false;
+            }
+            setErrors(updatedErrors);
+            break;
+            case "phone":
+              if (updatedUserDetails?.phone) {
+                if (phoneRegex.test(updatedUserDetails?.phone)) {
+                  delete updatedErrors?.phone;
+                } else {
+                  updatedErrors.phone = "Invalid phone number!";
+                  isFormValid = false;
+                }
+              } else {
+                updatedErrors.phone = "*Required";
+                isFormValid = false;
+              }
+              setErrors(updatedErrors);
+              break;
+           
+
+          default:
+            break;
+        }
+      });
+      resolve(isFormValid);
+    });
+  };
+
   const handleSave = async () => {
     setIsChanged(false);
     console.log("updatedUserDetails>>", updatedUserDetails);
@@ -150,86 +208,100 @@ const MyProfile = () => {
 
     const payload = _CheckFormUpdate(userDetails, updatedUserDetails);
     console.log("payload>>>", payload);
-
-    try {
-      if (payload) {
-        const response = await updateProfile(payload);
-        // console.log("response>>", response.user);
-        setUpdatedUserDetails(response.user);
-        alert("successfully updated");
-      } else {
-        const message = "Changes up-to-date";
-        successHandler(message);
-        // alert("Changes up-to-date");
+    const isvalid = await validateForm(updatedUserDetails)
+    if (isvalid) {
+      try {
+        if (payload) {
+          const response = await updateProfile(payload);
+          // console.log("response>>", response.user);
+          setUpdatedUserDetails(response.user);
+          alert("successfully updated");
+        } else {
+          const message = "Changes up-to-date";
+          successHandler(message);
+          // alert("Changes up-to-date");
+        }
+      } catch (error) {
+        successHandler(error);
       }
-    } catch (error) {
-      successHandler(error);
+    } else {
+      alert("please fill all the required field correctly!")
     }
   };
 
   return (
     <>
-      <section>
-        <Row className="gy-3 gy-xl-0">
-          <Col xl="4">
-            <Card body className="profileCard">
-              <div className="cardImg">
-                {updatedUserDetails?.profileImage ? (
-                  <img src={updatedUserDetails.profileImage} alt="" />
-                ) : (
-                  <img
-                    src={require("../../assets/img/SidebarMenu/profile.png")}
-                    alt="defult profile image"
-                  />
-                )}
-              </div>
-              <CardTitle>{updatedUserDetails.fullname}</CardTitle>
-              {/* <span>{updatedUserDetails.email}</span> */}
-              <div className="form-group">
-                {/* <Label>Change Profile Photo</Label> */}
-                <div className="customFileUpload">
-                  <Input type="file" id="customFileUpload" />
-                  {true ? (
-                    <Label for="customFileUpload" className="p-3">
-                      <i
-                        className="fa fa-edit"
-                        style={{ fontSize: "25px" }}
-                      ></i>
-
-                      <div className="customUploadText">
-                        <h6>Change Profile Picture</h6>
-                        <span>File size must be less than 5mb</span>
-                      </div>
-                    </Label>
+      {isLoading ? (
+        // Display a loading spinner or message when data is loading
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: "auto",
+          }}
+        >
+          <SpinnerLoading />
+        </div>
+      ) : (
+        <section>
+          <Row className="gy-3 gy-xl-0">
+            <Col xl="4">
+              <Card body className="profileCard">
+                <div className="cardImg">
+                  {updatedUserDetails?.profileImage ? (
+                    <img src={updatedUserDetails.profileImage} alt="" />
                   ) : (
-                    <Label for="customFileUpload" className="uploaded p-3">
-                      <img
-                        src={
-                          require("../../assets/img/sign-up-doc.svg").default
-                        }
-                        alt=""
-                      />
-                      <div className="customUploadText">
-                        <h6>Group 378961.svg</h6>
-                        <span>File size must be less than 5mb</span>
-                      </div>
-                    </Label>
+                    <img
+                      src={require("../../assets/img/SidebarMenu/profile.png")}
+                      alt="defult profile image"
+                    />
                   )}
                 </div>
-              </div>
-            </Card>
+                <CardTitle>{updatedUserDetails.fullname}</CardTitle>
+                {/* <span>{updatedUserDetails.email}</span> */}
+                <div className="form-group">
+                  {/* <Label>Change Profile Photo</Label> */}
+                  <div className="customFileUpload">
+                    <Input type="file" id="customFileUpload" />
+                    {true ? (
+                      <Label for="customFileUpload" className="p-3">
+                        <i
+                          className="fa fa-edit"
+                          style={{ fontSize: "25px" }}
+                        ></i>
 
-            <hr />
-          </Col>
-          <Col xl="8">
-            <Card body>
-              <div>
-                <h6>Basic Info</h6>
+                        <div className="customUploadText">
+                          <h6>Change Profile Picture</h6>
+                          <span>File size must be less than 5mb</span>
+                        </div>
+                      </Label>
+                    ) : (
+                      <Label for="customFileUpload" className="uploaded p-3">
+                        <img
+                          src={
+                            require("../../assets/img/sign-up-doc.svg").default
+                          }
+                          alt=""
+                        />
+                        <div className="customUploadText">
+                          <h6>Group 378961.svg</h6>
+                          <span>File size must be less than 5mb</span>
+                        </div>
+                      </Label>
+                    )}
+                  </div>
+                </div>
+              </Card>
 
-                <Row>
-                  <Col md="6" lg="4">
-                    {/* name */}
-                    {/* {updatedUserDetails.firstName && ( */}
+              <hr />
+            </Col>
+            <Col xl="8">
+              <Card body>
+                <div>
+                  <h6>Basic Info</h6>
+
+                  <Row>
+                    <Col md="6" lg="4">
+                      {/* name */}
                       <div className="form-group">
                         <Label>First Name</Label>
                         <Input
@@ -237,12 +309,24 @@ const MyProfile = () => {
                           value={updatedUserDetails?.firstName || ""}
                           onChange={(e) => handleChange(e, "firstName")}
                         />
+                        {/* Display error message below the input */}
+                        {errors?.firstName && (
+                          <p
+                            style={{
+                              color: "red",
+                              fontSize: "12px",
+                              marginTop: "5px",
+                            }}
+                          >
+                            {errors.firstName}
+                          </p>
+                        )}
                       </div>
-                    {/* )} */}
-                  </Col>
-                  <Col md="6" lg="4">
-                    {/* name */}
-                    {/* {updatedUserDetails.lastName && ( */}
+                    </Col>
+
+                    <Col md="6" lg="4">
+                      {/* name */}
+                      {/* {updatedUserDetails.lastName && ( */}
                       <div className="form-group">
                         <Label>Last Name</Label>
                         <Input
@@ -250,309 +334,377 @@ const MyProfile = () => {
                           value={updatedUserDetails?.lastName || ""}
                           onChange={(e) => handleChange(e, "lastName")}
                         />
+                        {errors?.lastName && (
+                          <p
+                            style={{
+                              color: "red",
+                              fontSize: "12px",
+                              marginTop: "5px",
+                            }}
+                          >
+                            {errors.lastName}
+                          </p>
+                        )}
                       </div>
-                    {/* )} */}
-                  </Col>
-                  <Col md="6" lg="4">
-                    {/* phone number */}
-                    {updatedUserDetails.gender && (
-                      <div className="form-group">
-                        <Label>Gender</Label>
-                        {updatedUserDetails.loginType === "student" ? (
-                          <Input disabled value={updatedUserDetails.gender} />
-                        ) : (
+                      {/* )} */}
+                    </Col>
+                    
+
+                    <Col md="6" lg="4">
+                      {/* phone number */}
+                      {updatedUserDetails.gender && (
+                        <div className="form-group">
+                          <Label>Gender</Label>
+                          {updatedUserDetails.loginType === "student" ? (
+                            <Input disabled value={updatedUserDetails.gender} />
+                          ) : (
+                            <Input
+                              type="select"
+                              value={updatedUserDetails.gender}
+                              onChange={(e) => handleChange(e, "gender")}
+                              disabled={
+                                updatedUserDetails.loginType === "student"
+                              }
+                            >
+                              <option hidden>Select</option>
+                              {AllGender.map((gender, index) => (
+                                <option key={index} value={gender}>
+                                  {gender}
+                                </option>
+                              ))}
+                            </Input>
+                          )}
+                        </div>
+                      )}
+                    </Col>
+                    {updatedUserDetails?.class?.name ? (
+                      <Col md="6" lg="4">
+                        {/* Login Type */}
+                        <div className="form-group">
+                          <Label>Class</Label>
                           <Input
-                            type="select"
-                            value={updatedUserDetails.gender}
-                            onChange={(e) => handleChange(e, "gender")}
+                            disabled
+                            value={updatedUserDetails.class.name}
+                          />
+                        </div>
+                      </Col>
+                    ) : (
+                      ""
+                    )}
+
+                    {updatedUserDetails?.class?.section ? (
+                      <Col md="6" lg="4">
+                        {/* Login Type */}
+                        <div className="form-group">
+                          <Label>Section</Label>
+                          <Input
+                            disabled
+                            value={updatedUserDetails.class.section}
+                          />
+                        </div>
+                      </Col>
+                    ) : (
+                      ""
+                    )}
+                    {updatedUserDetails?.rollNo ? (
+                      <Col md="6" lg="4">
+                        {/* Login Type */}
+                        <div className="form-group">
+                          <Label>Roll No.</Label>
+                          <Input disabled value={updatedUserDetails.rollNo} />
+                        </div>
+                      </Col>
+                    ) : (
+                      ""
+                    )}
+
+                    {updatedUserDetails?.currentAcademicYear ? (
+                      <Col md="6" lg="4">
+                        {/* Login Type */}
+                        <div className="form-group">
+                          <Label>Academic-Year</Label>
+                          <Input
+                            disabled
+                            value={updatedUserDetails.currentAcademicYear}
+                          />
+                        </div>
+                      </Col>
+                    ) : (
+                      ""
+                    )}
+                    <Col md="6" lg="4">
+                      {/* Year of Birth */}
+                      {DOB && (
+                        <div className="form-group">
+                          <Label>Date of Birth</Label>
+                          <Input
                             disabled={
                               updatedUserDetails.loginType === "student"
                             }
-                          >
-                            <option hidden>Select</option>
-                            {AllGender.map((gender, index) => (
-                              <option key={index} value={gender}>
-                                {gender}
-                              </option>
-                            ))}
-                          </Input>
+                            type="date"
+                            value={DOB || ""}
+                            onChange={(e) => handleChange(e, "dob")}
+                          ></Input>
+                        </div>
+                      )}
+                    </Col>
+                    {updatedUserDetails.isSuperAdmin !== true && (
+                      <Col md="6" lg="4">
+                        {/* Last 4 SSN */}
+                        {updatedUserDetails.username && (
+                          <div className="form-group">
+                            <Label>Username</Label>
+                            <InputGroup>
+                              <Input
+                                disabled
+                                placeholder="Enter your Username"
+                                type="text"
+                                value={updatedUserDetails?.username || ""}
+                              />
+                            </InputGroup>
+                          </div>
                         )}
-                      </div>
+                      </Col>
                     )}
-                  </Col>
-                  {updatedUserDetails?.class?.name ? (
-                    <Col md="6" lg="4">
-                      {/* Login Type */}
-                      <div className="form-group">
-                        <Label>Class</Label>
-                        <Input disabled value={updatedUserDetails.class.name} />
-                      </div>
-                    </Col>
-                  ) : (
-                    ""
-                  )}
 
-                  {updatedUserDetails?.class?.section ? (
-                    <Col md="6" lg="4">
-                      {/* Login Type */}
-                      <div className="form-group">
-                        <Label>Section</Label>
-                        <Input
-                          disabled
-                          value={updatedUserDetails.class.section}
-                        />
-                      </div>
-                    </Col>
-                  ) : (
-                    ""
-                  )}
-                  {updatedUserDetails?.rollNo ? (
-                    <Col md="6" lg="4">
-                      {/* Login Type */}
-                      <div className="form-group">
-                        <Label>Roll No.</Label>
-                        <Input disabled value={updatedUserDetails.rollNo} />
-                      </div>
-                    </Col>
-                  ) : (
-                    ""
-                  )}
-
-                  {updatedUserDetails?.currentAcademicYear ? (
-                    <Col md="6" lg="4">
-                      {/* Login Type */}
-                      <div className="form-group">
-                        <Label>Academic-Year</Label>
-                        <Input
-                          disabled
-                          value={updatedUserDetails.currentAcademicYear}
-                        />
-                      </div>
-                    </Col>
-                  ) : (
-                    ""
-                  )}
-                  <Col md="6" lg="4">
-                    {/* Year of Birth */}
-                    {DOB && (
-                      <div className="form-group">
-                        <Label>Date of Birth</Label>
-                        <Input
-                          disabled={updatedUserDetails.loginType === "student"}
-                          type="date"
-                          value={DOB || ""}
-                          onChange={(e) => handleChange(e, "dob")}
-                        ></Input>
-                      </div>
-                    )}
-                  </Col>
-                  <Col md="6" lg="4">
-                    {/* Last 4 SSN */}
-                    {updatedUserDetails.username && (
-                      <div className="form-group">
-                        <Label>Username</Label>
-                        <InputGroup>
+                    {updatedUserDetails?.guardian?.fathersName ? (
+                      <Col md="6" lg="4">
+                        {/* Login Type */}
+                        <div className="form-group">
+                          <Label>Father's Name</Label>
                           <Input
                             disabled
-                            placeholder="Enter your Username"
-                            type="text"
-                            value={updatedUserDetails?.username || ""}
+                            value={
+                              updatedUserDetails?.guardian?.fathersName || ""
+                            }
                           />
-                        </InputGroup>
-                      </div>
-                    )}
-                  </Col>
-
-                  {updatedUserDetails?.guardian?.fathersName ? (
-                    <Col md="6" lg="4">
-                      {/* Login Type */}
-                      <div className="form-group">
-                        <Label>Father's Name</Label>
-                        <Input
-                          disabled
-                          value={updatedUserDetails?.guardian?.fathersName || ""}
-                        />
-                      </div>
-                    </Col>
-                  ) : (
-                    ""
-                  )}
-
-                  {updatedUserDetails?.guardian?.fathersOccupation ? (
-                    <Col md="6" lg="4">
-                      {/* Login Type */}
-                      <div className="form-group">
-                        <Label>Father's Occupation</Label>
-                        <Input
-                          disabled
-                          value={updatedUserDetails?.guardian?.fathersOccupation || ""}
-                        />
-                      </div>
-                    </Col>
-                  ) : (
-                    ""
-                  )}
-
-                  {updatedUserDetails?.guardian?.mothersName ? (
-                    <Col md="6" lg="4">
-                      {/* Login Type */}
-                      <div className="form-group">
-                        <Label>Mother's Name</Label>
-                        <Input
-                          disabled
-                          value={updatedUserDetails?.guardian?.mothersName || ""}
-                        />
-                      </div>
-                    </Col>
-                  ) : (
-                    ""
-                  )}
-
-                  {updatedUserDetails?.guardian?.mothersOccupation ? (
-                    <Col md="6" lg="4">
-                      {/* Login Type */}
-                      <div className="form-group">
-                        <Label>Mother's Name</Label>
-                        <Input
-                          disabled
-                          value={updatedUserDetails?.guardian?.mothersOccupation || ""}
-                        />
-                      </div>
-                    </Col>
-                  ) : (
-                    ""
-                  )}
-
-                  <Col md="6" lg="4">
-                    {/* Email */}
-                    {updatedUserDetails.email ? (
-                      <div className="form-group">
-                        <Label>Email</Label>
-                        <Input
-                          disabled={updatedUserDetails.loginType === "student"}
-                          placeholder="Enter your email"
-                          value={updatedUserDetails?.email || ""}
-                          onChange={(e) => handleChange(e, "email")}
-                        />
-                      </div>
+                        </div>
+                      </Col>
                     ) : (
-                      <div className="form-group">
-                        <Label>Email</Label>
-                        <Input
-                          disabled={updatedUserDetails.loginType === "student"}
-                          placeholder="No email ID Given"
-                          value={""}
-                          onChange={(e) => handleChange(e, "email")}
-                        />
-                      </div>
+                      ""
                     )}
-                  </Col>
 
-                  <Col md="6" lg="4">
-                    {/* phone number */}
-                    {updatedUserDetails.phone && (
-                      <div className="form-group">
-                        <Label>Phone Number</Label>
-                        <Input
-                          type="number"
-                          disabled={updatedUserDetails.loginType === "student"}
-                          placeholder="Enter your Phone Number"
-                          value={updatedUserDetails.phone}
-                          onChange={(e) => handleChange(e, "phone")}
-                        />
-                      </div>
+                    {updatedUserDetails?.guardian?.fathersOccupation ? (
+                      <Col md="6" lg="4">
+                        {/* Login Type */}
+                        <div className="form-group">
+                          <Label>Father's Occupation</Label>
+                          <Input
+                            disabled
+                            value={
+                              updatedUserDetails?.guardian?.fathersOccupation ||
+                              ""
+                            }
+                          />
+                        </div>
+                      </Col>
+                    ) : (
+                      ""
                     )}
-                  </Col>
-                </Row>
-                <h6>Address</h6>
-                {/* Current Address */}
-                {updatedUserDetails.address && (
-                  <div className="form-group">
-                    <Label>Locality</Label>
-                    <Input
-                      type="text"
-                      placeholder="Enter your Address"
-                      value={updatedUserDetails.address.locality}
-                      onChange={(e) => handleAddress(e, "locality")}
-                    />
-                  </div>
-                )}
-                <Row className="gy-3 gy-xl-0">
-                  <Col lg="6" xl="4">
-                    {/* City */}
-                    {updatedUserDetails.address && (
-                      <div className="form-group mb-0">
-                        <Label>City</Label>
-                        <Input
-                          placeholder="Enter your City"
-                          type="text"
-                          value={updatedUserDetails.address.city}
-                          onChange={(e) => handleAddress(e, "city")}
-                        ></Input>
-                      </div>
-                    )}
-                  </Col>
 
-                  <Col lg="6" xl="4">
-                    {/* State */}
-                    {updatedUserDetails.address && (
-                      <div className="form-group mb-0">
-                        <Label>State</Label>
-                        <Input
-                          type="text"
-                          value={updatedUserDetails.address.state}
-                          onChange={(e) => handleAddress(e, "state")}
-                        ></Input>
-                      </div>
+                    {updatedUserDetails?.guardian?.mothersName ? (
+                      <Col md="6" lg="4">
+                        {/* Login Type */}
+                        <div className="form-group">
+                          <Label>Mother's Name</Label>
+                          <Input
+                            disabled
+                            value={
+                              updatedUserDetails?.guardian?.mothersName || ""
+                            }
+                          />
+                        </div>
+                      </Col>
+                    ) : (
+                      ""
                     )}
-                  </Col>
 
-                  <Col lg="6" xl="4">
-                    {/* Zip */}
-                    {updatedUserDetails.address && (
-                      <div className="form-group mb-0">
-                        <Label>Pin</Label>
-                        <Input
-                          type="number"
-                          placeholder="Enter your Pin Code"
-                          value={updatedUserDetails.address.pin}
-                          onChange={(e) => handleAddress(e, "pin")}
-                        />
-                      </div>
+                    {updatedUserDetails?.guardian?.mothersOccupation ? (
+                      <Col md="6" lg="4">
+                        {/* Login Type */}
+                        <div className="form-group">
+                          <Label>Mother's Name</Label>
+                          <Input
+                            disabled
+                            value={
+                              updatedUserDetails?.guardian?.mothersOccupation ||
+                              ""
+                            }
+                          />
+                        </div>
+                      </Col>
+                    ) : (
+                      ""
                     )}
-                  </Col>
 
-                  <Col lg="6" xl="4">
-                    {/* Zip */}
-                    {updatedUserDetails.address && (
-                      <div className="form-group mb-0">
-                        <Label>Country</Label>
-                        <Input
-                          type="text"
-                          value={updatedUserDetails.address.country}
-                          onChange={(e) => handleAddress(e, "country")}
-                        ></Input>
-                      </div>
-                    )}
-                  </Col>
-                </Row>
-              </div>
-            </Card>
-          </Col>
-        </Row>
+                    <Col md="6" lg="4">
+                      {/* Email */}
+                      {updatedUserDetails.email ? (
+                        <div className="form-group">
+                          <Label>Email</Label>
+                          <Input
+                            disabled={
+                              updatedUserDetails.loginType === "student"
+                            }
+                            placeholder="Enter your email"
+                            value={updatedUserDetails?.email || ""}
+                            onChange={(e) => handleChange(e, "email")}
+                          />
+                           {errors?.email && (
+                          <p
+                            style={{
+                              color: "red",
+                              fontSize: "12px",
+                              marginTop: "5px",
+                            }}
+                          >
+                            {errors.email}
+                          </p>
+                        )}
+                        </div>
+                      ) : (
+                        <div className="form-group">
+                          <Label>Email</Label>
+                          <Input
+                            disabled={
+                              updatedUserDetails.loginType === "student"
+                            }
+                            placeholder="No email ID Given"
+                            value={""}
+                            onChange={(e) => handleChange(e, "email")}
+                          />
+                          {errors?.email && (
+                          <p
+                            style={{
+                              color: "red",
+                              fontSize: "12px",
+                              marginTop: "5px",
+                            }}
+                          >
+                            {errors.email}
+                          </p>
+                        )}
+                        </div>
+                      )}
+                    </Col>
 
-        {/* submit button */}
-        <div className="d-flex justify-content-center mt-5">
-          <Button
-            hidden={!isChanged}
-            color="primary"
-            className="btn-submit"
-            onClick={handleSave}
-          >
-            Save Changes
-          </Button>
-        </div>
-      </section>
+                    <Col md="6" lg="4">
+                      {/* phone number */}
+                        <div className="form-group">
+                          <Label>Phone Number</Label>
+                          <Input
+                            type="number"
+                            disabled={
+                              updatedUserDetails.loginType === "student"
+                            }
+                            placeholder="Enter your Phone Number"
+                            value={updatedUserDetails.phone || ""}
+                            onChange={(e) => handleChange(e, "phone")}
+                          />
+                          {errors?.phone && (
+                          <p
+                            style={{
+                              color: "red",
+                              fontSize: "12px",
+                              marginTop: "5px",
+                            }}
+                          >
+                            {errors.phone}
+                          </p>
+                        )}
+                        </div>
+                    </Col>
+                  </Row>
+                  <h6>Address</h6>
+                  {/* Current Address */}
+                  {updatedUserDetails.address && (
+                    <div className="form-group">
+                      <Label>Locality</Label>
+                      <Input
+                        type="text"
+                        placeholder="Enter your Address"
+                        value={updatedUserDetails.address.locality}
+                        onChange={(e) => handleAddress(e, "locality")}
+                      />
+                    </div>
+                  )}
+                  <Row className="gy-3 gy-xl-0">
+                    <Col lg="6" xl="4">
+                      {/* City */}
+                      {updatedUserDetails.address && (
+                        <div className="form-group mb-0">
+                          <Label>City</Label>
+                          <Input
+                            placeholder="Enter your City"
+                            type="text"
+                            value={updatedUserDetails.address.city}
+                            onChange={(e) => handleAddress(e, "city")}
+                          ></Input>
+                        </div>
+                      )}
+                    </Col>
+
+                    <Col lg="6" xl="4">
+                      {/* State */}
+                      {updatedUserDetails.address && (
+                        <div className="form-group mb-0">
+                          <Label>State</Label>
+                          <Input
+                            type="text"
+                            value={updatedUserDetails.address.state}
+                            onChange={(e) => handleAddress(e, "state")}
+                          ></Input>
+                        </div>
+                      )}
+                    </Col>
+
+                    <Col lg="6" xl="4">
+                      {/* Zip */}
+                      {updatedUserDetails.address && (
+                        <div className="form-group mb-0">
+                          <Label>Pin</Label>
+                          <Input
+                            type="number"
+                            placeholder="Enter your Pin Code"
+                            value={updatedUserDetails.address.pin}
+                            onChange={(e) => handleAddress(e, "pin")}
+                          />
+                        </div>
+                      )}
+                    </Col>
+
+                    <Col lg="6" xl="4">
+                      {/* Zip */}
+                      {updatedUserDetails.address && (
+                        <div className="form-group mb-0">
+                          <Label>Country</Label>
+                          <Input
+                            type="text"
+                            value={updatedUserDetails.address.country}
+                            onChange={(e) => handleAddress(e, "country")}
+                          ></Input>
+                        </div>
+                      )}
+                    </Col>
+                  </Row>
+                </div>
+              </Card>
+            </Col>
+          </Row>
+
+          {/* submit button */}
+          <div className="d-flex justify-content-center mt-5">
+            <Button
+              hidden={!isChanged}
+              color="primary"
+              className="btn-submit"
+              onClick={handleSave}
+            >
+              Save Changes
+            </Button>
+          </div>
+        </section>
+      )}
     </>
   );
 };

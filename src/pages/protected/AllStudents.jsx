@@ -213,7 +213,7 @@ function AllStudents() {
         {isOpenModal && (
         <AddStudentModal
           isOpen={isOpenModal}
-          pageName="Create Student"
+          pageName="Add Student"
           toggle={() => _toggleModal()}
           fetchAllStudentData={() => fetchAllStudentData()}
         />
