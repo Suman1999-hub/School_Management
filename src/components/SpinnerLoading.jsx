@@ -1,24 +1,15 @@
 import React from "react";
-import { Spinner } from "reactstrap";
+import { InfinitySpin } from "react-loader-spinner";
 
 function SpinnerLoading() {
   return (
     <div>
-      <Spinner color="primary" type="grow">
-        Loading...
-      </Spinner>
-      <Spinner color="success" type="grow">
-        Loading...
-      </Spinner>
-      <Spinner color="danger" type="grow">
-        Loading...
-      </Spinner>
-      <Spinner color="warning" type="grow">
-        Loading...
-      </Spinner>
-      <Spinner color="info" type="grow">
-        Loading...
-      </Spinner>
+      <InfinitySpin
+        visible={true}
+        width="200"
+        color="#006aff"
+        ariaLabel="infinity-spin-loading"
+      />
     </div>
   );
 }

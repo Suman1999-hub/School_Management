@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getAllNotices } from "../../http/http-calls";
 import { formatDatell } from "../../helper-methods";
+import SpinnerLoading from "../../components/SpinnerLoading";
 
 function Notice() {
   const [filters, setFilters] = useState({
@@ -26,6 +27,7 @@ function Notice() {
     },
   });
   const [allNotice, setAllNotice] = useState();
+  const [isLoading, setIsLoading] = useState(true);
 
   const UserloginType = useSelector(
     (state) => state.userCredential.user.loginType
@@ -43,6 +45,7 @@ function Notice() {
 
   const _getAllNotice = async () => {
     let payload = {};
+    setIsLoading(true);
     if (UserloginType === "teacher") {
       payload = {
         type: "teacher",
@@ -58,6 +61,8 @@ function Notice() {
       setAllNotice(allNoticeRes.notices);
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsLoading(false);
     }
   };
   console.log(allNotice);
@@ -66,124 +71,138 @@ function Notice() {
   }, []);
   return (
     <>
-      {UserloginType === "admin" ? (
-        <div className="innerHeader">
-          <h2> </h2>
-          <Link to="/notice/createnotice">
-            <Button color="primary">Create Notice</Button>
-          </Link>
+      {isLoading ? (
+        // Display a loading spinner or message when data is loading
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: "auto",
+          }}
+        >
+          <SpinnerLoading />
         </div>
       ) : (
-        ""
-      )}
+        <>
+          {UserloginType === "admin" ? (
+            <div className="innerHeader">
+              <h2> </h2>
+              <Link to="/notice/createnotice">
+                <Button color="primary">Create Notice</Button>
+              </Link>
+            </div>
+          ) : (
+            ""
+          )}
 
-      <TabPane tabId="1" className="mt-5">
-        {/* filter */}
-        <div className="filterWrapper">
-          <div className="filterIcon">
-            <i className="fas fa-filter" />
-          </div>
+          <TabPane tabId="1" className="mt-5">
+            {/* filter */}
+            <div className="filterWrapper">
+              <div className="filterIcon">
+                <i className="fas fa-filter" />
+              </div>
 
-          <div className="filterForm">
-            <div className="formGroup">
-              <Label>Notice Date</Label>
-              <CustomDateRangePicker
-                startDate={filters.dateRange.startDate}
-                endDate={filters.dateRange.endDate}
-                startDateId={"startDate_kpi_dashboard"}
-                endDateId={`endDate_kpi_dashboard`}
-                onDatesChange={(startDate, endDate) =>
-                  _onDatesChange(startDate, endDate)
-                }
-              />
+              <div className="filterForm">
+                <div className="formGroup">
+                  <Label>Notice Date</Label>
+                  <CustomDateRangePicker
+                    startDate={filters.dateRange.startDate}
+                    endDate={filters.dateRange.endDate}
+                    startDateId={"startDate_kpi_dashboard"}
+                    endDateId={`endDate_kpi_dashboard`}
+                    onDatesChange={(startDate, endDate) =>
+                      _onDatesChange(startDate, endDate)
+                    }
+                  />
+                </div>
+
+                <div className="formGroup">
+                  <Label>Notice Type</Label>
+                  <Input type="select">
+                    <option>All</option>
+                    <option>Basic Subscription</option>
+                    <option>Premium Subscription</option>
+                  </Input>
+                </div>
+
+                {/* search */}
+                <div className="formGroup searchbar">
+                  <Label>Search</Label>
+                  <InputGroup>
+                    <Input placeholder="Search..." />
+                    <InputGroupText>
+                      <i className="fas fa-search" />
+                    </InputGroupText>
+                  </InputGroup>
+                </div>
+              </div>
             </div>
 
-            <div className="formGroup">
-              <Label>Notice Type</Label>
-              <Input type="select">
-                <option>All</option>
-                <option>Basic Subscription</option>
-                <option>Premium Subscription</option>
-              </Input>
-            </div>
-
-            {/* search */}
-            <div className="formGroup searchbar">
-              <Label>Search</Label>
-              <InputGroup>
-                <Input placeholder="Search..." />
-                <InputGroupText>
-                  <i className="fas fa-search" />
-                </InputGroupText>
-              </InputGroup>
-            </div>
-          </div>
-        </div>
-
-        {/* Personal Information */}
-        <section>
-          <h6>Notice</h6>
-          <Card body>
-            <Table responsive>
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Description</th>
-                  <th>Notice Type</th>
-                  <th>Date</th>
-                  <th>Download</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {allNotice?.map((curr) => {
-                  console.log(curr?.attachments?.[0]?.url);
-                  return (
+            {/* Personal Information */}
+            <section>
+              <h6>Notice</h6>
+              <Card body>
+                <Table responsive>
+                  <thead>
                     <tr>
-                      <td>
-                        <Link to={`/notice/${curr._id}`}>
-                          {curr?.title ? curr?.title : "-"}
-                        </Link>
-                      </td>
-
-                      <td>
-                        {curr?.description?.length > 50
-                          ? `${curr.description.substring(0, 50)}...`
-                          : curr?.description}
-                      </td>
-                      <td>{curr?.noticeType ? curr?.noticeType : "-"}</td>
-
-                      <td>
-                        {curr?.postedDate
-                          ? formatDatell(curr?.postedDate)
-                          : "-"}
-                      </td>
-                      <td>
-                        {curr?.attachments?.length > 0 ? (
-                          <a href={curr?.attachments?.[0]?.url} download>
-                            <img
-                              src={require("../../assets/img/download.png")}
-                              alt=""
-                              width="20px"
-                            />
-                          </a>
-                        ) : (
-                          ""
-                        )}
-                      </td>
+                      <th>Title</th>
+                      <th>Description</th>
+                      <th>Notice Type</th>
+                      <th>Date</th>
+                      <th>Download</th>
                     </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
+                  </thead>
 
-            {/* See More */}
-            {/* <Button color="link" className="h-auto mb-2">
+                  <tbody>
+                    {allNotice?.map((curr) => {
+                      console.log(curr?.attachments?.[0]?.url);
+                      return (
+                        <tr>
+                          <td>
+                            <Link to={`/notice/${curr._id}`}>
+                              {curr?.title ? curr?.title : "-"}
+                            </Link>
+                          </td>
+
+                          <td>
+                            {curr?.description?.length > 50
+                              ? `${curr.description.substring(0, 50)}...`
+                              : curr?.description}
+                          </td>
+                          <td>{curr?.noticeType ? curr?.noticeType : "-"}</td>
+
+                          <td>
+                            {curr?.postedDate
+                              ? formatDatell(curr?.postedDate)
+                              : "-"}
+                          </td>
+                          <td>
+                            {curr?.attachments?.length > 0 ? (
+                              <a href={curr?.attachments?.[0]?.url} download>
+                                <img
+                                  src={require("../../assets/img/download.png")}
+                                  alt=""
+                                  width="20px"
+                                />
+                              </a>
+                            ) : (
+                              ""
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </Table>
+
+                {/* See More */}
+                {/* <Button color="link" className="h-auto mb-2">
               See More <i className="fa fa-chevron-down"></i>
             </Button> */}
-          </Card>
-        </section>
-      </TabPane>
+              </Card>
+            </section>
+          </TabPane>
+        </>
+      )}
     </>
   );
 }

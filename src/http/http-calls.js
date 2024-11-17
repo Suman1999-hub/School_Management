@@ -152,9 +152,9 @@ export const findAllStudent = () => {
   });
 };
 //all teacher Api
-export const findAllTeacher = () => {
+export const findAllTeacher = (payload) => {
   return new Promise((resolve, reject) => {
-    makePostRequest(`${BASE_URL}/admin/teachers`, true)
+    makePostRequest(`${BASE_URL}/admin/teachers`, true, payload)
       .then((res) => {
         resolve(res);
         console.log(res);

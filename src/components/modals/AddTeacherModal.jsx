@@ -393,7 +393,12 @@ const AddTeacherModal = ({
 
             {/* submit button */}
             <div className="inlineBtnWrapper">
-              <Button color="primary" outline onClick={() => _closeModal()}>
+              <Button
+                color="primary"
+                outline
+                onClick={() => _closeModal()}
+                disabled={loading}
+              >
                 Cancel
               </Button>
               {pageName === "Create Teacher" ? (

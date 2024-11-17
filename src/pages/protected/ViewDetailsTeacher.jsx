@@ -15,15 +15,18 @@ import { ActivateDeactivate, getTeacherdetails } from "../../http/http-calls";
 import { Link, useParams } from "react-router-dom";
 import { dateFormat, getAddressFormate } from "../../helper-methods";
 import AddTeacherModal from "../../components/modals/AddTeacherModal";
+import SpinnerLoading from "../../components/SpinnerLoading";
 
 function ViewDetailsTeacher() {
   const [teacherData, setTeacherData] = useState();
   const [isActive, setIsActive] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
 
   const { id } = useParams();
 
   const _getTeacherAPiCall = async () => {
+    setIsLoading(true);
     try {
       const getTeacherApiRes = await getTeacherdetails({ id });
       setTeacherData(getTeacherApiRes?.user);
@@ -31,6 +34,8 @@ function ViewDetailsTeacher() {
       console.log("getTeacherApiRes", getTeacherApiRes.user);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -39,20 +44,22 @@ function ViewDetailsTeacher() {
       flag: data,
     };
     try {
-      await ActivateDeactivate({
+      const activateDeactivateApiRes = await ActivateDeactivate({
         payload,
         id,
       });
+      if (!activateDeactivateApiRes.error) {
+        _getTeacherAPiCall();
+      }
     } catch (err) {
-      console.log(err);
+      console.log("Error activating and deactivating teacher:", err);
     }
   };
 
   const handleChangeActiveDeactive = (e) => {
     console.log(e.target.value);
     const newActiveStatus = e.target.value;
-    if (newActiveStatus === false) {
-    }
+
     setIsActive(newActiveStatus);
     console.log("isActive", isActive);
     _AactivateDeactivateApiCall(e.target.value);
@@ -67,144 +74,160 @@ function ViewDetailsTeacher() {
   }, []);
 
   return (
-    <div>
-      <Card
-        style={{
-          maxWidth: "50rem",
-          margin: "auto",
-          marginTop: "10px",
-        }}
-      >
-        <CardBody>
-          <div className="innerHeader">
-            <h2>Teacher</h2>
-            <div style={{ display: "flex" }}>
-              <div>
-                <Input
-                  type="select"
-                  value={Boolean(isActive)}
-                  style={{
-                    maxHeight: "35px",
-                    marginTop: "10px",
-                  }}
-                  onChange={handleChangeActiveDeactive}
-                >
-                  <option value="true">Active</option>
-                  <option value="false">Inactive</option>
-                </Input>
+    <>
+      {isLoading ? (
+        // Display a loading spinner or message when data is loading
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: "auto",
+          }}
+        >
+          <SpinnerLoading />
+        </div>
+      ) : (
+        <div>
+          <Card
+            style={{
+              maxWidth: "50rem",
+              margin: "auto",
+              marginTop: "10px",
+            }}
+          >
+            <CardBody>
+              <div className="innerHeader">
+                <h2>Teacher</h2>
+                <div style={{ display: "flex" }}>
+                  <div>
+                    <Input
+                      type="select"
+                      value={Boolean(isActive)}
+                      style={{
+                        maxHeight: "35px",
+                        marginTop: "10px",
+                      }}
+                      onChange={handleChangeActiveDeactive}
+                    >
+                      <option value="true">Active</option>
+                      <option value="false">Inactive</option>
+                    </Input>
+                  </div>
+                  <div>
+                    <Button color="link" onClick={() => _toggleEditModal(true)}>
+                      <img
+                        src={require("../../assets/img/edit.png")}
+                        alt=""
+                        width="20px"
+                        className="float-end"
+                      />
+                    </Button>
+                  </div>
+                </div>
               </div>
-              <div>
-                <Button color="link" onClick={() => _toggleEditModal(true)}>
+
+              <div style={{ textAlign: "center" }}>
+                {teacherData?.profileImage ? (
                   <img
-                    src={require("../../assets/img/edit.png")}
+                    src={teacherData?.profileImage}
                     alt=""
-                    width="20px"
-                    className="float-end"
+                    width="100px"
+                    style={{
+                      border: "2px solid aqua",
+                      borderRadius: "10%",
+                    }}
                   />
-                </Button>
+                ) : (
+                  <img
+                    src={require("../../assets/img/SidebarMenu/user .png")}
+                    alt=""
+                    width="100px"
+                    style={{
+                      border: "2px solid aqua",
+                      borderRadius: "50%",
+                    }}
+                  />
+                )}
               </div>
-            </div>
-          </div>
+              <CardTitle className="text-center" tag="h5">
+                {teacherData?.fullName}
+              </CardTitle>
+              <CardSubtitle className="mb-2 text-muted text-center" tag="h6">
+                <img
+                  src={require("../../assets/img/location.png")}
+                  width="30px"
+                  alt="location logo"
+                />
+                <span>
+                  {getAddressFormate(
+                    teacherData?.address?.city || "-",
+                    teacherData?.address?.state || "-",
+                    teacherData?.address?.country || "-",
+                    teacherData?.address?.pin || "-"
+                  )}
+                </span>
+              </CardSubtitle>
+              <CardText>
+                <Row>
+                  <Col md="6">
+                    <Label style={{ fontWeight: "bold" }}>Email</Label>
+                    <div>{teacherData?.email}</div>
+                  </Col>
+                  <Col md="6">
+                    <Label style={{ fontWeight: "bold" }}>Phone Number</Label>
+                    <div>{teacherData?.phone}</div>
+                  </Col>
+                </Row>
+                <Row className="mt-3">
+                  <Col md="6">
+                    <Label style={{ fontWeight: "bold" }}>Date Of Birth</Label>
+                    <div>
+                      {teacherData?.dob ? dateFormat(teacherData?.dob) : "-"}
+                    </div>
+                  </Col>
+                  <Col md="6">
+                    <Label style={{ fontWeight: "bold" }}>
+                      Date of Joining
+                    </Label>
+                    <div>
+                      {teacherData?.joinDate
+                        ? dateFormat(teacherData?.joinDate)
+                        : "-"}
+                    </div>
+                  </Col>
+                </Row>
 
-          <div style={{ textAlign: "center" }}>
-            {teacherData?.profileImage ? (
-              <img
-                src={teacherData?.profileImage}
-                alt=""
-                width="100px"
-                style={{
-                  border: "2px solid aqua",
-                  borderRadius: "10%",
-                }}
-              />
-            ) : (
-              <img
-                src={require("../../assets/img/SidebarMenu/user .png")}
-                alt=""
-                width="100px"
-                style={{
-                  border: "2px solid aqua",
-                  borderRadius: "50%",
-                }}
-              />
-            )}
-          </div>
-          <CardTitle className="text-center" tag="h5">
-            {teacherData?.fullName}
-          </CardTitle>
-          <CardSubtitle className="mb-2 text-muted text-center" tag="h6">
-            <img
-              src={require("../../assets/img/location.png")}
-              width="30px"
-              alt="location logo"
+                <Row className="mt-3">
+                  <Col md="6">
+                    <Label style={{ fontWeight: "bold" }}>Qualification</Label>
+                    <div>
+                      {teacherData?.qualification
+                        ? teacherData?.qualification
+                        : "-"}
+                    </div>
+                  </Col>
+                  <Col md="6">
+                    <Label style={{ fontWeight: "bold" }}>Experience</Label>
+                    <div>
+                      {teacherData?.experience ? teacherData?.experience : "-"}
+                    </div>
+                  </Col>
+                </Row>
+              </CardText>
+            </CardBody>
+          </Card>
+          {isOpenEditModal && (
+            <AddTeacherModal
+              isOpen={isOpenEditModal}
+              pageName="Edit Teacher"
+              toggle={() => _toggleEditModal()}
+              id={id}
+              teacherDetails={teacherData}
+              getTeacherAPiCall={_getTeacherAPiCall}
             />
-            <span>
-              {getAddressFormate(
-                teacherData?.address?.city || "-",
-                teacherData?.address?.state || "-",
-                teacherData?.address?.country || "-",
-                teacherData?.address?.pin || "-"
-              )}
-            </span>
-          </CardSubtitle>
-          <CardText>
-            <Row>
-              <Col md="6">
-                <Label style={{ fontWeight: "bold" }}>Email</Label>
-                <div>{teacherData?.email}</div>
-              </Col>
-              <Col md="6">
-                <Label style={{ fontWeight: "bold" }}>Phone Number</Label>
-                <div>{teacherData?.phone}</div>
-              </Col>
-            </Row>
-            <Row className="mt-3">
-              <Col md="6">
-                <Label style={{ fontWeight: "bold" }}>Date Of Birth</Label>
-                <div>
-                  {teacherData?.dob ? dateFormat(teacherData?.dob) : "-"}
-                </div>
-              </Col>
-              <Col md="6">
-                <Label style={{ fontWeight: "bold" }}>Date of Joining</Label>
-                <div>
-                  {teacherData?.joinDate
-                    ? dateFormat(teacherData?.joinDate)
-                    : "-"}
-                </div>
-              </Col>
-            </Row>
-
-            <Row className="mt-3">
-              <Col md="6">
-                <Label style={{ fontWeight: "bold" }}>Qualification</Label>
-                <div>
-                  {teacherData?.qualification
-                    ? teacherData?.qualification
-                    : "-"}
-                </div>
-              </Col>
-              <Col md="6">
-                <Label style={{ fontWeight: "bold" }}>Experience</Label>
-                <div>
-                  {teacherData?.experience ? teacherData?.experience : "-"}
-                </div>
-              </Col>
-            </Row>
-          </CardText>
-        </CardBody>
-      </Card>
-      {isOpenEditModal && (
-        <AddTeacherModal
-          isOpen={isOpenEditModal}
-          pageName="Edit Teacher"
-          toggle={() => _toggleEditModal()}
-          id={id}
-          teacherDetails={teacherData}
-          getTeacherAPiCall={_getTeacherAPiCall}
-        />
+          )}
+        </div>
       )}
-    </div>
+    </>
   );
 }
 

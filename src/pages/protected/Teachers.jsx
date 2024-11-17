@@ -10,7 +10,6 @@ import {
   TabPane,
 } from "reactstrap";
 import CustomDateRangePicker from "../../components/CustomDateRangePicker";
-
 import AddTeacherModal from "../../components/modals/AddTeacherModal";
 import PaginatedItems from "../../components/PaginatedItems";
 import { findAllTeacher } from "../../http/http-calls";
