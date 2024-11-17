@@ -21,6 +21,7 @@ import {
 } from "../../http/http-calls";
 import { useSelector } from "react-redux";
 import { formatDatell } from "../../helper-methods";
+import SpinnerLoading from "../../components/SpinnerLoading";
 
 function Approval() {
   const [filters, setFilters] = useState({
@@ -44,6 +45,7 @@ function Approval() {
   const _toggleModal = (isOpenModal = false) => {
     setIsOpenModal(isOpenModal);
   };
+  const [isLoading, setIsLoading] = useState(true);
 
   const [activeTab, setActiveTab] = useState("1");
   const _toggleTab = (newTab = "1") => {
@@ -51,11 +53,14 @@ function Approval() {
   };
   const [applyLeaveData, setApplyLeaveData] = useState();
   const _getApplyLeaveApi = async () => {
+    setIsLoading(true);
     try {
       const getApplyLeaveApiRes = await getAllLeaves();
       setApplyLeaveData(getApplyLeaveApiRes.leaves);
     } catch (err) {
-      console.log(err);
+      console.log("Approval Error", err);
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -117,138 +122,157 @@ function Approval() {
   };
   return (
     <>
-      <div className="innerHeader">
-        <h2>Leave</h2>
-      </div>
-      <TabContent activeTab={activeTab}>
-        <TabPane tabId="1">
-          {/* filter */}
-          <div className="filterWrapper">
-            <div className="filterIcon">
-              <i className="fas fa-filter" />
-            </div>
-
-            <div className="filterForm">
-              <div className="formGroup">
-                <Label>Leave Type</Label>
-                <Input
-                  type="select"
-                  // onClick={(e) => setLeaveType(e.target.value)}
-                >
-                  <option value="">Select Leave Type</option>
-                  <option value="PL">PL</option>
-                  <option value="CL">CL</option>
-                  <option value="SL">SL</option>
-                </Input>
-              </div>
-
-              <div className="formGroup">
-                <Label>Status</Label>
-                <Input
-                  type="select"
-                  // onClick={(e) => setLeaveStatus(e.target.value)}
-                >
-                  <option value="">All</option>
-                  <option value="accept">Accept</option>
-                  <option value="pending">Pending</option>
-                  <option value="reject">Reject</option>
-                </Input>
-              </div>
-
-              {/* search */}
-              <div className="formGroup searchbar">
-                <Label>Search</Label>
-                <InputGroup>
-                  <Input placeholder="Search..." />
-                  <InputGroupText>
-                    <i className="fas fa-search" />
-                  </InputGroupText>
-                </InputGroup>
-              </div>
-            </div>
+      {isLoading ? (
+        // Display a loading spinner or message when data is loading
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: "auto",
+          }}
+        >
+          <SpinnerLoading />
+        </div>
+      ) : (
+        <>
+          <div className="innerHeader">
+            <h2>Leave</h2>
           </div>
+          <TabContent activeTab={activeTab}>
+            <TabPane tabId="1">
+              {/* filter */}
+              <div className="filterWrapper">
+                <div className="filterIcon">
+                  <i className="fas fa-filter" />
+                </div>
 
-          {/* Personal Information */}
-          <section>
-            <h6>Leave Information</h6>
-            <Card body>
-              <Table responsive>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Leave Type</th>
-                    <th style={{ maxWidth: "300px" }}>Leave Reasons</th>
-                    <th>Start Date</th>
-                    <th>End Day</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
+                <div className="filterForm">
+                  <div className="formGroup">
+                    <Label>Leave Type</Label>
+                    <Input
+                      type="select"
+                      // onClick={(e) => setLeaveType(e.target.value)}
+                    >
+                      <option value="">Select Leave Type</option>
+                      <option value="PL">PL</option>
+                      <option value="CL">CL</option>
+                      <option value="SL">SL</option>
+                    </Input>
+                  </div>
 
-                <tbody>
-                  {applyLeaveData?.length !== 0
-                    ? applyLeaveData?.map((curr) => {
-                        return (
-                          <tr>
-                            <td>Kartik</td>
-                            <td>{curr.leaveType}</td>
-                            <td style={{ maxWidth: "300px" }}>{curr.reason}</td>
-                            <td>
-                              {curr?.startDate && formatDatell(curr?.startDate)}
-                            </td>
-                            <td>
-                              {" "}
-                              {curr?.endDate && formatDatell(curr?.endDate)}
-                            </td>
-                            <td>
-                              {curr?.status === "pending" ? (
-                                <span className="badge-warning">Pending</span>
-                              ) : curr?.status === "approved" ? (
-                                <span className="badge-success">Accept</span>
-                              ) : (
-                                <span className="badge-danger">reject</span>
-                              )}
-                            </td>
+                  <div className="formGroup">
+                    <Label>Status</Label>
+                    <Input
+                      type="select"
+                      // onClick={(e) => setLeaveStatus(e.target.value)}
+                    >
+                      <option value="">All</option>
+                      <option value="accept">Accept</option>
+                      <option value="pending">Pending</option>
+                      <option value="reject">Reject</option>
+                    </Input>
+                  </div>
 
-                            <td>
-                              {curr?.status === "pending" ? (
-                                <div>
-                                  <Button
-                                    color="success"
-                                    outline
-                                    onClick={() =>
-                                      _handleApprovedAndReject(
-                                        "approved",
-                                        curr?._id
-                                      )
-                                    }
-                                  >
-                                    Accept
-                                  </Button>
-                                  <Button
-                                    color="danger"
-                                    outline
-                                    onClick={() =>
-                                      _handleApprovedAndReject(
-                                        "rejected",
-                                        curr?._id
-                                      )
-                                    }
-                                  >
-                                    reject
-                                  </Button>
-                                </div>
-                              ) : (
-                                // <h6 style={{ textAlign: "center" }}>-</h6>
-                                ""
-                              )}
-                            </td>
-                          </tr>
-                        );
-                      })
-                    : "No Data Found"}
+                  {/* search */}
+                  <div className="formGroup searchbar">
+                    <Label>Search</Label>
+                    <InputGroup>
+                      <Input placeholder="Search..." />
+                      <InputGroupText>
+                        <i className="fas fa-search" />
+                      </InputGroupText>
+                    </InputGroup>
+                  </div>
+                </div>
+              </div>
 
-                  {/* <tr>
+              {/* Personal Information */}
+              <section>
+                <h6>Leave Information</h6>
+                <Card body>
+                  <Table responsive>
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Leave Type</th>
+                        <th style={{ maxWidth: "300px" }}>Leave Reasons</th>
+                        <th>Start Date</th>
+                        <th>End Day</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {applyLeaveData?.length !== 0
+                        ? applyLeaveData?.map((curr) => {
+                            return (
+                              <tr>
+                                <td>Kartik</td>
+                                <td>{curr.leaveType}</td>
+                                <td style={{ maxWidth: "300px" }}>
+                                  {curr.reason}
+                                </td>
+                                <td>
+                                  {curr?.startDate &&
+                                    formatDatell(curr?.startDate)}
+                                </td>
+                                <td>
+                                  {" "}
+                                  {curr?.endDate && formatDatell(curr?.endDate)}
+                                </td>
+                                <td>
+                                  {curr?.status === "pending" ? (
+                                    <span className="badge-warning">
+                                      Pending
+                                    </span>
+                                  ) : curr?.status === "approved" ? (
+                                    <span className="badge-success">
+                                      Accept
+                                    </span>
+                                  ) : (
+                                    <span className="badge-danger">reject</span>
+                                  )}
+                                </td>
+
+                                <td>
+                                  {curr?.status === "pending" ? (
+                                    <div>
+                                      <Button
+                                        color="success"
+                                        outline
+                                        onClick={() =>
+                                          _handleApprovedAndReject(
+                                            "approved",
+                                            curr?._id
+                                          )
+                                        }
+                                      >
+                                        Accept
+                                      </Button>
+                                      <Button
+                                        color="danger"
+                                        outline
+                                        onClick={() =>
+                                          _handleApprovedAndReject(
+                                            "rejected",
+                                            curr?._id
+                                          )
+                                        }
+                                      >
+                                        reject
+                                      </Button>
+                                    </div>
+                                  ) : (
+                                    // <h6 style={{ textAlign: "center" }}>-</h6>
+                                    ""
+                                  )}
+                                </td>
+                              </tr>
+                            );
+                          })
+                        : "No Data Found"}
+
+                      {/* <tr>
                     <td>4344343434</td>
                     <td>CL</td>
                     <td style={{ maxWidth: "300px" }}>
@@ -284,19 +308,21 @@ function Approval() {
                       <span className="badge-danger">Pending</span>
                     </td>
                   </tr> */}
-                </tbody>
-              </Table>
-            </Card>
-          </section>
-        </TabPane>
-        {isOpenModal && (
-          <ApplyLeaveModal
-            isOpen={isOpenModal}
-            toggle={() => _toggleModal()}
-            setApplyLeaveData={setApplyLeaveData}
-          />
-        )}
-      </TabContent>
+                    </tbody>
+                  </Table>
+                </Card>
+              </section>
+            </TabPane>
+            {isOpenModal && (
+              <ApplyLeaveModal
+                isOpen={isOpenModal}
+                toggle={() => _toggleModal()}
+                setApplyLeaveData={setApplyLeaveData}
+              />
+            )}
+          </TabContent>
+        </>
+      )}
     </>
   );
 }

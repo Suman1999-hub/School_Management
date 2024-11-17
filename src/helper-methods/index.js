@@ -58,7 +58,11 @@ export const extractQueryParams = () => {
   return params;
 };
 
-export const showsuccessToast = (message, type = "success", duration = 4000) => {
+export const showsuccessToast = (
+  message,
+  type = "success",
+  duration = 4000
+) => {
   toast[type](message, { duration });
 };
 
@@ -494,4 +498,15 @@ export const dateFormat = (date) => {
 
 export const getFormattedDate = () => {
   return new Date().toISOString().split("T")[0];
+};
+
+export const LatitudeLongitudeFind = (url) => {
+  const coordinatesPart = url.match(/@([0-9.-]+),([0-9.-]+)/);
+
+  if (coordinatesPart) {
+    coordinatesPart.shift();
+    return coordinatesPart;
+  } else {
+    return "Coordinates not found in the URL";
+  }
 };
