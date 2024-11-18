@@ -74,9 +74,9 @@ const AddStudentModal = ({
     try {
       const response = await getAvailableClasses();
       console.log("response>>", response.settings);
-      const updatedformdata = {...formData}
-      updatedformdata["currentAcademicYear"] = response.settings.academicYear
-      setFormData(updatedformdata)
+      const updatedformdata = { ...formData };
+      updatedformdata["currentAcademicYear"] = response.settings.academicYear;
+      setFormData(updatedformdata);
       setClasses(response.settings.availableClasses);
     } catch (err) {
       // setError('Failed to load classes. Please try again.');
@@ -238,10 +238,12 @@ const AddStudentModal = ({
                 <Input
                   type="select"
                   name="class"
-                  value={formData.class}
+                  value={formData.class || ""}
                   onChange={handleInputChange}
                 >
-                  <option value="">Select a class</option>
+                  <option value="" disabled>
+                    Select a class
+                  </option>
                   {classes.map((classItem) => (
                     <option key={classItem.id} value={classItem.id}>
                       {classItem.grade}
@@ -258,13 +260,15 @@ const AddStudentModal = ({
                 <Input
                   type="select"
                   name="section"
-                  value={formData.section}
+                  value={formData.section || ""}
                   onChange={handleInputChange}
                 >
-                   <option value="">Select a class</option>
-                  {classes.map((classItem, index) => (
+                  <option value="" disabled>
+                    Select a class
+                  </option>
+                  {classes.slice(0, 4).map((classItem, index) => (
                     <option key={classItem.id} value={classItem.id}>
-                      {classItem.section[index]}
+                      {classItem.sections[index]}
                     </option>
                   ))}
                 </Input>
