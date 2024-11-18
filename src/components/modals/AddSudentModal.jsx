@@ -14,6 +14,7 @@ import stateData from "../../State.json";
 import {
   createSchool,
   createStudent,
+  getAvailableClasses,
   updateStudent,
 } from "../../http/http-calls";
 import { errorHandler, successHandler } from "../../helper-methods";
@@ -32,7 +33,9 @@ const AddStudentModal = ({
   };
 
   console.log("studentDetails", studentDetails);
-  
+  const [classes, setClasses] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const [formData, setFormData] = useState({
     locality: studentDetails?.address?.locality || "",
     city: studentDetails?.address?.city || "",
@@ -51,13 +54,36 @@ const AddStudentModal = ({
     mothersName: studentDetails?.guardian?.mothersName || "",
     mothersOccupation: studentDetails?.guardian?.mothersOccupation || "",
     fathersOccupation: studentDetails?.guardian?.fathersOccupation || "",
-    currentAcademicYear : studentDetails?.currentAcademicYear || "",
+    currentAcademicYear: studentDetails?.currentAcademicYear || "",
     joinDate: studentDetails?.joinDate || "",
     profileUrl: studentDetails?.profileUrl || "",
   });
 
   const [profileUrl, setProfileUrl] = useState(formData?.profileUrl || ""); // State to store image URL
   const uploadedImage = useRef(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchClasses();
+    }
+  }, [isOpen]);
+
+  const fetchClasses = async () => {
+    setIsLoading(true);
+
+    try {
+      const response = await getAvailableClasses();
+      console.log("response>>", response.settings);
+      const updatedformdata = {...formData}
+      updatedformdata["currentAcademicYear"] = response.settings.academicYear
+      setFormData(updatedformdata)
+      setClasses(response.settings.availableClasses);
+    } catch (err) {
+      // setError('Failed to load classes. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const payload = {
     firstName: formData?.firstName,
@@ -98,7 +124,6 @@ const AddStudentModal = ({
       errorHandler(error);
     }
     _closeModal();
-
   };
 
   //Edit
@@ -153,7 +178,7 @@ const AddStudentModal = ({
       <ModalBody>
         <div className="userAvatar" style={{ textAlign: "center" }}>
           <img
-          ref={uploadedImage}
+            ref={uploadedImage}
             src={
               profileUrl
                 ? profileUrl
@@ -171,7 +196,11 @@ const AddStudentModal = ({
         </div>
         <div style={{ margin: "auto", maxWidth: "300px", marginTop: "10px" }}>
           <FormGroup>
-            <Input name="file" type="file" style={{ maxHeight: "35px" }}               onChange={handleImageUpload}
+            <Input
+              name="file"
+              type="file"
+              style={{ maxHeight: "35px" }}
+              onChange={handleImageUpload}
             />
           </FormGroup>
         </div>
@@ -179,7 +208,9 @@ const AddStudentModal = ({
           <Row>
             <Col md="6">
               <FormGroup>
-                <Label>First Name<span style={{ color: "red" }}>*</span></Label>
+                <Label>
+                  First Name<span style={{ color: "red" }}>*</span>
+                </Label>
                 <Input
                   type="text"
                   name="firstName"
@@ -201,41 +232,41 @@ const AddStudentModal = ({
             </Col>
             <Col md="6">
               <FormGroup>
-                <Label>Class<span style={{ color: "red" }}>*</span></Label>
+                <Label>
+                  Class<span style={{ color: "red" }}>*</span>
+                </Label>
                 <Input
                   type="select"
                   name="class"
                   value={formData.class}
                   onChange={handleInputChange}
                 >
-                  <option value="">Select Class</option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                  <option>6</option>
-                  <option>7</option>
-                  <option>8</option>
-                  <option>9</option>
-                  <option>10</option>
+                  <option value="">Select a class</option>
+                  {classes.map((classItem) => (
+                    <option key={classItem.id} value={classItem.id}>
+                      {classItem.grade}
+                    </option>
+                  ))}
                 </Input>
               </FormGroup>
             </Col>
             <Col md="6">
               <FormGroup>
-                <Label>Section<span style={{ color: "red" }}>*</span></Label>
+                <Label>
+                  Section<span style={{ color: "red" }}>*</span>
+                </Label>
                 <Input
                   type="select"
                   name="section"
                   value={formData.section}
                   onChange={handleInputChange}
                 >
-                  <option value="">Select Section</option>
-                  <option value="A">A</option>
-                  <option value="B">B</option>
-                  <option value="C">C</option>
-                  {/* <option value="Others">Others</option> */}
+                   <option value="">Select a class</option>
+                  {classes.map((classItem, index) => (
+                    <option key={classItem.id} value={classItem.id}>
+                      {classItem.section[index]}
+                    </option>
+                  ))}
                 </Input>
               </FormGroup>
             </Col>
@@ -243,18 +274,18 @@ const AddStudentModal = ({
               <FormGroup>
                 <Label>Academic-Year</Label>
                 <Input
-                disabled
+                  disabled
                   // name="currentAcademicYear"
                   value={formData.currentAcademicYear}
                   // onChange={handleInputChange}
-                >
-                  
-                </Input>
+                ></Input>
               </FormGroup>
             </Col>
             <Col md="6">
               <FormGroup>
-                <Label>Gender<span style={{ color: "red" }}>*</span></Label>
+                <Label>
+                  Gender<span style={{ color: "red" }}>*</span>
+                </Label>
                 <Input
                   type="select"
                   name="gender"
@@ -271,7 +302,9 @@ const AddStudentModal = ({
             </Col>
             <Col md="6">
               <FormGroup>
-                <Label>dob<span style={{ color: "red" }}>*</span></Label>
+                <Label>
+                  dob<span style={{ color: "red" }}>*</span>
+                </Label>
                 <Input
                   type="date"
                   name="dob"
@@ -283,7 +316,9 @@ const AddStudentModal = ({
           </Row>
 
           <FormGroup>
-            <Label>Father's Name<span style={{ color: "red" }}>*</span></Label>
+            <Label>
+              Father's Name<span style={{ color: "red" }}>*</span>
+            </Label>
             <Input
               type="text"
               name="fathersName"
@@ -292,7 +327,9 @@ const AddStudentModal = ({
             />
           </FormGroup>
           <FormGroup>
-            <Label>Father's Occupation<span style={{ color: "red" }}>*</span></Label>
+            <Label>
+              Father's Occupation<span style={{ color: "red" }}>*</span>
+            </Label>
             <Input
               type="text"
               name="fathersOccupation"
@@ -301,7 +338,9 @@ const AddStudentModal = ({
             />
           </FormGroup>
           <FormGroup>
-            <Label>mothersName<span style={{ color: "red" }}>*</span></Label>
+            <Label>
+              mothersName<span style={{ color: "red" }}>*</span>
+            </Label>
             <Input
               type="text"
               name="mothersName"
@@ -310,7 +349,9 @@ const AddStudentModal = ({
             />
           </FormGroup>
           <FormGroup>
-            <Label>Mother's Occupation<span style={{ color: "red" }}>*</span></Label>
+            <Label>
+              Mother's Occupation<span style={{ color: "red" }}>*</span>
+            </Label>
             <Input
               type="text"
               name="mothersOccupation"
@@ -321,7 +362,7 @@ const AddStudentModal = ({
           <h6>Address</h6>
           <Row>
             <FormGroup>
-              <Label>locality<span style={{ color: "red" }}>*</span></Label>
+              <Label>locality</Label>
               <Input
                 type="text"
                 name="locality"
@@ -331,7 +372,9 @@ const AddStudentModal = ({
             </FormGroup>
             <Col md="6">
               <FormGroup>
-                <Label>City<span style={{ color: "red" }}>*</span></Label>
+                <Label>
+                  City<span style={{ color: "red" }}>*</span>
+                </Label>
                 <Input
                   type="text"
                   name="city"
@@ -342,7 +385,9 @@ const AddStudentModal = ({
             </Col>
             <Col md="6">
               <FormGroup>
-                <Label>State<span style={{ color: "red" }}>*</span></Label>
+                <Label>
+                  State<span style={{ color: "red" }}>*</span>
+                </Label>
                 <Input
                   type="select"
                   name="state"
@@ -362,7 +407,9 @@ const AddStudentModal = ({
           <Row>
             <Col md="6">
               <FormGroup>
-                <Label>Country<span style={{ color: "red" }}>*</span></Label>
+                <Label>
+                  Country<span style={{ color: "red" }}>*</span>
+                </Label>
                 <Input
                   type="select"
                   name="country"
@@ -376,7 +423,9 @@ const AddStudentModal = ({
             </Col>
             <Col md="6">
               <FormGroup>
-                <Label>pin<span style={{ color: "red" }}>*</span></Label>
+                <Label>
+                  pin<span style={{ color: "red" }}>*</span>
+                </Label>
                 <Input
                   type="text"
                   name="pin"
@@ -396,7 +445,9 @@ const AddStudentModal = ({
             />
           </FormGroup>
           <FormGroup>
-            <Label>Mobile no.<span style={{ color: "red" }}>*</span></Label>
+            <Label>
+              Mobile no.<span style={{ color: "red" }}>*</span>
+            </Label>
             <Input
               type="text"
               name="phone"

@@ -460,3 +460,18 @@ export const markStudentAttendance = ({ payload }) => {
       });
   });
 };
+
+
+//get available classes
+export const getAvailableClasses = () => {
+  return new Promise((resolve, reject) => {
+    makeGetRequest(`${BASE_URL}/admin/settings`, true)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};

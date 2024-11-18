@@ -14,6 +14,7 @@ import {
   CheckFormUpdate,
   errorHandler,
   formatDate,
+  showerrorToast,
   successHandler,
 } from "../../helper-methods";
 import { getLoggedInUserDetail, updateProfile } from "../../http/http-calls";
@@ -69,10 +70,10 @@ const MyProfile = () => {
   const handleChange = (event, field) => {
     setIsChanged(true);
     if (field === "dob") {
-      setDOB(event.target.value);
+      setDOB(event.target.value.trim());
     }
     const updatedNewDetails = { ...updatedUserDetails };
-    updatedNewDetails[field] = event.target.value;
+    updatedNewDetails[field] = event.target.value.trim();
     setUpdatedUserDetails(updatedNewDetails);
     if (_CheckFormUpdate(userDetails, updatedNewDetails)) {
       setIsChanged(true);
@@ -86,7 +87,7 @@ const MyProfile = () => {
     setIsChanged(true);
     // const changedUserDetails = { ...updatedUserDetails }
     const updatedAddress = { ...address };
-    updatedAddress[field] = event.target.value;
+    updatedAddress[field] = event.target.value.trim();
     setAddress(updatedAddress);
     setUpdatedUserDetails((prev) => ({
       ...prev,
@@ -103,6 +104,8 @@ const MyProfile = () => {
     } else {
       setIsChanged(false);
     }
+    validateForm(updatedAddress);
+
   };
 
   const _CheckFormUpdate = (initialState, updatedState) => {
@@ -191,7 +194,47 @@ const MyProfile = () => {
               }
               setErrors(updatedErrors);
               break;
-           
+             
+
+                case "city":
+                if (updatedUserDetails?.city) {
+                  delete updatedErrors?.city;
+                } else {
+                  updatedErrors.city = "*Required";
+                  isFormValid = false;
+                }
+                setErrors(updatedErrors);
+                break;
+
+                case "state":
+                if (updatedUserDetails?.state) {
+                  delete updatedErrors?.state;
+                } else {
+                  updatedErrors.state = "*Required";
+                  isFormValid = false;
+                }
+                setErrors(updatedErrors);
+                break;
+
+                case "pin":
+                if (updatedUserDetails?.pin) {
+                  delete updatedErrors?.pin;
+                } else {
+                  updatedErrors.pin = "*Required";
+                  isFormValid = false;
+                }
+                setErrors(updatedErrors);
+                break;
+
+                case "country":
+                if (updatedUserDetails?.country) {
+                  delete updatedErrors?.country;
+                } else {
+                  updatedErrors.country = "*Required";
+                  isFormValid = false;
+                }
+                setErrors(updatedErrors);
+                break;
 
           default:
             break;
@@ -213,26 +256,21 @@ const MyProfile = () => {
       try {
         if (payload) {
           const response = await updateProfile(payload);
-          // console.log("response>>", response.user);
           setUpdatedUserDetails(response.user);
-          alert("successfully updated");
         } else {
-          const message = "Changes up-to-date";
-          successHandler(message);
-          // alert("Changes up-to-date");
+          showerrorToast("Changes Up-to-date!", "success", 5000);
         }
       } catch (error) {
         successHandler(error);
       }
     } else {
-      alert("please fill all the required field correctly!")
+      showerrorToast("please fill all the required field correctly!", "error", 5000);
     }
   };
 
   return (
     <>
       {isLoading ? (
-        // Display a loading spinner or message when data is loading
         <div
           style={{
             textAlign: "center",
@@ -539,14 +577,13 @@ const MyProfile = () => {
 
                     <Col md="6" lg="4">
                       {/* Email */}
-                      {updatedUserDetails.email ? (
                         <div className="form-group">
                           <Label>Email</Label>
                           <Input
                             disabled={
                               updatedUserDetails.loginType === "student"
                             }
-                            placeholder="Enter your email"
+                            placeholder="Enter your email ID"
                             value={updatedUserDetails?.email || ""}
                             onChange={(e) => handleChange(e, "email")}
                           />
@@ -562,30 +599,6 @@ const MyProfile = () => {
                           </p>
                         )}
                         </div>
-                      ) : (
-                        <div className="form-group">
-                          <Label>Email</Label>
-                          <Input
-                            disabled={
-                              updatedUserDetails.loginType === "student"
-                            }
-                            placeholder="No email ID Given"
-                            value={""}
-                            onChange={(e) => handleChange(e, "email")}
-                          />
-                          {errors?.email && (
-                          <p
-                            style={{
-                              color: "red",
-                              fontSize: "12px",
-                              marginTop: "5px",
-                            }}
-                          >
-                            {errors.email}
-                          </p>
-                        )}
-                        </div>
-                      )}
                     </Col>
 
                     <Col md="6" lg="4">
@@ -626,6 +639,17 @@ const MyProfile = () => {
                         value={updatedUserDetails.address.locality}
                         onChange={(e) => handleAddress(e, "locality")}
                       />
+                      {errors?.locality && (
+                          <p
+                            style={{
+                              color: "red",
+                              fontSize: "12px",
+                              marginTop: "5px",
+                            }}
+                          >
+                            {errors.locality}
+                          </p>
+                        )}
                     </div>
                   )}
                   <Row className="gy-3 gy-xl-0">
@@ -639,7 +663,18 @@ const MyProfile = () => {
                             type="text"
                             value={updatedUserDetails.address.city}
                             onChange={(e) => handleAddress(e, "city")}
-                          ></Input>
+                          />
+                          {errors?.city && (
+                          <p
+                            style={{
+                              color: "red",
+                              fontSize: "12px",
+                              marginTop: "5px",
+                            }}
+                          >
+                            {errors.city}
+                          </p>
+                        )}
                         </div>
                       )}
                     </Col>
@@ -653,7 +688,18 @@ const MyProfile = () => {
                             type="text"
                             value={updatedUserDetails.address.state}
                             onChange={(e) => handleAddress(e, "state")}
-                          ></Input>
+                          />
+                          {errors?.state && (
+                          <p
+                            style={{
+                              color: "red",
+                              fontSize: "12px",
+                              marginTop: "5px",
+                            }}
+                          >
+                            {errors.state}
+                          </p>
+                        )}
                         </div>
                       )}
                     </Col>
@@ -669,6 +715,17 @@ const MyProfile = () => {
                             value={updatedUserDetails.address.pin}
                             onChange={(e) => handleAddress(e, "pin")}
                           />
+                          {errors?.pin && (
+                          <p
+                            style={{
+                              color: "red",
+                              fontSize: "12px",
+                              marginTop: "5px",
+                            }}
+                          >
+                            {errors.pin}
+                          </p>
+                        )}
                         </div>
                       )}
                     </Col>
@@ -682,7 +739,18 @@ const MyProfile = () => {
                             type="text"
                             value={updatedUserDetails.address.country}
                             onChange={(e) => handleAddress(e, "country")}
-                          ></Input>
+                          />
+                          {errors?.country && (
+                          <p
+                            style={{
+                              color: "red",
+                              fontSize: "12px",
+                              marginTop: "5px",
+                            }}
+                          >
+                            {errors.country}
+                          </p>
+                        )}
                         </div>
                       )}
                     </Col>
