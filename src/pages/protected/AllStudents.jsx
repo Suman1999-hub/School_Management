@@ -15,15 +15,35 @@ import { getAddressFormate } from "../../helper-methods";
 import AddStudentModal from "../../components/modals/AddSudentModal";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import { useSelector } from "react-redux";
-import { findAllStudent } from "../../http/http-calls";
+import { findAllStudent, getAvailableClasses } from "../../http/http-calls";
 import { Link } from "react-router-dom";
 import SpinnerLoading from "../../components/SpinnerLoading";
 
 function AllStudents() {
   const [allStudents, setAllStudents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [availableClasses, setAvailableClasses] = useState([]);
+
 
   const user = useSelector((state) => state.userCredential.user.loginType);
+
+  useEffect(() => {
+      fetchClasses();
+  }, []);
+
+  const fetchClasses = async () => {
+    setIsLoading(true);
+
+    try {
+      const response = await getAvailableClasses();
+      console.log("response>>", response.settings.availableClasses);
+      setAvailableClasses( response.settings.availableClasses)
+    } catch (err) {
+      // setError('Failed to load classes. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const fetchAllStudentData = async () => {
     setIsLoading(true);
@@ -71,47 +91,31 @@ function AllStudents() {
           </div>
   
           <div className="filterForm">
-            <div className="formGroup">
-              <Label>Acedemic Year</Label>
-              <Input type="select">
-                <option>2024-2025</option>
-                <option>2023-2024</option>
-                <option>2022-2023</option>
-                <option>2021-2022</option>
-                <option>2020-2021</option>
-                <option>2019-2020</option>
-                <option>2018-2019</option>
-                <option>2017-2018</option>
-                <option>2016-2017</option>
-                <option>2015-2016</option>
-                <option>2014-2015</option>
-                <option>2013-2014</option>
-              </Input>
-            </div>
-  
+              
             <div className="formGroup">
               <Label>Class</Label>
               <Input type="select">
-                <option>All</option>
-                <option>I</option>
-                <option>II</option>
-                <option>III</option>
-                <option>IV</option>
-                <option>V</option>
-                <option>VI</option>
-                <option>VII</option>
-                <option>VIII</option>
-                <option>IX</option>
-                <option>X</option>
+              <option value="">
+                   All
+                  </option>
+                  {availableClasses.map((classItem) => (
+                    <option key={classItem.id} value={classItem.id}>
+                      {classItem.grade}
+                    </option>
+                  ))}
               </Input>
             </div>
             <div className="formGroup">
               <Label>Section</Label>
               <Input type="select">
-                <option>All</option>
-                <option>A</option>
-                <option>B</option>
-                <option>C</option>
+              <option value="" >
+                    All
+                  </option>
+                  {availableClasses.slice(0, 4).map((classItem, index) => (
+                    <option key={classItem.id} value={classItem.id}>
+                      {classItem.sections[index]}
+                    </option>
+                  ))}
               </Input>
             </div>
   
