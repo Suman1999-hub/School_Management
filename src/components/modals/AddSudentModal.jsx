@@ -17,7 +17,7 @@ import {
   getAvailableClasses,
   updateStudent,
 } from "../../http/http-calls";
-import { errorHandler, successHandler } from "../../helper-methods";
+import { errorHandler, showerrorToast, successHandler } from "../../helper-methods";
 
 const AddStudentModal = ({
   isOpen,
@@ -35,6 +35,10 @@ const AddStudentModal = ({
 
   const [classes, setClasses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+  const phoneRegex = /^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/;
+  const [errors, setErrors] = useState({});
 
   const [formData, setFormData] = useState({
     locality: studentDetails?.locality || "",
@@ -118,45 +122,59 @@ const AddStudentModal = ({
 
   //Create
   const _createStudentApiCall = async () => {
-    try {
-      const createStudentRes = await createStudent(payload);
-      if (!createStudentRes?.error) {
-        fetchAllStudentData();
+    const isvalid = await validateForm(formData)
+    if (isvalid) {
+      try {
+        const createStudentRes = await createStudent(payload);
+        if (!createStudentRes?.error) {
+          fetchAllStudentData();
+        }
+        console.log(payload);
+      } catch (error) {
+        errorHandler(error);
       }
-      console.log(payload);
-    } catch (error) {
-      errorHandler(error);
+      _closeModal();
+    } else {
+      showerrorToast("Please fill all the required fields correctly!", "error", 4000)
     }
-    _closeModal();
+
+    
   };
 
   //Edit
   const _EditStudentApiCall = async () => {
-    try {
-      if (id !== undefined) {
-        const updateStudentRes = await updateStudent({ payload, id });
-        if (!updateStudentRes?.error) {
-          getStudentAPICall(id);
+    const isvalid = await validateForm(formData)
+    if (isvalid) {
+      try {
+        if (id !== undefined) {
+          const updateStudentRes = await updateStudent({ payload, id });
+          if (!updateStudentRes?.error) {
+            getStudentAPICall(id);
+          }
+  
+          console.log(updateStudentRes);
         }
-
-        console.log(updateStudentRes);
+      } catch (error) {
+        successHandler(error);
       }
-    } catch (error) {
-      successHandler(error);
+      updateStudentData(formData);
+      _closeModal();
+    } else {
+      showerrorToast("Please fill all the required fields correctly!", "error", 4000)
     }
-    console.log("formData", formData);
+   
+    // console.log("formData", formData);
 
-    updateStudentData(formData);
-    _closeModal();
+   
   };
 
   // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    const updatedFormdata = { ...formData };
+    updatedFormdata[name] = value.trim();
+    setFormData(updatedFormdata);
+    validateForm(updatedFormdata);
   };
 
   const handleImageUpload = (event) => {
@@ -166,6 +184,151 @@ const AddStudentModal = ({
       console.log(imagePreviewUrl);
       setProfileUrl(imagePreviewUrl);
     }
+  };
+
+  const validateForm = (updatedUserDetails) => {
+    const updatedErrors = { ...errors };
+    let isFormValid = true;
+    return new Promise((resolve) => {
+      Object.keys(updatedUserDetails).forEach((each) => {
+        switch (each) {
+          case "firstName":
+            if (updatedUserDetails?.firstName) {
+              delete updatedErrors?.firstName;
+            } else {
+              updatedErrors.firstName = "*Required";
+              isFormValid = false;
+            }
+            setErrors(updatedErrors);
+            break;
+          case "lastName":
+            if (updatedUserDetails?.lastName) {
+              delete updatedErrors?.lastName;
+            } else {
+              updatedErrors.lastName = "*Required";
+              isFormValid = false;
+            }
+            setErrors(updatedErrors);
+            break;
+          case "mothersOccupation":
+            if (updatedUserDetails?.mothersOccupation) {
+              delete updatedErrors?.mothersOccupation;
+            } else {
+              updatedErrors.mothersOccupation = "*Required";
+              isFormValid = false;
+            }
+            setErrors(updatedErrors);
+            break;
+          case "mothersName":
+            if (updatedUserDetails?.mothersName) {
+              delete updatedErrors?.mothersName;
+            } else {
+              updatedErrors.mothersName = "*Required";
+              isFormValid = false;
+            }
+            setErrors(updatedErrors);
+            break;
+          case "fathersName":
+            if (updatedUserDetails?.fathersName) {
+              delete updatedErrors?.fathersName;
+            } else {
+              updatedErrors.fathersName = "*Required";
+              isFormValid = false;
+            }
+            setErrors(updatedErrors);
+            break;
+          case "fathersOccupation":
+            if (updatedUserDetails?.fathersOccupation) {
+              delete updatedErrors?.fathersOccupation;
+            } else {
+              updatedErrors.fathersOccupation = "*Required";
+              isFormValid = false;
+            }
+            setErrors(updatedErrors);
+            break;
+          case "dob":
+            if (updatedUserDetails?.dob) {
+              delete updatedErrors?.dob;
+            } else {
+              updatedErrors.dob = "*Required";
+              isFormValid = false;
+            }
+            setErrors(updatedErrors);
+            break;
+          case "email":
+            if (updatedUserDetails?.email) {
+              if (emailRegex.test(updatedUserDetails?.email)) {
+                delete updatedErrors?.email;
+              } else {
+                updatedErrors.email = "Invalid email!";
+                isFormValid = false;
+              }
+            } else {
+              delete updatedErrors?.email;
+            }
+            setErrors(updatedErrors);
+            break;
+          case "phone":
+            if (updatedUserDetails?.phone) {
+              if (phoneRegex.test(updatedUserDetails?.phone)) {
+                delete updatedErrors?.phone;
+              } else {
+                updatedErrors.phone = "Invalid mobile No.!";
+                isFormValid = false;
+              }
+            } else {
+              updatedErrors.phone = "*Required";
+              isFormValid = false;
+            }
+            setErrors(updatedErrors);
+            break;
+
+          case "city":
+            if (updatedUserDetails?.city) {
+              delete updatedErrors?.city;
+            } else {
+              updatedErrors.city = "*Required";
+              isFormValid = false;
+            }
+            setErrors(updatedErrors);
+            break;
+
+          case "state":
+            if (updatedUserDetails?.state) {
+              delete updatedErrors?.state;
+            } else {
+              updatedErrors.state = "*Required";
+              isFormValid = false;
+            }
+            setErrors(updatedErrors);
+            break;
+
+          case "pin":
+            if (updatedUserDetails?.pin) {
+              delete updatedErrors?.pin;
+            } else {
+              updatedErrors.pin = "*Required";
+              isFormValid = false;
+            }
+            setErrors(updatedErrors);
+            break;
+
+          case "country":
+            if (updatedUserDetails?.country) {
+              delete updatedErrors?.country;
+            } else {
+              updatedErrors.country = "*Required";
+              isFormValid = false;
+            }
+            setErrors(updatedErrors);
+            break;
+
+          default:
+            break;
+        }
+      });
+      resolve(isFormValid);
+    });
   };
 
   return (
@@ -224,17 +387,41 @@ const AddStudentModal = ({
                   value={formData.firstName}
                   onChange={handleInputChange}
                 />
+                {errors?.firstName && (
+                  <p
+                    style={{
+                      color: "red",
+                      fontSize: "12px",
+                      marginTop: "5px",
+                    }}
+                  >
+                    {errors.firstName}
+                  </p>
+                )}
               </FormGroup>
             </Col>
             <Col md="6">
               <FormGroup>
-                <Label>Last Name</Label>
+                <Label>
+                  Last Name<span style={{ color: "red" }}>*</span>
+                </Label>
                 <Input
                   type="text"
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleInputChange}
                 />
+                {errors?.lastName && (
+                  <p
+                    style={{
+                      color: "red",
+                      fontSize: "12px",
+                      marginTop: "5px",
+                    }}
+                  >
+                    {errors.lastName}
+                  </p>
+                )}
               </FormGroup>
             </Col>
             <Col md="6">
@@ -249,7 +436,7 @@ const AddStudentModal = ({
                   onChange={handleInputChange}
                 >
                   <option value="" disabled>
-                    Select a class
+                    Select Class
                   </option>
                   {classes.map((classItem) => (
                     <option key={classItem.id} value={classItem.id}>
@@ -271,7 +458,7 @@ const AddStudentModal = ({
                   onChange={handleInputChange}
                 >
                   <option value="" disabled>
-                    Select a class
+                    Select Section
                   </option>
                   {classes.slice(0, 4).map((classItem, index) => (
                     <option key={classItem.id} value={classItem.id}>
@@ -303,11 +490,11 @@ const AddStudentModal = ({
                   value={formData.gender}
                   onChange={handleInputChange}
                 >
-                  <option value="">Select Gender</option>
+                  <option value="" disabled>
+                    Select Gender
+                  </option>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
-                  <option value="Transgender">Transgender</option>
-                  {/* <option value="Others">Others</option> */}
                 </Input>
               </FormGroup>
             </Col>
@@ -322,6 +509,17 @@ const AddStudentModal = ({
                   value={formData.dob}
                   onChange={handleInputChange}
                 />
+                {errors?.dob && (
+                  <p
+                    style={{
+                      color: "red",
+                      fontSize: "12px",
+                      marginTop: "5px",
+                    }}
+                  >
+                    {errors.dob}
+                  </p>
+                )}
               </FormGroup>
             </Col>
           </Row>
@@ -336,6 +534,17 @@ const AddStudentModal = ({
               value={formData.fathersName}
               onChange={handleInputChange}
             />
+            {errors?.fathersName && (
+              <p
+                style={{
+                  color: "red",
+                  fontSize: "12px",
+                  marginTop: "5px",
+                }}
+              >
+                {errors.fathersName}
+              </p>
+            )}
           </FormGroup>
           <FormGroup>
             <Label>
@@ -347,6 +556,17 @@ const AddStudentModal = ({
               value={formData.fathersOccupation}
               onChange={handleInputChange}
             />
+            {errors?.fathersOccupation && (
+              <p
+                style={{
+                  color: "red",
+                  fontSize: "12px",
+                  marginTop: "5px",
+                }}
+              >
+                {errors.fathersOccupation}
+              </p>
+            )}
           </FormGroup>
           <FormGroup>
             <Label>
@@ -358,6 +578,17 @@ const AddStudentModal = ({
               value={formData.mothersName}
               onChange={handleInputChange}
             />
+            {errors?.mothersName && (
+              <p
+                style={{
+                  color: "red",
+                  fontSize: "12px",
+                  marginTop: "5px",
+                }}
+              >
+                {errors.mothersName}
+              </p>
+            )}
           </FormGroup>
           <FormGroup>
             <Label>
@@ -369,6 +600,17 @@ const AddStudentModal = ({
               value={formData.mothersOccupation}
               onChange={handleInputChange}
             />
+            {errors?.mothersOccupation && (
+              <p
+                style={{
+                  color: "red",
+                  fontSize: "12px",
+                  marginTop: "5px",
+                }}
+              >
+                {errors.mothersOccupation}
+              </p>
+            )}
           </FormGroup>
           <h6>Address</h6>
           <Row>
@@ -392,6 +634,17 @@ const AddStudentModal = ({
                   value={formData.city}
                   onChange={handleInputChange}
                 />
+                {errors?.city && (
+                  <p
+                    style={{
+                      color: "red",
+                      fontSize: "12px",
+                      marginTop: "5px",
+                    }}
+                  >
+                    {errors.city}
+                  </p>
+                )}
               </FormGroup>
             </Col>
             <Col md="6">
@@ -404,7 +657,18 @@ const AddStudentModal = ({
                   name="state"
                   value={formData.state}
                   onChange={handleInputChange}
-                ></Input>
+                />
+                {errors?.state && (
+                  <p
+                    style={{
+                      color: "red",
+                      fontSize: "12px",
+                      marginTop: "5px",
+                    }}
+                  >
+                    {errors.state}
+                  </p>
+                )}
               </FormGroup>
             </Col>
           </Row>
@@ -419,7 +683,18 @@ const AddStudentModal = ({
                   name="country"
                   value={formData.country}
                   onChange={handleInputChange}
-                ></Input>
+                />
+                {errors?.country && (
+                  <p
+                    style={{
+                      color: "red",
+                      fontSize: "12px",
+                      marginTop: "5px",
+                    }}
+                  >
+                    {errors.country}
+                  </p>
+                )}
               </FormGroup>
             </Col>
             <Col md="6">
@@ -433,6 +708,17 @@ const AddStudentModal = ({
                   value={formData.pin}
                   onChange={handleInputChange}
                 />
+                {errors?.pin && (
+                  <p
+                    style={{
+                      color: "red",
+                      fontSize: "12px",
+                      marginTop: "5px",
+                    }}
+                  >
+                    {errors.pin}
+                  </p>
+                )}
               </FormGroup>
             </Col>
           </Row>
@@ -441,20 +727,42 @@ const AddStudentModal = ({
             <Input
               type="text"
               name="email"
-              value={formData.email}
+              value={formData.email || ""}
               onChange={handleInputChange}
             />
+            {errors?.email && (
+              <p
+                style={{
+                  color: "red",
+                  fontSize: "12px",
+                  marginTop: "5px",
+                }}
+              >
+                {errors.email}
+              </p>
+            )}
           </FormGroup>
           <FormGroup>
             <Label>
               Mobile no.<span style={{ color: "red" }}>*</span>
             </Label>
             <Input
-              type="text"
+              type="number"
               name="phone"
               value={formData.phone}
               onChange={handleInputChange}
             />
+            {errors?.phone && (
+              <p
+                style={{
+                  color: "red",
+                  fontSize: "12px",
+                  marginTop: "5px",
+                }}
+              >
+                {errors.phone}
+              </p>
+            )}
           </FormGroup>
           {/* submit button */}
           <div className="inlineBtnWrapper">
