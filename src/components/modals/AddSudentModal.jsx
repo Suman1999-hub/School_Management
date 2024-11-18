@@ -27,8 +27,7 @@ const AddStudentModal = ({
   studentDetails,
   fetchAllStudentData,
   getStudentAPICall,
-  updateStudentData
-  
+  updateStudentData,
 }) => {
   const _closeModal = () => {
     toggle();
@@ -58,12 +57,11 @@ const AddStudentModal = ({
     currentAcademicYear: studentDetails?.currentAcademicYear || "",
     joinDate: studentDetails?.joinDate || "",
     profileUrl: studentDetails?.profileUrl || "",
-    rollNo:studentDetails?.rollNo,
-    username: studentDetails?.username || ""
+    rollNo: studentDetails?.rollNo,
+    username: studentDetails?.username || "",
   });
 
   console.log("formData", formData);
-
 
   const [profileUrl, setProfileUrl] = useState(formData?.profileUrl || ""); // State to store image URL
   const uploadedImage = useRef(null);
@@ -148,7 +146,7 @@ const AddStudentModal = ({
     }
     console.log("formData", formData);
 
-    updateStudentData(formData)
+    updateStudentData(formData);
     _closeModal();
   };
 
@@ -406,9 +404,7 @@ const AddStudentModal = ({
                   name="state"
                   value={formData.state}
                   onChange={handleInputChange}
-                >
-                  
-                </Input>
+                ></Input>
               </FormGroup>
             </Col>
           </Row>
@@ -423,9 +419,7 @@ const AddStudentModal = ({
                   name="country"
                   value={formData.country}
                   onChange={handleInputChange}
-                >
-                 
-                </Input>
+                ></Input>
               </FormGroup>
             </Col>
             <Col md="6">

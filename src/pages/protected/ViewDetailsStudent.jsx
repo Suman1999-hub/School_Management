@@ -64,7 +64,7 @@ function ViewDetailsStudent() {
         joinDate: Response?.student?.joinDate || "",
         profileUrl: Response?.student?.profileImage || "",
         rollNo: Response?.student?.rollNo,
-        username: Response?.student?.username || ""
+        username: Response?.student?.username || "",
       });
       setIsActive(Response?.student?.isActive || false);
     } catch (error) {
@@ -180,7 +180,9 @@ function ViewDetailsStudent() {
               </div>
 
               <CardTitle className="text-center" tag="h5">
-                {studentData?.fullName}
+                {organizedStudentData?.firstName +
+                  " " +
+                  organizedStudentData?.lastName}
               </CardTitle>
               <CardSubtitle className="mb-2 text-muted text-center" tag="h6">
                 <img
@@ -189,12 +191,8 @@ function ViewDetailsStudent() {
                   alt="Location"
                 />
                 <span>
-                  {getAddressFormate(
-                    studentData?.address?.city || "-",
-                    studentData?.address?.state || "-",
-                    studentData?.address?.country || "-",
-                    studentData?.address?.pin || "-"
-                  )}
+                  {organizedStudentData?.city} ,{organizedStudentData?.state} ,
+                  {organizedStudentData?.country} ,{organizedStudentData?.pin}
                 </span>
               </CardSubtitle>
               <CardText>
@@ -285,7 +283,7 @@ function ViewDetailsStudent() {
                   <Col md="6">
                     <Label style={{ fontWeight: "bold" }}>Date Of Birth</Label>
                     <div>
-                      {studentData?.dob ? dateFormat(studentData?.dob) : "-"}
+                      {organizedStudentData?.dob || "" }
                     </div>
                   </Col>
                   {/* <Col md="6">

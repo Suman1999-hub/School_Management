@@ -159,10 +159,10 @@ function AllStudents() {
                   <th>Class</th>
                   <th>Section</th>
                   <th>Roll no</th>
+                  <th>Date of Birth</th>
                   <th>gender</th>
                   <th>Address</th>
                   <th>Mobile no.</th>
-                  <th>Attendence(%)</th>
                   <th>View Details</th>
                 </tr>
               </thead>
@@ -182,6 +182,7 @@ function AllStudents() {
                         <td>{curr._class.name ? curr._class.name : ""}</td>
                         <td>{curr._class.section ? curr._class.section : ""}</td>
                         <td>{curr.rollNo ? curr.rollNo : ""}</td>
+                        <td>{curr.dob ? curr.dob : "" }</td>
                         <td>{curr.gender ? curr.gender : ""}</td>
                         <td>
                           {curr.address
@@ -195,7 +196,7 @@ function AllStudents() {
                             : ""}
                         </td>
                         <td>{curr.phone ? curr.phone : ""}</td>
-                        <td>
+                        {/* <td>
                           <CircularProgressbar
                             value="97"
                             text="97%"
@@ -204,7 +205,7 @@ function AllStudents() {
                               strokeLinecap: "round",
                             })}
                           />
-                        </td>
+                        </td> */}
                         <td>
                           <div className="action">
                           <Link to={`/student/${curr._id}`}>
