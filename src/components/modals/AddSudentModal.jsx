@@ -27,37 +27,43 @@ const AddStudentModal = ({
   studentDetails,
   fetchAllStudentData,
   getStudentAPICall,
+  updateStudentData
+  
 }) => {
   const _closeModal = () => {
     toggle();
   };
 
-  console.log("studentDetails", studentDetails);
   const [classes, setClasses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const [formData, setFormData] = useState({
-    locality: studentDetails?.address?.locality || "",
-    city: studentDetails?.address?.city || "",
-    state: studentDetails?.address?.state || "",
-    country: studentDetails?.address?.country || "",
-    pin: studentDetails?.address?.pin || "",
+    locality: studentDetails?.locality || "",
+    city: studentDetails?.city || "",
+    state: studentDetails?.state || "",
+    country: studentDetails?.country || "",
+    pin: studentDetails?.pin || "",
     email: studentDetails?.email || "",
     firstName: studentDetails?.firstName || "",
     lastName: studentDetails?.lastName || "",
     dob: studentDetails?.dob || "",
     gender: studentDetails?.gender || "",
-    section: studentDetails?._class?.section || "",
-    class: studentDetails?._class?.name || "",
+    section: studentDetails?.section || "",
+    class: studentDetails?.class || "",
     phone: studentDetails?.phone || "",
-    fathersName: studentDetails?.guardian?.fathersName || "",
-    mothersName: studentDetails?.guardian?.mothersName || "",
-    mothersOccupation: studentDetails?.guardian?.mothersOccupation || "",
-    fathersOccupation: studentDetails?.guardian?.fathersOccupation || "",
+    fathersName: studentDetails?.fathersName || "",
+    mothersName: studentDetails?.mothersName || "",
+    mothersOccupation: studentDetails?.mothersOccupation || "",
+    fathersOccupation: studentDetails?.fathersOccupation || "",
     currentAcademicYear: studentDetails?.currentAcademicYear || "",
     joinDate: studentDetails?.joinDate || "",
     profileUrl: studentDetails?.profileUrl || "",
+    rollNo:studentDetails?.rollNo,
+    username: studentDetails?.username || ""
   });
+
+  console.log("formData", formData);
+
 
   const [profileUrl, setProfileUrl] = useState(formData?.profileUrl || ""); // State to store image URL
   const uploadedImage = useRef(null);
@@ -140,6 +146,9 @@ const AddStudentModal = ({
     } catch (error) {
       successHandler(error);
     }
+    console.log("formData", formData);
+
+    updateStudentData(formData)
     _closeModal();
   };
 
@@ -393,17 +402,12 @@ const AddStudentModal = ({
                   State<span style={{ color: "red" }}>*</span>
                 </Label>
                 <Input
-                  type="select"
+                  type="text"
                   name="state"
                   value={formData.state}
                   onChange={handleInputChange}
                 >
-                  <option>Select State</option>
-                  {stateData.states?.map((curr) => (
-                    <option key={curr.value} value={curr.state}>
-                      {curr.state}
-                    </option>
-                  ))}
+                  
                 </Input>
               </FormGroup>
             </Col>
@@ -415,13 +419,12 @@ const AddStudentModal = ({
                   Country<span style={{ color: "red" }}>*</span>
                 </Label>
                 <Input
-                  type="select"
+                  type="text"
                   name="country"
                   value={formData.country}
                   onChange={handleInputChange}
                 >
-                  <option>Select Country</option>
-                  <option value="India">India</option>
+                 
                 </Input>
               </FormGroup>
             </Col>

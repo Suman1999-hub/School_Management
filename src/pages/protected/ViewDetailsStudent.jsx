@@ -24,12 +24,13 @@ import { useSelector } from "react-redux";
 import SpinnerLoading from "../../components/SpinnerLoading";
 
 function ViewDetailsStudent() {
-  const [studentData, setStudentData] = useState(null);
+  const [studentData, setStudentData] = useState({});
   const [isActive, setIsActive] = useState(null);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [organizedStudentData, setOrganizedStudentData] = useState({});
   const loginType = useSelector((state) => state.userCredential.user.loginType);
-  console.log("isActive>>>>", isActive);
+  console.log("organizedStudentData>>>>", organizedStudentData);
 
   const { id } = useParams();
 
@@ -41,6 +42,30 @@ function ViewDetailsStudent() {
       console.log("Response", Response);
 
       setStudentData(Response?.student);
+      setOrganizedStudentData({
+        locality: Response?.student?.address?.locality || "",
+        city: Response?.student?.address?.city || "",
+        state: Response?.student?.address?.state || "",
+        country: Response?.student?.address?.country || "",
+        pin: Response?.student?.address?.pin || "",
+        email: Response?.student?.email || "",
+        firstName: Response?.student?.firstName || "",
+        lastName: Response?.student?.lastName || "",
+        dob: Response?.student?.dob || "",
+        gender: Response?.student?.gender || "",
+        section: Response?.student?._class?.section || "",
+        class: Response?.student?._class?.name || "",
+        phone: Response?.student?.phone || "",
+        fathersName: Response?.student?.guardian?.fathersName || "",
+        mothersName: Response?.student?.guardian?.mothersName || "",
+        mothersOccupation: Response?.student?.guardian?.mothersOccupation || "",
+        fathersOccupation: Response?.student?.guardian?.fathersOccupation || "",
+        currentAcademicYear: Response?.student?.currentAcademicYear || "",
+        joinDate: Response?.student?.joinDate || "",
+        profileUrl: Response?.student?.profileImage || "",
+        rollNo: Response?.student?.rollNo,
+        username: Response?.student?.username || ""
+      });
       setIsActive(Response?.student?.isActive || false);
     } catch (error) {
       console.error("Error fetching student details:", error);
@@ -71,6 +96,10 @@ function ViewDetailsStudent() {
 
   const _toggleEditModal = (isOpenModal = false) => {
     setIsOpenEditModal(isOpenModal);
+  };
+
+  const updateStudentData = (updatedData) => {
+    setOrganizedStudentData(updatedData);
   };
 
   useEffect(() => {
@@ -129,7 +158,7 @@ function ViewDetailsStudent() {
               <div style={{ textAlign: "center" }}>
                 {studentData?.profileImage ? (
                   <img
-                    src={studentData?._school?.imageUrl}
+                    src={organizedStudentData?.profileUrl}
                     alt="Profile"
                     width="100px"
                     style={{
@@ -172,22 +201,22 @@ function ViewDetailsStudent() {
                 <Row className="mt-3">
                   <Col md="6">
                     <Label style={{ fontWeight: "bold" }}>First Name</Label>
-                    <div>{studentData?.firstName || "-"}</div>
+                    <div>{organizedStudentData?.firstName || "-"}</div>
                   </Col>
                   <Col md="6">
                     <Label style={{ fontWeight: "bold" }}>Last Name</Label>
-                    <div>{studentData?.lastName || "-"}</div>
+                    <div>{organizedStudentData?.lastName || "-"}</div>
                   </Col>
                 </Row>
 
                 <Row className="mt-3">
                   <Col md="6">
                     <Label style={{ fontWeight: "bold" }}>Father's Name</Label>
-                    <div>{studentData?.guardian?.fathersName || "-"}</div>
+                    <div>{organizedStudentData?.fathersName || "-"}</div>
                   </Col>
                   <Col md="6">
                     <Label style={{ fontWeight: "bold" }}>Mother's Name</Label>
-                    <div>{studentData?.guardian?.mothersName || "-"}</div>
+                    <div>{organizedStudentData?.mothersName || "-"}</div>
                   </Col>
                 </Row>
 
@@ -196,57 +225,59 @@ function ViewDetailsStudent() {
                     <Label style={{ fontWeight: "bold" }}>
                       Father's Occupation
                     </Label>
-                    <div>{studentData?.guardian?.fathersOccupation || "-"}</div>
+                    <div>{organizedStudentData?.fathersOccupation || "-"}</div>
                   </Col>
                   <Col md="6">
                     <Label style={{ fontWeight: "bold" }}>
                       Mother's Occupation
                     </Label>
-                    <div>{studentData?.guardian?.mothersOccupation || "-"}</div>
+                    <div>{organizedStudentData?.mothersOccupation || "-"}</div>
                   </Col>
                 </Row>
 
                 <Row className="mt-3">
                   <Col md="6">
                     <Label style={{ fontWeight: "bold" }}>Roll No</Label>
-                    <div>{studentData?.rollNo || "-"}</div>
+                    <div>{organizedStudentData?.rollNo || "-"}</div>
                   </Col>
                   <Col md="6">
                     <Label style={{ fontWeight: "bold" }}>Gender</Label>
-                    <div>{studentData?.gender || "-"}</div>
+                    <div>{organizedStudentData?.gender || "-"}</div>
                   </Col>
                 </Row>
 
                 <Row className="mt-3">
                   <Col md="6">
                     <Label style={{ fontWeight: "bold" }}>Class</Label>
-                    <div>{studentData?._class?.name || "-"}</div>
+                    <div>{organizedStudentData?.class || "-"}</div>
                   </Col>
                   <Col md="6">
                     <Label style={{ fontWeight: "bold" }}>Section</Label>
-                    <div>{studentData?._class?.section || "-"}</div>
+                    <div>{organizedStudentData?.section || "-"}</div>
                   </Col>
                 </Row>
 
                 <Row className="mt-3">
                   <Col md="6">
                     <Label style={{ fontWeight: "bold" }}>Academic-Year</Label>
-                    <div>{studentData?.currentAcademicYear || "-"}</div>
+                    <div>
+                      {organizedStudentData?.currentAcademicYear || "-"}
+                    </div>
                   </Col>
                   <Col md="6">
                     <Label style={{ fontWeight: "bold" }}>Username</Label>
-                    <div>{studentData?.username || "-"}</div>
+                    <div>{organizedStudentData?.username || "-"}</div>
                   </Col>
                 </Row>
 
                 <Row className="mt-3">
                   <Col md="6">
                     <Label style={{ fontWeight: "bold" }}>Email</Label>
-                    <div>{studentData?.email || "-"}</div>
+                    <div>{organizedStudentData?.email || "-"}</div>
                   </Col>
                   <Col md="6">
                     <Label style={{ fontWeight: "bold" }}>Phone Number</Label>
-                    <div>{studentData?.phone || "-"}</div>
+                    <div>{organizedStudentData?.phone || "-"}</div>
                   </Col>
                 </Row>
 
@@ -257,7 +288,7 @@ function ViewDetailsStudent() {
                       {studentData?.dob ? dateFormat(studentData?.dob) : "-"}
                     </div>
                   </Col>
-                  <Col md="6">
+                  {/* <Col md="6">
                     <Label style={{ fontWeight: "bold" }}>
                       Date of Joining
                     </Label>
@@ -266,7 +297,7 @@ function ViewDetailsStudent() {
                         ? dateFormat(studentData?.joinDate)
                         : "-"}
                     </div>
-                  </Col>
+                  </Col> */}
                 </Row>
               </CardText>
             </CardBody>
@@ -277,8 +308,9 @@ function ViewDetailsStudent() {
               pageName="Edit Student"
               toggle={() => _toggleEditModal()}
               id={id}
-              studentDetails={studentData}
+              studentDetails={organizedStudentData}
               getStudentAPICall={_getStudentAPICall}
+              updateStudentData={updateStudentData}
             />
           )}
         </div>
