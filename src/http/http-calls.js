@@ -138,9 +138,9 @@ export const createSchool = (payload) => {
       });
   });
 };
-export const findAllStudent = () => {
+export const findAllStudent = (payload) => {
   return new Promise((resolve, reject) => {
-    makePostRequest(`${BASE_URL}/admin/students/view-students`, true)
+    makePostRequest(`${BASE_URL}/admin/students/view-students`, true, payload)
       .then((res) => {
         resolve(res);
         console.log(res);

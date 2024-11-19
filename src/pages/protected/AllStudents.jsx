@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
   Card,
@@ -23,14 +23,28 @@ function AllStudents() {
   const [allStudents, setAllStudents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [availableClasses, setAvailableClasses] = useState([]);
-  const [selectedFilter, setSelectedFilter] = useState({});
+  const [currentPage, setCurrentPage] = useState(1); 
+  const [totalItems, setTotalItems] = useState(); 
+  const itemsPerPage = 10; 
+  const [selectedFilter, setSelectedFilter] = useState({
+    pageNo	: currentPage,
+    skipLimit	: 10
+  });
   console.log("selectedFilter>>", selectedFilter);
 
   const user = useSelector((state) => state.userCredential.user.loginType);
-
+  const searchTimeoutRef = useRef(null); 
   useEffect(() => {
     fetchClasses();
   }, []);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage); 
+    setSelectedFilter(prevFilter => ({
+      ...prevFilter,
+      pageNo: newPage 
+    }));
+  };
 
   const fetchClasses = async () => {
     setIsLoading(true);
@@ -46,25 +60,31 @@ function AllStudents() {
     }
   };
 
-  const fetchAllStudentData = async () => {
+  const fetchAllStudentData = async (payload) => {
     setIsLoading(true);
+    // const payload = {
+    //   pageNo	: currentPage,
+    //   skipLimit	: 10
+
+    // }
 
     try {
-      // console.log("userID", userID);
-      const studentData = await findAllStudent();
-      console.log("studentData>>>", studentData.students);
+      console.log("payload>>>>", payload);
+      const studentData = await findAllStudent(payload);
+      // console.log("studentData>>>", studentData.students);
       setAllStudents(studentData.students);
+      setTotalItems(studentData.totalStudents)
     } catch (err) {
       console.log("Error", err);
     } finally {
       setIsLoading(false);
     }
   };
-  console.log("allStudents", allStudents);
+  console.log("selectedFilter", selectedFilter);
 
   useEffect(() => {
-    fetchAllStudentData();
-  }, []);
+    fetchAllStudentData(selectedFilter);
+  }, [currentPage]);
 
   const [isOpenModal, setIsOpenModal] = useState(false);
   const _toggleModal = (isOpenModal = false) => {
@@ -73,22 +93,41 @@ function AllStudents() {
 
   const handleFilterChange = (event, field) => {
     const updatedFilter = { ...selectedFilter };
-    updatedFilter[field] = event.target.value;
+    const value = event.target.value;
+  
+    if (value === "") {
+      delete updatedFilter[field];
+    } else {
+      updatedFilter[field] = value;
+    }
+  
     setSelectedFilter(updatedFilter);
-    ApplyFilter();
-  };
+     // Clear the previous timeout to prevent multiple rapid API calls
+     if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
 
-  const ApplyFilter = () => {
-    if (selectedFilter) {
-      return allStudents.filter((element) => {
-        const classMatch = selectedFilter.class ? element._class.name === selectedFilter.class : true
-        const sectionMatch = selectedFilter.section ? element._class.section === selectedFilter.section : true;
-        return classMatch && sectionMatch;
-      });
-    } 
-   
+    // Set a new timeout for the debouncing (e.g., 500ms delay)
+    searchTimeoutRef.current = setTimeout(() => {
+      fetchAllStudentData(updatedFilter);  // Trigger API call after delay
+    }, 800);
   };
-  const filteredStudents = ApplyFilter();
+  
+
+  // const ApplyFilter = () => {
+  //   if (selectedFilter) {
+  //     return allStudents.filter((element) => {
+  //       const classMatch = selectedFilter.class
+  //         ? element._class.name === selectedFilter.class
+  //         : true;
+  //       const sectionMatch = selectedFilter.section
+  //         ? element._class.section === selectedFilter.section
+  //         : true;
+  //       return classMatch && sectionMatch;
+  //     });
+  //   }
+  // };
+  // const filteredStudents = ApplyFilter();
 
   return (
     <>
@@ -114,7 +153,8 @@ function AllStudents() {
                 <Label>Class</Label>
                 <Input
                   type="select"
-                  onChange={(e) => handleFilterChange(e, "class")}
+                  value={selectedFilter?.className || ""}
+                  onChange={(e) => handleFilterChange(e, "className")}
                 >
                   <option value="">All</option>
                   {availableClasses.map((classItem) => (
@@ -128,6 +168,7 @@ function AllStudents() {
                 <Label>Section</Label>
                 <Input
                   type="select"
+                  value={selectedFilter?.section || ""}
                   onChange={(e) => handleFilterChange(e, "section")}
                 >
                   <option value="">All</option>
@@ -143,7 +184,7 @@ function AllStudents() {
               <div className="formGroup searchbar">
                 <Label>Search</Label>
                 <InputGroup>
-                  <Input placeholder="Search..." />
+                  <Input placeholder="Search..." value={selectedFilter?.searchString || ""} onChange={(e) => handleFilterChange(e, "searchString")}/>
                   <InputGroupText>
                     <i className="fas fa-search" />
                   </InputGroupText>
@@ -200,8 +241,8 @@ function AllStudents() {
                 </thead>
 
                 <tbody>
-                  {filteredStudents.map((curr) => {
-                    console.log(curr);
+                  {allStudents.map((curr) => {
+                    // console.log(curr);
                     return (
                       <>
                         <tr>
@@ -257,14 +298,14 @@ function AllStudents() {
               </Table>
 
               {/* pagination */}
-              <PaginatedItems itemsPerPage={4} />
-            </Card>
-            {/* {isOpenModal && (
-              <AddStudentModal
-                isOpen={isOpenModal}
-                toggle={() => _toggleModal()}
+              <PaginatedItems
+                totalItems={totalItems}
+                currentPage={currentPage}
+                itemsPerPage={itemsPerPage}
+                onPageChange={handlePageChange}
               />
-            )} */}
+            </Card>
+           
             {isOpenModal && (
               <AddStudentModal
                 isOpen={isOpenModal}
