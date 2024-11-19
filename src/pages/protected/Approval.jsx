@@ -8,6 +8,7 @@ import {
   InputGroupText,
   Label,
   List,
+  Spinner,
   TabContent,
   Table,
   TabPane,
@@ -105,11 +106,12 @@ function Approval() {
   const handleSearchField = (e) => {
     // setSearchItem(e.target.value);
   };
-
+  // const
   const _handleApprovedAndReject = async (field, id) => {
     const payload = {
       status: field,
     };
+    setIsLoading(true);
     try {
       const UpdateLeaveStatusApiRes = await UpdateLeaveStatus({ id, payload });
       if (!UpdateLeaveStatusApiRes.error) {
@@ -118,16 +120,19 @@ function Approval() {
       console.log("UpdateLeaveStatusApiRes", UpdateLeaveStatusApiRes);
     } catch (err) {
       console.log("Error is", err);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
     <>
       {isLoading ? (
-        // Display a loading spinner or message when data is loading
         <div
           style={{
-            textAlign: "center",
-            marginTop: "auto",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "80vh",
           }}
         >
           <SpinnerLoading />
@@ -240,6 +245,7 @@ function Approval() {
                                       <Button
                                         color="success"
                                         outline
+                                        disabled={isLoading}
                                         onClick={() =>
                                           _handleApprovedAndReject(
                                             "approved",
@@ -247,11 +253,24 @@ function Approval() {
                                           )
                                         }
                                       >
-                                        Accept
+                                        {isLoading ? (
+                                          <>
+                                            <Spinner size="sm">
+                                              Loading...
+                                            </Spinner>
+                                            <span style={{ color: "white" }}>
+                                              {" "}
+                                              Accepting...
+                                            </span>
+                                          </>
+                                        ) : (
+                                          "Accept"
+                                        )}
                                       </Button>
                                       <Button
                                         color="danger"
                                         outline
+                                        disabled={isLoading}
                                         onClick={() =>
                                           _handleApprovedAndReject(
                                             "rejected",
@@ -259,7 +278,19 @@ function Approval() {
                                           )
                                         }
                                       >
-                                        reject
+                                        {isLoading ? (
+                                          <>
+                                            <Spinner size="sm">
+                                              Loading...
+                                            </Spinner>
+                                            <span style={{ color: "white" }}>
+                                              {" "}
+                                              Rejecting...
+                                            </span>
+                                          </>
+                                        ) : (
+                                          "Reject"
+                                        )}
                                       </Button>
                                     </div>
                                   ) : (
@@ -271,43 +302,6 @@ function Approval() {
                             );
                           })
                         : "No Data Found"}
-
-                      {/* <tr>
-                    <td>4344343434</td>
-                    <td>CL</td>
-                    <td style={{ maxWidth: "300px" }}>
-                      Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    </td>
-                    <td>Jul 11. 2023</td>
-                    <td>Jul 12. 2023</td>
-                    <td>
-                      <span className="badge-success">Accept</span>
-                    </td>
-                  </tr>{" "}
-                  <tr>
-                    <td>4344343434</td>
-                    <td>CL</td>
-                    <td style={{ maxWidth: "300px" }}>
-                      Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    </td>
-                    <td>Jul 11. 2023</td>
-                    <td>Jul 12. 2023</td>
-                    <td>
-                      <span className="badge-success">Accept</span>
-                    </td>
-                  </tr>{" "}
-                  <tr>
-                    <td>4344343434</td>
-                    <td>CL</td>
-                    <td style={{ maxWidth: "300px" }}>
-                      Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    </td>
-                    <td>Jul 11. 2023</td>
-                    <td>Jul 12. 2023</td>
-                    <td>
-                      <span className="badge-danger">Pending</span>
-                    </td>
-                  </tr> */}
                     </tbody>
                   </Table>
                 </Card>

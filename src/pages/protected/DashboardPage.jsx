@@ -1292,7 +1292,7 @@ const DashboardPage = () => {
           </Table>
 
           {/* pagination */}
-          <PaginatedItems itemsPerPage={4} />
+          {/* <PaginatedItems itemsPerPage={4} /> */}
         </Card>
       </section>
 
@@ -1355,7 +1355,7 @@ const DashboardPage = () => {
           </Table>
 
           {/* pagination */}
-          <PaginatedItems itemsPerPage={4} />
+          {/* <PaginatedItems itemsPerPage={4} /> */}
         </Card>
       </section>
     </>

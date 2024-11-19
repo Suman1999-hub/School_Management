@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 import { getAllNotices } from "../../http/http-calls";
 import { formatDatell } from "../../helper-methods";
 import SpinnerLoading from "../../components/SpinnerLoading";
+import PaginatedItems from "../../components/PaginatedItems";
 
 function Notice() {
   const [filters, setFilters] = useState({
@@ -27,7 +28,11 @@ function Notice() {
     },
   });
   const [allNotice, setAllNotice] = useState();
+  const [totalNotice, setTotalNotice] = useState(0);
+  const [currentItems, setCurrentItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const UserloginType = useSelector(
     (state) => state.userCredential.user.loginType
@@ -44,21 +49,26 @@ function Notice() {
   };
 
   const _getAllNotice = async () => {
-    let payload = {};
+    let payload = { pageNumber: currentPage, pageSize: itemsPerPage };
     setIsLoading(true);
     if (UserloginType === "teacher") {
       payload = {
         type: "teacher",
+        pageNumber: currentPage,
+        pageSize: itemsPerPage,
       };
     } else if (UserloginType === "student") {
       payload = {
         type: "student",
+        pageNumber: currentPage,
+        pageSize: itemsPerPage,
       };
     }
     try {
       const allNoticeRes = await getAllNotices(payload);
       console.log(allNoticeRes.notices);
       setAllNotice(allNoticeRes.notices);
+      setTotalNotice(allNoticeRes.totalNotice);
     } catch (err) {
       console.log(err);
     } finally {
@@ -69,14 +79,25 @@ function Notice() {
   useEffect(() => {
     _getAllNotice();
   }, []);
+
+  const handlePageChange = async (page) => {
+    setCurrentPage(page);
+    await _getAllNotice(page, itemsPerPage);
+  };
+
+  const handleItemsChange = (items) => {
+    setCurrentItems(items);
+  };
   return (
     <>
       {isLoading ? (
         // Display a loading spinner or message when data is loading
         <div
           style={{
-            textAlign: "center",
-            marginTop: "auto",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "80vh",
           }}
         >
           <SpinnerLoading />
@@ -119,8 +140,8 @@ function Notice() {
                   <Label>Notice Type</Label>
                   <Input type="select">
                     <option>All</option>
-                    <option>Basic Subscription</option>
-                    <option>Premium Subscription</option>
+                    <option>Teacher</option>
+                    <option>Student</option>
                   </Input>
                 </div>
 
@@ -145,7 +166,7 @@ function Notice() {
                   <thead>
                     <tr>
                       <th>Title</th>
-                      <th>Description</th>
+                      {/* <th>Description</th> */}
                       <th>Notice Type</th>
                       <th>Date</th>
                       <th>Download</th>
@@ -153,7 +174,7 @@ function Notice() {
                   </thead>
 
                   <tbody>
-                    {allNotice?.map((curr) => {
+                    {currentItems?.map((curr) => {
                       console.log(curr?.attachments?.[0]?.url);
                       return (
                         <tr>
@@ -163,11 +184,11 @@ function Notice() {
                             </Link>
                           </td>
 
-                          <td>
+                          {/* <td>
                             {curr?.description?.length > 50
                               ? `${curr.description.substring(0, 50)}...`
                               : curr?.description}
-                          </td>
+                          </td> */}
                           <td>{curr?.noticeType ? curr?.noticeType : "-"}</td>
 
                           <td>
@@ -177,7 +198,11 @@ function Notice() {
                           </td>
                           <td>
                             {curr?.attachments?.length > 0 ? (
-                              <a href={curr?.attachments?.[0]?.url} download>
+                              <a
+                                href={curr?.attachments?.[0]?.url}
+                                download
+                                target="_"
+                              >
                                 <img
                                   src={require("../../assets/img/download.png")}
                                   alt=""
@@ -193,7 +218,14 @@ function Notice() {
                     })}
                   </tbody>
                 </Table>
-
+                <PaginatedItems
+                  items={allNotice}
+                  totalItems={totalNotice}
+                  currentPage={currentPage}
+                  itemsPerPage={itemsPerPage}
+                  onItemsChange={(items) => handleItemsChange(items)}
+                  onPageChange={handlePageChange}
+                />
                 {/* See More */}
                 {/* <Button color="link" className="h-auto mb-2">
               See More <i className="fa fa-chevron-down"></i>

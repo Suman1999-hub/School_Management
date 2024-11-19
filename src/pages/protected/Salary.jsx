@@ -242,7 +242,7 @@ function Salary() {
               </tbody>
             </Table>
 
-            <PaginatedItems itemsPerPage={4} />
+            {/* <PaginatedItems itemsPerPage={4} /> */}
           </Card>
         </section>
       </TabPane>

@@ -204,7 +204,7 @@ const CreditReport = () => {
           </Table>
 
           {/* pagination */}
-          <PaginatedItems itemsPerPage={4} />
+          {/* <PaginatedItems itemsPerPage={4} /> */}
         </Card>
 
         {/* Trade Line (Wells Fargo) */}

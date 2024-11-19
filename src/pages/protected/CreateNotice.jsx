@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Button, FormGroup, Input, Label } from "reactstrap";
+import { Button, FormGroup, Input, Label, Spinner } from "reactstrap";
 import {
   createNoticeApi,
   getNoticedetails,
   updateNotice,
 } from "../../http/http-calls";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import TextEditor from "../../components/TextEditor";
 
 function CreateNotice({ pageName }) {
   const [noticeData, setNoticeData] = useState(null);
+  const [isLoadingBtn, setLoadingBtn] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -55,6 +57,13 @@ function CreateNotice({ pageName }) {
     }));
   };
 
+  const handleEditorChange = (value) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      description: value,
+    }));
+  };
+
   const payload = {
     title: formData.title,
     description: formData.description,
@@ -68,15 +77,22 @@ function CreateNotice({ pageName }) {
   };
 
   const _createNoticeApiCall = async () => {
+    setLoadingBtn(true);
     try {
       const createNoticeRes = await createNoticeApi(payload);
+      if (!createNoticeRes.error) {
+        navigate("/notice");
+      }
       console.log("Notice created:", createNoticeRes);
     } catch (err) {
       console.error("Error creating notice:", err);
+    } finally {
+      setLoadingBtn(false);
     }
   };
 
   const _EditNoticeApiCall = async () => {
+    setLoadingBtn(true);
     try {
       const updateNoticeRes = await updateNotice({ payload, id });
       if (!updateNoticeRes.error) {
@@ -85,6 +101,8 @@ function CreateNotice({ pageName }) {
       console.log("Notice updated:", updateNoticeRes);
     } catch (err) {
       console.error("Error updating notice:", err);
+    } finally {
+      setLoadingBtn(false);
     }
   };
 
@@ -135,31 +153,57 @@ function CreateNotice({ pageName }) {
             </FormGroup>
           </div>
         </div>
-        <div style={{ maxWidth: "500px" }}>
-          <FormGroup>
-            <Label for="description">Description</Label>
-            <Input
-              name="description"
-              type="textarea"
-              placeholder="Description"
-              style={{
-                boxShadow: "rgb(38, 57, 77) 0px 20px 30px -10px",
-                minHeight: "300px",
-              }}
-              value={formData.description}
-              onChange={handleInputChange}
-            />
-          </FormGroup>
+        <div>
+          <Label for="description">Description</Label>
+          <TextEditor
+            content={formData.description}
+            onChange={handleEditorChange}
+            placeholder="Enter the description here..."
+          />
         </div>
       </div>
       <div className="mt-4">
         {pageName === "Create Notice" ? (
-          <Button color="primary" onClick={_createNoticeApiCall}>
-            {pageName}
-          </Button>
+          <>
+            <Link to="/notice">
+              <Button
+                color="danger"
+                outline
+                style={{ marginRight: "2%" }}
+                disabled={isLoadingBtn}
+              >
+                Back
+              </Button>
+            </Link>
+            <Button
+              color="success"
+              onClick={_createNoticeApiCall}
+              disabled={isLoadingBtn}
+            >
+              {isLoadingBtn ? (
+                <>
+                  <Spinner size="sm">Loading...</Spinner>
+                  <span style={{ color: "white" }}> Create...</span>
+                </>
+              ) : (
+                pageName
+              )}
+            </Button>
+          </>
         ) : (
-          <Button color="primary" onClick={_EditNoticeApiCall}>
-            {pageName}
+          <Button
+            color="primary"
+            onClick={_EditNoticeApiCall}
+            disabled={isLoadingBtn}
+          >
+            {isLoadingBtn ? (
+              <>
+                <Spinner size="sm">Loading...</Spinner>
+                <span style={{ color: "white" }}> Update...</span>
+              </>
+            ) : (
+              pageName
+            )}
           </Button>
         )}
       </div>
