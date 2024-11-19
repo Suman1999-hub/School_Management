@@ -9,7 +9,8 @@ class TextEditor extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  modules = {
+  // Default modules and formats can be overridden by props
+  modules = this.props.modules || {
     toolbar: [
       [{ header: [1, 2, 3, false] }],
       ["bold", "italic", "underline", "strike", "blockquote"],
@@ -25,7 +26,7 @@ class TextEditor extends Component {
     ],
   };
 
-  formats = [
+  formats = this.props.formats || [
     "header",
     "bold",
     "italic",
@@ -48,36 +49,69 @@ class TextEditor extends Component {
 
   render() {
     return (
-      <>
-        <div>
-          <ReactQuill
-            value={this.props.content || ""}
-            onChange={this.handleChange}
-            className="editor"
-            modules={this.modules}
-            formats={this.formats}
-            placeholder={this.props.placeholder}
-            style={{
-              maxWidth: "70%",
-              boxShadow: "rgb(38, 57, 77) 0px 20px 30px -10px",
-            }}
-          />
-        </div>
-      </>
+      <div>
+        <ReactQuill
+          value={this.props.content || ""}
+          onChange={this.handleChange}
+          className="editor"
+          modules={this.modules}
+          formats={this.formats}
+          placeholder={this.props.placeholder}
+          style={{
+            ...this.props.style,
+            maxWidth: "70%",
+            boxShadow: "rgb(38, 57, 77) 0px 20px 30px -10px",
+          }}
+        />
+      </div>
     );
   }
 }
 
-// Define PropTypes for better validation
 TextEditor.propTypes = {
   content: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
+  style: PropTypes.object,
+  modules: PropTypes.object,
+  formats: PropTypes.array,
 };
 
-// Default props in case they are not provided
 TextEditor.defaultProps = {
   content: "",
+  placeholder: "Enter your content...",
+  style: {},
+  modules: {
+    toolbar: [
+      [{ header: [1, 2, 3, false] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [
+        { list: "ordered" },
+        { list: "bullet" },
+        { indent: "-1" },
+        { indent: "+1" },
+      ],
+      [{ align: [] }], // Alignment options
+      [{ color: [] }, { background: [] }], // Text color and background color
+      ["link", "image"], // Link and image options
+    ],
+  },
+  formats: [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "indent",
+    "align",
+    "color",
+    "background",
+    "link",
+    "image",
+  ],
 };
 
 export default TextEditor;

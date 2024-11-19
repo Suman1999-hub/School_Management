@@ -82,8 +82,10 @@ function Teachers() {
         // Display a loading spinner or message when data is loading
         <div
           style={{
-            textAlign: "center",
-            marginTop: "auto",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "80vh",
           }}
         >
           <SpinnerLoading />

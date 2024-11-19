@@ -10,13 +10,16 @@ import {
   ModalBody,
   ModalHeader,
   Row,
+  Spinner,
 } from "reactstrap";
 import { ApplyLeave, getAllLeaves } from "../../http/http-calls";
+import moment from "moment";
 
-function ApplyLeaveModal({ isOpen, toggle, setApplyLeaveData }) {
+function ApplyLeaveModal({ isOpen, toggle, getAllLeaves }) {
   const _closeModal = () => {
     toggle();
   };
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     leaveType: "",
     startDate: "",
@@ -25,21 +28,24 @@ function ApplyLeaveModal({ isOpen, toggle, setApplyLeaveData }) {
   });
   const payload = {
     leaveType: formData.leaveType,
-    startDate: formData.startDate,
-    endDate: formData.endDate,
+    startDate: moment(formData.startDate).format("DD/MM/YYYY"),
+    endDate: moment(formData.endDate).format("DD/MM/YYYY"),
     reason: formData.reason,
   };
   const _ApplyLeaveApiCall = async () => {
+    setLoading(true);
     try {
       const applyLeaveRes = await ApplyLeave(payload);
       if (!applyLeaveRes?.error) {
-        // getAllTeacherAPiCall();
-        // setApplyLeaveData();
+        getAllLeaves();
+
         toggle();
       }
       console.log(payload);
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
   const handleInputChange = (e) => {
@@ -59,7 +65,7 @@ function ApplyLeaveModal({ isOpen, toggle, setApplyLeaveData }) {
         centered
         size="lg"
       >
-        <ModalHeader>Create School</ModalHeader>
+        <ModalHeader>Leave</ModalHeader>
         <ModalBody>
           {/* Card Number */}
 
@@ -120,16 +126,29 @@ function ApplyLeaveModal({ isOpen, toggle, setApplyLeaveData }) {
             <Input type="checkbox" /> <Label check>Is Half Day Leave?</Label>
           </FormGroup> */}
           <div className="inlineBtnWrapper">
-            <Button color="primary" outline onClick={() => _closeModal()}>
+            <Button
+              color="danger"
+              outline
+              onClick={() => _closeModal()}
+              disabled={loading}
+            >
               Cancel
             </Button>
 
             <Button
-              color="primary"
+              color="success"
               onClick={() => _ApplyLeaveApiCall()}
               style={{ marginLeft: "2%" }}
+              disabled={loading}
             >
-              Submit
+              {loading ? (
+                <>
+                  <Spinner size="sm">Loading...</Spinner>
+                  <span style={{ color: "white" }}> Submit...</span>
+                </>
+              ) : (
+                "Submit"
+              )}
             </Button>
           </div>
         </ModalBody>

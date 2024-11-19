@@ -460,3 +460,34 @@ export const markStudentAttendance = ({ payload }) => {
       });
   });
 };
+
+// Search Api Leave
+export const searchLeaveApi = (payload) => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/leave/find`, true, payload)
+      .then((res) => {
+        resolve(res);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+//filterLeave Api
+
+export const filterLeaveApi = (payload) => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/leave/get`, true, payload)
+      .then((res) => {
+        resolve(res);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};

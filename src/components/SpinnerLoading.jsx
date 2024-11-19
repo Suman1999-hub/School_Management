@@ -7,7 +7,7 @@ function SpinnerLoading() {
       <InfinitySpin
         visible={true}
         width="200"
-        color="#006aff"
+        color="#f0079a"
         ariaLabel="infinity-spin-loading"
       />
     </div>
