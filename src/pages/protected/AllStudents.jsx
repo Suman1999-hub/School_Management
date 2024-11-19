@@ -259,12 +259,12 @@ function AllStudents() {
               {/* pagination */}
               <PaginatedItems itemsPerPage={4} />
             </Card>
-            {isOpenModal && (
+            {/* {isOpenModal && (
               <AddStudentModal
                 isOpen={isOpenModal}
                 toggle={() => _toggleModal()}
               />
-            )}
+            )} */}
             {isOpenModal && (
               <AddStudentModal
                 isOpen={isOpenModal}
