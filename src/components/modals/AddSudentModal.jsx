@@ -340,9 +340,9 @@ const AddStudentModal = ({
       style={{ maxWidth: "600px" }}
     >
       {pageName === "Add Student" ? (
-        <ModalHeader>Add Student</ModalHeader>
+        <ModalHeader toggle={toggle}>Add Student</ModalHeader>
       ) : (
-        <ModalHeader>Edit Student</ModalHeader>
+        <ModalHeader toggle={toggle}>Edit Student</ModalHeader>
       )}
 
       <ModalBody>

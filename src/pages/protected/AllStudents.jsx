@@ -79,11 +79,14 @@ function AllStudents() {
   };
 
   const ApplyFilter = () => {
-    return allStudents.filter((element) => {
-      const classMatch = selectedFilter.class ? element._class.name === selectedFilter.class : true
-      const sectionMatch = selectedFilter.section ? element._class.section === selectedFilter.section : true;
-      return classMatch && sectionMatch;
-    });
+    if (selectedFilter) {
+      return allStudents.filter((element) => {
+        const classMatch = selectedFilter.class ? element._class.name === selectedFilter.class : true
+        const sectionMatch = selectedFilter.section ? element._class.section === selectedFilter.section : true;
+        return classMatch && sectionMatch;
+      });
+    } 
+   
   };
   const filteredStudents = ApplyFilter();
 
