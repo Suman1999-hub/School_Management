@@ -7,7 +7,7 @@ const PaginatedItems = ({
   totalItems,
   currentPage,
   itemsPerPage,
-  // onItemsChange,
+  onItemsChange,
   onPageChange,
 }) => {
   const pageCount = Math.ceil(totalItems / itemsPerPage);
@@ -22,7 +22,7 @@ const PaginatedItems = ({
     // Fetch items from another resources.
     // const endOffset = itemOffset + itemsPerPage;
     // const newItems = items?.slice(itemOffset, endOffset);
-    // onItemsChange(items);
+     onItemsChange(items);
   }, [items]);
 
   return (

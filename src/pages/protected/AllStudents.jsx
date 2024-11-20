@@ -15,7 +15,7 @@ import { getAddressFormate } from "../../helper-methods";
 import AddStudentModal from "../../components/modals/AddSudentModal";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import { useSelector } from "react-redux";
-import { findAllStudent,  getAvailableSettings } from "../../http/http-calls";
+import { findAllStudent, getAvailableSettings } from "../../http/http-calls";
 import { Link } from "react-router-dom";
 import SpinnerLoading from "../../components/SpinnerLoading";
 
@@ -24,7 +24,8 @@ function AllStudents() {
   const [isLoading, setIsLoading] = useState(true);
   const [availableClasses, setAvailableClasses] = useState([]);
   const [currentPage, setCurrentPage] = useState(1); 
-  const [totalItems, setTotalItems] = useState(); 
+  const [totalItems, setTotalItems] = useState();
+  const [currentItems, setCurrentItems] = useState([]);
   const itemsPerPage = 10; 
   const [selectedFilter, setSelectedFilter] = useState({
     pageNo	: currentPage,
@@ -115,21 +116,10 @@ function AllStudents() {
   };
   
 
-  // const ApplyFilter = () => {
-  //   if (selectedFilter) {
-  //     return allStudents.filter((element) => {
-  //       const classMatch = selectedFilter.class
-  //         ? element._class.name === selectedFilter.class
-  //         : true;
-  //       const sectionMatch = selectedFilter.section
-  //         ? element._class.section === selectedFilter.section
-  //         : true;
-  //       return classMatch && sectionMatch;
-  //     });
-  //   }
-  // };
-  // const filteredStudents = ApplyFilter();
-
+  const handleItemsChange = (items) => {
+    setCurrentItems(items);
+  };
+  
   return (
     <>
       {isLoading ? (
@@ -242,7 +232,7 @@ function AllStudents() {
                 </thead>
 
                 <tbody>
-                  {allStudents.map((curr) => {
+                  {currentItems.map((curr) => {
                     // console.log(curr);
                     return (
                       <>
@@ -300,10 +290,12 @@ function AllStudents() {
 
               {/* pagination */}
               <PaginatedItems
+              items={allStudents}
                 totalItems={totalItems}
                 currentPage={currentPage}
                 itemsPerPage={itemsPerPage}
                 onPageChange={handlePageChange}
+                onItemsChange={(items) => handleItemsChange(items)}
               />
             </Card>
            

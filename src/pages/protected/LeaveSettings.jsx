@@ -6,7 +6,6 @@ import {
   getAvailableSettings,
   setSettings,
 } from "../../http/http-calls";
-import SpinnerLoading from "../../components/SpinnerLoading";
 
 const LeaveSettings = ({ activeTab, tabId, title, settings }) => {
   const [days, setDays] = useState();
@@ -26,24 +25,6 @@ const LeaveSettings = ({ activeTab, tabId, title, settings }) => {
 
   console.log("formFields>>>", formFields);
   console.log("errors>>>", errors);
-
-  // const fetchSettings = async () => {
-  //   setIsLoading(true);
-
-  //   try {
-  //     const response = await getAvailableSettings();
-  //     console.log("response>>>", response.settings.busdays);
-  //     setFormFields(response?.settings?.leave);
-  //   } catch (e) {
-  //     console.log(e);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchSettings();
-  // }, []);
 
   const handleChange = (index, event) => {
     const { value, name } = event.target;

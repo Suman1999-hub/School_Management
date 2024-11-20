@@ -115,6 +115,8 @@ const Settingss = () => {
           <HolidaysSettings
             activeTab={activeTab}
             tabId="6"
+            title="Holidays"
+            settings={allSettings.holidays}
           />
 
           <PersonalSettings
