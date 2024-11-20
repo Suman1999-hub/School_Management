@@ -15,7 +15,7 @@ import { getAddressFormate } from "../../helper-methods";
 import AddStudentModal from "../../components/modals/AddSudentModal";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import { useSelector } from "react-redux";
-import { findAllStudent, getAvailableClasses } from "../../http/http-calls";
+import { findAllStudent,  getAvailableSettings } from "../../http/http-calls";
 import { Link } from "react-router-dom";
 import SpinnerLoading from "../../components/SpinnerLoading";
 
@@ -42,7 +42,8 @@ function AllStudents() {
     setCurrentPage(newPage); 
     setSelectedFilter(prevFilter => ({
       ...prevFilter,
-      pageNo: newPage 
+      pageNo: newPage,
+      academicYear : "2024-2025"
     }));
   };
 
@@ -50,7 +51,7 @@ function AllStudents() {
     setIsLoading(true);
 
     try {
-      const response = await getAvailableClasses();
+      const response = await getAvailableSettings();
       // console.log("response>>", response.settings.availableClasses);
       setAvailableClasses(response.settings.availableClasses);
     } catch (err) {

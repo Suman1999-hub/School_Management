@@ -491,3 +491,33 @@ export const filterLeaveApi = (payload) => {
       });
   });
 };
+
+//get available classes
+export const getAvailableSettings = () => {
+  return new Promise((resolve, reject) => {
+    makeGetRequest(`${BASE_URL}/admin/settings`, true)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+// set Bus Service
+
+export const setSettings = (payload) => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/admin/setsettings`, true, payload)
+      .then((res) => {
+        resolve(res);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};

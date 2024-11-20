@@ -9,12 +9,13 @@ import {
   Row,
   Col,
   Input,
+  Spinner,
 } from "reactstrap";
 import stateData from "../../State.json";
 import {
   createSchool,
   createStudent,
-  getAvailableClasses,
+  getAvailableSettings,
   updateStudent,
 } from "../../http/http-calls";
 import { errorHandler, showerrorToast, successHandler } from "../../helper-methods";
@@ -34,7 +35,7 @@ const AddStudentModal = ({
   };
 
   const [classes, setClasses] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
   const phoneRegex = /^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/;
@@ -77,10 +78,10 @@ const AddStudentModal = ({
   }, [isOpen]);
 
   const fetchClasses = async () => {
-    setIsLoading(true);
+    setLoading(true);
 
     try {
-      const response = await getAvailableClasses();
+      const response = await getAvailableSettings();
       console.log("response>>", response.settings);
       const updatedformdata = { ...formData };
       updatedformdata["currentAcademicYear"] = response.settings.academicYear;
@@ -89,7 +90,7 @@ const AddStudentModal = ({
     } catch (err) {
       // setError('Failed to load classes. Please try again.');
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
@@ -122,8 +123,11 @@ const AddStudentModal = ({
 
   //Create
   const _createStudentApiCall = async () => {
+
     const isvalid = await validateForm(formData)
     if (isvalid) {
+      setLoading(true);
+
       try {
         const createStudentRes = await createStudent(payload);
         if (!createStudentRes?.error) {
@@ -132,6 +136,8 @@ const AddStudentModal = ({
         console.log(payload);
       } catch (error) {
         errorHandler(error);
+      }finally {
+        setLoading(false);
       }
       _closeModal();
     } else {
@@ -143,8 +149,10 @@ const AddStudentModal = ({
 
   //Edit
   const _EditStudentApiCall = async () => {
+
     const isvalid = await validateForm(formData)
     if (isvalid) {
+      setLoading(true);
       try {
         if (id !== undefined) {
           const updateStudentRes = await updateStudent({ payload, id });
@@ -156,6 +164,8 @@ const AddStudentModal = ({
         }
       } catch (error) {
         successHandler(error);
+      } finally {
+        setLoading(false);
       }
       updateStudentData(formData);
       _closeModal();
@@ -172,7 +182,7 @@ const AddStudentModal = ({
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     const updatedFormdata = { ...formData };
-    updatedFormdata[name] = value.trim();
+    updatedFormdata[name] = value;
     setFormData(updatedFormdata);
     validateForm(updatedFormdata);
   };
@@ -774,16 +784,32 @@ const AddStudentModal = ({
                 color="primary"
                 className="ms-3"
                 onClick={() => _createStudentApiCall()}
+                disabled={loading}
               >
-                {pageName}
+                 {loading ? (
+                    <>
+                      <Spinner size="sm">Loading...</Spinner>
+                      <span style={{ color: "white" }}> Creating...</span>
+                    </>
+                  ) : (
+                    pageName
+                  )}
               </Button>
             ) : (
               <Button
                 color="primary"
                 className="ms-3"
                 onClick={() => _EditStudentApiCall()}
+                disabled={loading}
               >
-                {pageName}
+               {loading ? (
+                    <>
+                      <Spinner size="sm">Loading...</Spinner>
+                      <span style={{ color: "white" }}> Update...</span>
+                    </>
+                  ) : (
+                    pageName
+                  )}
               </Button>
             )}
           </div>
