@@ -1,19 +1,17 @@
 // BusServiceSettings.js
 import React, { useEffect, useState } from "react";
 import { Card, Button, Input, NavLink, TabPane } from "reactstrap";
-import { getAvailableClasses, getAvailableSettings, setSettings } from "../../http/http-calls";
+import {
+  getAvailableClasses,
+  getAvailableSettings,
+  setSettings,
+} from "../../http/http-calls";
 import SpinnerLoading from "../../components/SpinnerLoading";
 
-const BusServiceSettings = ({ activeTab, tabId, title }) => {
-
-  const [ fee , setFee ] = useState()
+const BusServiceSettings = ({ activeTab, tabId, title, settings }) => {
+  const [fee, setFee] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const [formFields, setFormFields] = useState([
-    {
-      range: "",
-      fee: fee,
-    },
-  ]);
+  const [formFields, setFormFields] = useState(settings);
   const [errors, setErrors] = useState([
     {
       range: "",
@@ -29,31 +27,30 @@ const BusServiceSettings = ({ activeTab, tabId, title }) => {
   console.log("formFields>>>", formFields);
   console.log("errors>>>", errors);
 
-  const fetchSettings = async () => {
-    setIsLoading(true);
+  // const fetchSettings = async () => {
+  //   setIsLoading(true);
 
-    try {
-     
-      const response = await  getAvailableSettings()
-      console.log("response>>>", response.settings.busFee);
-      setFormFields(response.settings.busFee)
+  //   try {
+  //     const response = await getAvailableSettings();
+  //     console.log("response>>>", response.settings.busFee);
+  //     setFormFields(response.settings.busFee);
+  //   } catch (e) {
+  //     console.log(e);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
-    } catch(e) {
-      console.log(e);
-      
-    }finally {
-      setIsLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    fetchSettings()
-  },[])
+  // useEffect(() => {
+  //   fetchSettings();
+  // }, []);
 
   const handleChange = (index, event) => {
     const { value, name } = event.target;
     const updatedFormFields = formFields.map((field, i) =>
-      i === index ? { ...field, [name]: name === 'fee' ? parseFloat(value) : value } : field
+      i === index
+        ? { ...field, [name]: name === "fee" ? parseFloat(value) : value }
+        : field
     );
     setFormFields(updatedFormFields);
     validateForm(updatedFormFields);
@@ -100,7 +97,7 @@ const BusServiceSettings = ({ activeTab, tabId, title }) => {
         fee: "",
       }));
       let isFormValid = true;
-  
+
       updatedFormFields.forEach((field, rowIndex) => {
         // Check for range field errors
         if (!field.range) {
@@ -110,154 +107,149 @@ const BusServiceSettings = ({ activeTab, tabId, title }) => {
           updatedErrors[rowIndex].range = "Range already exists!";
           isFormValid = false;
         } else {
-          updatedErrors[rowIndex].range = "";  
+          updatedErrors[rowIndex].range = "";
         }
-  
+
         // Check for amount field errors
         if (!field.fee) {
           updatedErrors[rowIndex].fee = "*Required";
           isFormValid = false;
         } else {
-          updatedErrors[rowIndex].fee = "";  
+          updatedErrors[rowIndex].fee = "";
         }
       });
-  
+
       setErrors(updatedErrors);
       resolve(isFormValid);
     });
   };
 
   const handleSave = async () => {
-    const isValid = await validateForm(formFields)
+    const isValid = await validateForm(formFields);
     if (isValid) {
       try {
         const payload = {
-          setField : "busFee",
-          busFee : formFields
-        }
+          setField: "busFee",
+          busFee: formFields,
+        };
 
         const response = await setSettings(payload);
         console.log("response>>>", response);
-
-      } catch(e) {
+      } catch (e) {
         console.log(e);
-        
       }
     } else {
-
     }
-  }
-  
+  };
+
   return (
     <>
-     {isLoading ? (
-        <div
-          style={{
-            textAlign: "center",
-            marginTop: "auto",
-          }}
-        >
-          <SpinnerLoading />
-        </div>
-      ) : (
-<TabPane tabId={tabId}>
-      <section>
-        <Card body>
-          <NavLink
-            style={{ textAlign: "center" }}
-            className={activeTab === tabId ? "active" : ""}
-          >
-            <div className="innerHeader">
-              <h2>{title}</h2>
-              <div>
-                <Button color="dark" outline onClick={handleAdd}>
-                  <i className="fa fa-plus"></i>
-                </Button>
-              </div>
-            </div>
-            {formFields.map((fields, index) => (
-              <div
-                style={{
-                  textAlign: "center",
-                  display: "flex",
-                  flexWrap: "wrap",
-                  justifyContent: "space-evenly",
-                }}
-                key={index}
+     
+        <TabPane tabId={tabId}>
+          <section>
+            <Card body>
+              <NavLink
+                style={{ textAlign: "center" }}
+                className={activeTab === tabId ? "active" : ""}
               >
-
-                <div>
+                <div className="innerHeader">
+                  <h2>{title}</h2>
                   <div>
-                  <Input
-                  name="range"
-                  style={contentStyles}
-                  type="select"
-                  value={fields.range}
-                  onChange={(e) => handleChange(index, e)}
-                >
-                  <option>Range(kms)</option>
-                  <option>1-5</option>
-                  <option>6-10</option>
-                  <option>11-20</option>
-                  <option>21-25</option>
-                  <option>26-30</option>
-                </Input>
-                  </div>
-                  <div>
-                  <span 
-                 style={{
-                        color: "red",
-                        display: "block", 
-                        marginTop: "5px", 
-                        fontSize: "12px", 
-                      }}
-                
-                >{errors[index]?.range}</span> 
-
+                    <Button color="dark" outline onClick={handleAdd}>
+                      <i className="fa fa-plus"></i>
+                    </Button>
                   </div>
                 </div>
-                
-                <div>
-                  <div>
-                  <Input
-                  name="fee"
-                  style={contentStyles}
-                  type="number"
-                  value={fields.fee}
-                  onChange={(e) => handleChange(index, e)}
-                />
-                  </div>
-                  <div>
-                  <span style={{ color: "red" }}>{errors[index]?.fee}</span> 
-
-                  </div>
-                </div>
-               
-
-                {formFields.length > 1 && (
-                  <Button
-                    color="danger"
-                    style={contentStyles}
-                    onClick={() => handleDelete(index)} // Added functionality for deleting the row
+              
+                {formFields.map((fields, index) => (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      display: "flex",
+                      flexWrap: "wrap",
+                      justifyContent: "space-evenly",
+                    }}
+                    key={index}
                   >
-                    <i className="fa fa-trash"></i>
-                  </Button>
-                )}
+                    <div>
+                    {index === 1 &&  <div>Range</div>}
 
-              </div>
-            ))}
-            <Button 
-            // hidden={!validateForm(formFields)} 
-            style={{ marginTop: "30px" }} color="primary" onClick={handleSave}>
-              Save
-            </Button>
-          </NavLink>
-        </Card>
-      </section>
-    </TabPane>
-      )}
+                      <div>
+                        <Input
+                          name="range"
+                          style={contentStyles}
+                          type="select"
+                          value={fields.range}
+                          onChange={(e) => handleChange(index, e)}
+                        >
+                          <option>Range(kms)</option>
+                          <option>1-5</option>
+                          <option>6-10</option>
+                          <option>11-20</option>
+                          <option>21-25</option>
+                          <option>26-30</option>
+                        </Input>
+                      </div>
+                      <div>
+                        <span
+                          style={{
+                            color: "red",
+                            display: "block",
+                            marginTop: "5px",
+                            fontSize: "12px",
+                          }}
+                        >
+                          {errors[index]?.range}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div>
+                    {index === 1 &&  <div>Amount</div>}
+
+                      <div>
+                      <Input
+                          name="fee"
+                          style={contentStyles}
+                          type="number"
+                          value={fields.fee}
+                          onChange={(e) => handleChange(index, e)}
+                        />
+                      </div>
+                      <div>
+                        <span style={{ color: "red" }}>
+                          {errors[index]?.fee}
+                        </span>
+                      </div>
+                    </div>
+
+                    {formFields.length > 1 && (
+                      <Button
+                        color="danger" outline
+                        style={{
+                          marginTop: "30px",  
+                          maxWidth: "350px",
+                          textAlign: "center",
+                        }}
+                        onClick={() => handleDelete(index)}
+                      >
+                        <i className="fa fa-trash"></i>
+                      </Button>
+                    )}
+                  </div>
+                ))}
+                <Button
+                  style={{ marginTop: "30px" }}
+                  color="primary"
+                  onClick={handleSave}
+                >
+                  Save
+                </Button>
+              </NavLink>
+            </Card>
+          </section>
+        </TabPane>
     </>
-    
   );
 };
 

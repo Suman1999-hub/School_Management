@@ -1,164 +1,245 @@
 // LeaveSettings.js
-import React, { useState } from "react";
-import { Card, Button, Input, NavLink, TabPane, Table } from "reactstrap";
-import AddHolidayModal from "../../components/modals/AddHolidayModal";
+import React, { useEffect, useState } from "react";
+import { Card, Button, Input, NavLink, TabPane } from "reactstrap";
+import {
+  getAvailableClasses,
+  getAvailableSettings,
+  setSettings,
+} from "../../http/http-calls";
+import SpinnerLoading from "../../components/SpinnerLoading";
 
-const LeaveSettings = ({ activeTab, tabId, title, onAddClick }) => {
-  const [isModal2Open, setIsModal2Open] = useState(false);
-  const _toggleModal2 = (isOpen, name) => {
-    setIsModal2Open(isOpen);
-  };
+const LeaveSettings = ({ activeTab, tabId, title, settings }) => {
+  const [days, setDays] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const [formFields, setFormFields] = useState(settings);
+  const [errors, setErrors] = useState([
+    {
+      type: "",
+      days: "",
+    },
+  ]);
   const contentStyles = {
     marginTop: "30px",
     maxWidth: "350px",
     textAlign: "center",
   };
 
+  console.log("formFields>>>", formFields);
+  console.log("errors>>>", errors);
+
+  // const fetchSettings = async () => {
+  //   setIsLoading(true);
+
+  //   try {
+  //     const response = await getAvailableSettings();
+  //     console.log("response>>>", response.settings.busdays);
+  //     setFormFields(response?.settings?.leave);
+  //   } catch (e) {
+  //     console.log(e);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchSettings();
+  // }, []);
+
+  const handleChange = (index, event) => {
+    const { value, name } = event.target;
+    const updatedFormFields = formFields.map((field, i) =>
+      i === index
+        ? { ...field, [name]: name === "days" ? parseFloat(value) : value }
+        : field
+    );
+    setFormFields(updatedFormFields);
+    validateForm(updatedFormFields);
+  };
+
+  const handleAdd = async () => {
+    try {
+      // Use a temporary email for the new row
+      const newtype = formFields[formFields.length - 1]?.type || "";
+
+      // Check for duplicate emails in the formFields excluding the new one
+      const isEmailDuplicate = check(
+        formFields.slice(0, formFields.length - 1),
+        newtype
+      );
+      if (isEmailDuplicate) {
+        return;
+      }
+      const isValid = await validateForm(formFields);
+      if (isValid) {
+        setFormFields([...formFields, { type: "", days: "" }]);
+        setErrors([...errors, { type: "", days: "" }]);
+      }
+    } catch (error) {}
+  };
+
+  const handleDelete = (indexToDelete) => {
+    const updatedFormFields = formFields.filter(
+      (_, index) => index !== indexToDelete
+    );
+    const updatedErrors = errors.filter((_, index) => index !== indexToDelete);
+    setFormFields(updatedFormFields);
+    setErrors(updatedErrors);
+  };
+
+  const check = (formFields, newtype) => {
+    return formFields.some((field) => field.type === newtype);
+  };
+
+  const validateForm = (updatedFormFields) => {
+    return new Promise((resolve) => {
+      const updatedErrors = updatedFormFields.map((field) => ({
+        type: "",
+        days: "",
+      }));
+      let isFormValid = true;
+
+      updatedFormFields.forEach((field, rowIndex) => {
+        // Check for type field errors
+        if (!field.type) {
+          updatedErrors[rowIndex].type = "*Required";
+          isFormValid = false;
+        } else if (check(updatedFormFields.slice(0, rowIndex), field.type)) {
+          updatedErrors[rowIndex].type = "type already exists!";
+          isFormValid = false;
+        } else {
+          updatedErrors[rowIndex].type = "";
+        }
+
+        // Check for days field errors
+        if (!field.days) {
+          updatedErrors[rowIndex].days = "*Required";
+          isFormValid = false;
+        } else {
+          updatedErrors[rowIndex].days = "";
+        }
+      });
+
+      setErrors(updatedErrors);
+      resolve(isFormValid);
+    });
+  };
+
+  const handleSave = async () => {
+    const isValid = await validateForm(formFields);
+    if (isValid) {
+      try {
+        const payload = {
+          setField: "leave",
+          leave: formFields,
+        };
+
+        const response = await setSettings(payload);
+        console.log("response>>>", response);
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+    }
+  };
+
   return (
-    <TabPane tabId={tabId}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "baseline",
-        }}
-      ></div>
-      <section>
-        <Card body>
-          <div className="innerHeader">
-            <h2> Leaves</h2>
-          </div>
-        </Card>
-      </section>
-      <section>
-        <Card body>
-          <div style={{textAlign:"center"}}>
-          <Table responsive style={{ textAlign: "center" }}>
-            <thead>
-              <tr>
-                <th>Type</th>
-                <th>Days</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <Input
+    <>
+     
+        <TabPane tabId={tabId}>
+          <section>
+            <Card body>
+              <NavLink
+                style={{ textAlign: "center" }}
+                className={activeTab === tabId ? "active" : ""}
+              >
+                <div className="innerHeader">
+                  <h2>{title}</h2>
+                  <div>
+                    <Button color="dark" outline onClick={handleAdd}>
+                      <i className="fa fa-plus"></i>
+                    </Button>
+                  </div>
+                </div>
+                {formFields.map((fields, index) => (
+                  <div
                     style={{
-                      marginTop: "10px",
-
-                      margin: "auto",
-                      maxWidth: "300px",
                       textAlign: "center",
+                      display: "flex",
+                      flexWrap: "wrap",
+                      justifyContent: "space-evenly",
                     }}
-                    type="select"
-                    // onChange={(e) => handleInputChange(index, e)}
+                    key={index}
                   >
-                    <option>SL</option>
-                    <option>CL</option>
-                    <option>PL</option>
-                  </Input>
-                </td>
-                <td>
-                  <Input
-                    style={{
-                      marginTop: "10px",
+                    <div>
+                      <div>
+                        <Input
+                          name="type"
+                          style={contentStyles}
+                          type="select"
+                          value={fields.type}
+                          onChange={(e) => handleChange(index, e)}
+                        >
+                          <option>Type of Leave</option>
+                          <option>SL</option>
+                          <option>CL</option>
+                          <option>PL</option>
+                        </Input>
+                      </div>
+                      <div>
+                        <span
+                          style={{
+                            color: "red",
+                            display: "block",
+                            marginTop: "5px",
+                            fontSize: "12px",
+                          }}
+                        >
+                          {errors[index]?.type}
+                        </span>
+                      </div>
+                    </div>
 
-                      margin: "auto",
-                      maxWidth: "300px",
-                      textAlign: "center",
-                    }}
-                    type="text"
-                    placeholder="No. of Days"
-                    // onChange={(e) => handleInputChange(index, e)}
-                  ></Input>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <Input
-                    style={{
-                      marginTop: "10px",
+                    <div>
+                      <div>
+                        <Input
+                          name="days"
+                          style={contentStyles}
+                          type="number"
+                          value={fields.days}
+                          onChange={(e) => handleChange(index, e)}
+                        />
+                      </div>
+                      <div>
+                        <span style={{ color: "red" }}>
+                          {errors[index]?.days}
+                        </span>
+                      </div>
+                    </div>
 
-                      margin: "auto",
-                      maxWidth: "300px",
-                      textAlign: "center",
-                    }}
-                    type="select"
-                    // onChange={(e) => handleInputChange(index, e)}
-                  >
-                    <option>SL</option>
-                    <option>CL</option>
-                    <option>PL</option>
-                  </Input>
-                </td>
-                <td>
-                  <Input
-                    style={{
-                      marginTop: "10px",
-
-                      margin: "auto",
-                      maxWidth: "300px",
-                      textAlign: "center",
-                    }}
-                    type="text"
-                    placeholder="No. of Days"
-                    // onChange={(e) => handleInputChange(index, e)}
-                  ></Input>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <Input
-                    style={{
-                      marginTop: "10px",
-
-                      margin: "auto",
-                      maxWidth: "300px",
-                      textAlign: "center",
-                    }}
-                    type="select"
-                    // onChange={(e) => handleInputChange(index, e)}
-                  >
-                    <option>SL</option>
-                    <option>CL</option>
-                    <option>PL</option>
-                  </Input>
-                </td>
-                <td>
-                  <Input
-                    style={{
-                      marginTop: "10px",
-
-                      margin: "auto",
-                      maxWidth: "300px",
-                      textAlign: "center",
-                    }}
-                    type="text"
-                    placeholder="No. of Days"
-                    // onChange={(e) => handleInputChange(index, e)}
-                  ></Input>
-                </td>
-              </tr>
-            </tbody>
-          </Table>
-          </div>
-         
-          <div style={{ textAlign: "center", marginTop: "10px" }}>
-            <Button color="primary">Save</Button>
-          </div>
-
-          {/* <PaginatedItems itemsPerPage={4} /> */}
-        </Card>
-        {isModal2Open && (
-          <AddHolidayModal
-            isOpen={isModal2Open}
-            toggle={() => _toggleModal2()}
-            // fetchAllStudentData={() => fetchAllStudentData()}
-          />
-        )}
-      </section>
-    </TabPane>
+                    {formFields.length > 1 && (
+                      <Button
+                        color="danger" outline
+                        style={contentStyles}
+                        onClick={() => handleDelete(index)}
+                      >
+                        <i className="fa fa-trash"></i>
+                      </Button>
+                    )}
+                  </div>
+                ))}
+                <Button
+                  // hidden={!validateForm(formFields)}
+                  style={{ marginTop: "30px" }}
+                  color="primary" 
+                  onClick={handleSave}
+                >
+                  Save
+                </Button>
+              </NavLink>
+            </Card>
+          </section>
+        </TabPane>
+    </>
   );
 };
 
