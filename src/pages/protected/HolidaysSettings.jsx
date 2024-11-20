@@ -163,8 +163,8 @@ const HolidateSettings = ({ activeTab, tabId, title, settings }) => {
   const [formFields, setFormFields] = useState(settings);
   const [errors, setErrors] = useState([
     {
-      name: "",
       date: "",
+      name: "",
     },
   ]);
   const contentStyles = {
@@ -224,8 +224,8 @@ const HolidateSettings = ({ activeTab, tabId, title, settings }) => {
   const validateForm = (updatedFormFields) => {
     return new Promise((resolve) => {
       const updatedErrors = updatedFormFields.map((field) => ({
-        name: "",
         date: "",
+        name: "",
       }));
       let isFormValid = true;
 
@@ -321,7 +321,7 @@ const HolidateSettings = ({ activeTab, tabId, title, settings }) => {
                             fontSize: "12px",
                           }}
                         >
-                          {errors[index]?.name}
+                          {errors[index]?.date}
                         </span>
                       </div>
                     </div>
@@ -338,7 +338,7 @@ const HolidateSettings = ({ activeTab, tabId, title, settings }) => {
                       </div>
                       <div>
                         <span style={{ color: "red" }}>
-                          {errors[index]?.date}
+                          {errors[index]?.name}
                         </span>
                       </div>
                     </div>
