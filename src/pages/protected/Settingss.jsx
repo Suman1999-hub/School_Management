@@ -63,8 +63,10 @@ const Settingss = () => {
      {isLoading ? (
         <div
           style={{
-            textAlign: "center",
-            marginTop: "auto",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "80vh",
           }}
         >
           <SpinnerLoading />
@@ -100,6 +102,8 @@ const Settingss = () => {
           <ClassSettings
             activeTab={activeTab}
             tabId="3"
+            title="Classes"
+            settings={allSettings.availableClasses}
           />
 
           <ScheduleSettings

@@ -49,7 +49,7 @@ function AllStudents() {
   };
 
   const fetchClasses = async () => {
-    setIsLoading(true);
+    // setIsLoading(true);
 
     try {
       const response = await getAvailableSettings();
@@ -57,9 +57,10 @@ function AllStudents() {
       setAvailableClasses(response.settings.availableClasses);
     } catch (err) {
       // setError('Failed to load classes. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
+    } 
+    // finally {
+    //   setIsLoading(false);
+    // }
   };
 
   const fetchAllStudentData = async (payload) => {
@@ -125,8 +126,10 @@ function AllStudents() {
       {isLoading ? (
         <div
           style={{
-            textAlign: "center",
-            marginTop: "auto",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "80vh",
           }}
         >
           <SpinnerLoading />

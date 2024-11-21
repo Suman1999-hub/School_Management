@@ -1,6 +1,6 @@
 // BusServiceSettings.js
 import React, { useEffect, useState } from "react";
-import { Card, Button, Input, NavLink, TabPane } from "reactstrap";
+import { Card, Button, Input, NavLink, TabPane, Label } from "reactstrap";
 import {
   getAvailableClasses,
   getAvailableSettings,
@@ -172,8 +172,8 @@ const BusServiceSettings = ({ activeTab, tabId, title, settings }) => {
                     key={index}
                   >
                     <div>
-                    {index === 1 &&  <div>Range</div>}
-
+                    {/* {index === 1 &&  <div>Range</div>} */}
+                    
                       <div>
                         <Input
                           name="range"
@@ -205,7 +205,7 @@ const BusServiceSettings = ({ activeTab, tabId, title, settings }) => {
                     </div>
 
                     <div>
-                    {index === 1 &&  <div>Amount</div>}
+                    {/* {index === 1 &&  <div>Amount</div>} */}
 
                       <div>
                       <Input
