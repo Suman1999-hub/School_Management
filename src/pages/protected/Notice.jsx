@@ -64,18 +64,19 @@ function Notice() {
         pageSize: itemsPerPage,
       };
     }
+    // else if()
     try {
       const allNoticeRes = await getAllNotices(payload);
-      console.log(allNoticeRes.notices);
-      setAllNotice(allNoticeRes.notices);
-      setTotalNotice(allNoticeRes.totalNotice);
+      // console.log(allNoticeRes.notices);
+      setAllNotice(allNoticeRes?.notices);
+      setTotalNotice(allNoticeRes?.count);
     } catch (err) {
       console.log(err);
     } finally {
       setIsLoading(false);
     }
   };
-  console.log(allNotice);
+  // console.log(allNotice);
   useEffect(() => {
     _getAllNotice();
   }, []);
@@ -84,10 +85,11 @@ function Notice() {
     setCurrentPage(page);
     await _getAllNotice(page, itemsPerPage);
   };
-
+  // console.log(allNotice);
   const handleItemsChange = (items) => {
     setCurrentItems(items);
   };
+  // console.log(totalNotice);
   return (
     <>
       {isLoading ? (
