@@ -19,7 +19,7 @@ import {
 } from "../../http/http-calls";
 import { formatDatell } from "../../helper-methods";
 import SpinnerLoading from "../../components/SpinnerLoading";
-
+import { debounce } from "lodash";
 function ApplyLeave() {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -71,7 +71,12 @@ function ApplyLeave() {
   };
 
   useEffect(() => {
-    _getSearchLeaveApi();
+    const debouncedFetch = debounce(_getSearchLeaveApi, 500);
+    debouncedFetch();
+
+    return () => {
+      debouncedFetch.cancel();
+    };
   }, [searchItem]);
 
   const handleSearch = (e) => {

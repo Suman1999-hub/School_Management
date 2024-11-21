@@ -20,7 +20,10 @@ import CustomDateRangePicker from "../../components/CustomDateRangePicker";
 import PaginatedItems from "../../components/PaginatedItems";
 import { useSelector } from "react-redux";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
-import { getAllStudentReport } from "../../http/http-calls";
+import {
+  getAllStudentReport,
+  getAvailableClasses,
+} from "../../http/http-calls";
 import SpinnerLoading from "../../components/SpinnerLoading";
 
 function Report() {
@@ -76,6 +79,19 @@ function Report() {
   useEffect(() => {
     _getAllStudentReportApiCall();
   }, []);
+  const [getClass, setGetClass] = useState();
+  const _getClassApi = async () => {
+    try {
+      const getClassAPiCall = await getAvailableClasses();
+      setGetClass(getClassAPiCall?.settings?.availableClasses);
+      // console.log(getClassAPiCall?.settings?.availableClasses);
+    } catch (err) {
+      console.log("Get Class :", err);
+    }
+  };
+  useEffect(() => {
+    _getClassApi();
+  }, []);
 
   return (
     <>
@@ -117,57 +133,30 @@ function Report() {
 
                   <div className="filterForm">
                     <div className="formGroup">
-                      <Label>Acedemic Year</Label>
-                      <Input type="select">
-                        <option>2024-2025</option>
-                        <option>2023-2024</option>
-                        <option>2022-2023</option>
-                        <option>2021-2022</option>
-                        <option>2020-2021</option>
-                        <option>2019-2020</option>
-                        <option>2018-2019</option>
-                        <option>2017-2018</option>
-                        <option>2016-2017</option>
-                        <option>2015-2016</option>
-                        <option>2014-2015</option>
-                        <option>2013-2014</option>
-                      </Input>
-                    </div>
-                    {/* <div className="formGroup">
-              <Label>School</Label>
-              <Input type="select">
-                <option>All</option>
-                <option>Kendriya Vidyalaya AFS Bagdogra</option>
-                <option>DAV International School</option>
-                <option>G D Goenka School</option>
-                <option>Modi International School</option>
-                <option>Army Public School, Delhi</option>
-                <option>Delhi Public School, Sukna</option>
-              </Input>
-            </div> */}
-                    <div className="formGroup">
                       <Label>Class</Label>
                       <Input type="select">
-                        <option>All</option>
-                        <option>I</option>
-                        <option>II</option>
-                        <option>III</option>
-                        <option>IV</option>
-                        <option>V</option>
-                        <option>VI</option>
-                        <option>VII</option>
-                        <option>VIII</option>
-                        <option>IX</option>
-                        <option>X</option>
+                        <option>Select Class</option>
+                        {Array.isArray(getClass) &&
+                          getClass.map((currClass) => {
+                            return (
+                              <option
+                                key={currClass._id}
+                                value={currClass.grade}
+                              >
+                                {currClass.grade}
+                              </option>
+                            );
+                          })}
                       </Input>
                     </div>
                     <div className="formGroup">
                       <Label>Section</Label>
                       <Input type="select">
-                        <option>All</option>
-                        <option>A</option>
-                        <option>B</option>
-                        <option>C</option>
+                        <option value="">All</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
                       </Input>
                     </div>
 

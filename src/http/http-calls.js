@@ -475,6 +475,19 @@ export const searchLeaveApi = (payload) => {
       });
   });
 };
+//get available classes
+export const getAvailableClasses = () => {
+  return new Promise((resolve, reject) => {
+    makeGetRequest(`${BASE_URL}/admin/settings`, true)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
 
 //filterLeave Api
 
@@ -492,7 +505,7 @@ export const filterLeaveApi = (payload) => {
   });
 };
 
-//get available classes
+//get available settings
 export const getAvailableSettings = () => {
   return new Promise((resolve, reject) => {
     makeGetRequest(`${BASE_URL}/admin/settings`, true)
@@ -506,7 +519,7 @@ export const getAvailableSettings = () => {
   });
 };
 
-// set Bus Service
+// set Settings
 
 export const setSettings = (payload) => {
   return new Promise((resolve, reject) => {

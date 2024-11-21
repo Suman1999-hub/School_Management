@@ -7,6 +7,7 @@ import {
 } from "../../http/http-calls";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import TextEditor from "../../components/TextEditor";
+import CustomDateRangePicker from "../../components/CustomDateRangePicker";
 
 function CreateNotice({ pageName }) {
   const [noticeData, setNoticeData] = useState(null);
@@ -105,6 +106,22 @@ function CreateNotice({ pageName }) {
       setLoadingBtn(false);
     }
   };
+  const [filters, setFilters] = useState({
+    dateRange: {
+      startDate: null,
+      endDate: null,
+    },
+  });
+
+  const _onDatesChange = (startDate = null, endDate = null) => {
+    const newFilters = { ...filters };
+
+    newFilters["dateRange"] = {
+      startDate,
+      endDate,
+    };
+    setFilters(newFilters);
+  };
 
   return (
     <>
@@ -139,6 +156,18 @@ function CreateNotice({ pageName }) {
                 <option value="student">Student</option>
               </Input>
             </FormGroup>
+          </div>
+          <div style={{ minWidth: "400px", marginLeft: "10px" }}>
+            <Label>Select Range Of Date</Label>
+            <CustomDateRangePicker
+              startDate={filters.dateRange.startDate}
+              endDate={filters.dateRange.endDate}
+              startDateId={"startDate_kpi_dashboard"}
+              endDateId={`endDate_kpi_dashboard`}
+              onDatesChange={(startDate, endDate) =>
+                _onDatesChange(startDate, endDate)
+              }
+            />
           </div>
           <div style={{ maxWidth: "400px", marginLeft: "10px" }}>
             <FormGroup>
