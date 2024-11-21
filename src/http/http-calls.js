@@ -138,9 +138,9 @@ export const createSchool = (payload) => {
       });
   });
 };
-export const findAllStudent = () => {
+export const findAllStudent = (payload) => {
   return new Promise((resolve, reject) => {
-    makePostRequest(`${BASE_URL}/admin/students/view-students`, true)
+    makePostRequest(`${BASE_URL}/admin/students/view-students`, true, payload)
       .then((res) => {
         resolve(res);
         console.log(res);
@@ -494,6 +494,36 @@ export const getAvailableClasses = () => {
 export const filterLeaveApi = (payload) => {
   return new Promise((resolve, reject) => {
     makePostRequest(`${BASE_URL}/leave/get`, true, payload)
+      .then((res) => {
+        resolve(res);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+//get available classes
+export const getAvailableSettings = () => {
+  return new Promise((resolve, reject) => {
+    makeGetRequest(`${BASE_URL}/admin/settings`, true)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
+
+// set Bus Service
+
+export const setSettings = (payload) => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/admin/setsettings`, true, payload)
       .then((res) => {
         resolve(res);
         console.log(res);

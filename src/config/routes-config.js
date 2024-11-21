@@ -14,6 +14,7 @@ import ApplyLeave from "../pages/protected/ApplyLeave";
 import Report from "../pages/protected/Report";
 import Settings from "../pages/protected/Settings";
 import Approval from "../pages/protected/Approval";
+import Settingss from "../pages/protected/Settingss";
 
 const SUPER_ADMIN_ROUTES = [
   { text: "School", route: "/school", element: <ViewAllSchool /> },
@@ -30,7 +31,7 @@ const ADMIN_ROUTES = [
   // { text: "Attendance", route: "/attendance", element: <Attendance /> },
   { text: "Report", route: "/report", element: <Report /> },
   { text: "Student", route: "/student", element: <AllStudents /> },
-  { text: "Settings", route: "/settings", element: <Settings /> },
+  { text: "Settings", route: "/settings", element: <Settingss /> },
   { text: "Profile", route: "/profile", element: <MyProfile /> },
 ];
 

@@ -449,7 +449,7 @@ export const getAWSBucketName = (type, isPublic = false) => {
 //Formated Address for List os School
 
 export const getAddressFormate = (city, state, country, pinCode) => {
-  console.log(city, state, country, pinCode);
+  // console.log(city, state, country, pinCode);
   let address = city + ", " + state + ", " + country + ", " + pinCode;
   return address;
 };
