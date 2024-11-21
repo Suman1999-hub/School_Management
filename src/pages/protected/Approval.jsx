@@ -16,13 +16,16 @@ import {
 import CustomDateRangePicker from "../../components/CustomDateRangePicker";
 import ApplyLeaveModal from "../../components/modals/ApplyLeaveModal";
 import {
+  filterLeaveApi,
   getAllLeaves,
   getLeaves,
+  searchLeaveApi,
   UpdateLeaveStatus,
 } from "../../http/http-calls";
 import { useSelector } from "react-redux";
 import { formatDatell } from "../../helper-methods";
 import SpinnerLoading from "../../components/SpinnerLoading";
+import { debounce } from "lodash";
 
 function Approval() {
   const [filters, setFilters] = useState({
@@ -47,7 +50,10 @@ function Approval() {
     setIsOpenModal(isOpenModal);
   };
   const [isLoading, setIsLoading] = useState(true);
-
+  const [searchItem, setSearchItem] = useState("");
+  const [leaveType, setLeaveType] = useState("");
+  const [leaveStatus, setLeaveStatus] = useState("");
+  const [filteredSearchData, setFilteredSearchData] = useState([]);
   const [activeTab, setActiveTab] = useState("1");
   const _toggleTab = (newTab = "1") => {
     if (activeTab !== newTab) setActiveTab(newTab);
@@ -57,7 +63,8 @@ function Approval() {
     setIsLoading(true);
     try {
       const getApplyLeaveApiRes = await getAllLeaves();
-      setApplyLeaveData(getApplyLeaveApiRes.leaves);
+      // console.log();
+      setApplyLeaveData(getApplyLeaveApiRes);
     } catch (err) {
       console.log("Approval Error", err);
     } finally {
@@ -67,46 +74,7 @@ function Approval() {
   useEffect(() => {
     _getApplyLeaveApi();
   }, []);
-  // const [searchItem, setSearchItem] = useState("");
-  // const [leaveType, setLeaveType] = useState("");
-  // const [leaveStatus, setLeaveStatus] = useState("");
-  // const [filteredData, setFilteredData] = useState([]);
-  // useEffect(() => {
-  //   if (applyLeaveData) {
-  //     const filteredItems = applyLeaveData.filter((leaveData) => {
-  //       const matchesLeaveType = leaveType
-  //         ? leaveData.leaveType.toLowerCase() === leaveType.toLowerCase()
-  //         : true;
-  //       const matchesStatus = leaveStatus
-  //         ? leaveData.status.toLowerCase() === leaveStatus.toLowerCase()
-  //         : true;
-  //       const matchesSearch = searchItem
-  //         ? leaveData.leaveType
-  //             .toLowerCase()
-  //             .includes(searchItem.toLowerCase()) ||
-  //           leaveData.reason.toLowerCase().includes(searchItem.toLowerCase()) ||
-  //           (leaveData.startDate &&
-  //             formatDatell(leaveData.startDate)
-  //               .toLowerCase()
-  //               .includes(searchItem.toLowerCase())) ||
-  //           (leaveData.endDate &&
-  //             formatDatell(leaveData.endDate)
-  //               .toLowerCase()
-  //               .includes(searchItem.toLowerCase())) ||
-  //           leaveData.status.toLowerCase().includes(searchItem.toLowerCase())
-  //         : true;
 
-  //       return matchesLeaveType && matchesStatus && matchesSearch;
-  //     });
-
-  //     setFilteredData(filteredItems);
-  //   }
-  // }, [applyLeaveData, searchItem, leaveType, leaveStatus]);
-
-  const handleSearchField = (e) => {
-    // setSearchItem(e.target.value);
-  };
-  // const
   const _handleApprovedAndReject = async (field, id) => {
     const payload = {
       status: field,
@@ -124,6 +92,62 @@ function Approval() {
       setIsLoading(false);
     }
   };
+  const _getSearchLeaveApi = async () => {
+    if (searchItem) {
+      const payload = { searchText: searchItem };
+      try {
+        const getApplyLeaveApiRes = await searchLeaveApi(payload);
+        setFilteredSearchData(getApplyLeaveApiRes.leaves);
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      _getApplyLeaveApi();
+    }
+  };
+
+  useEffect(() => {
+    const debouncedFetch = debounce(_getSearchLeaveApi, 500);
+    debouncedFetch();
+
+    return () => {
+      debouncedFetch.cancel();
+    };
+  }, [searchItem]);
+
+  const handleSearch = (e) => {
+    setSearchItem(e.target.value);
+  };
+
+  const _getFilterLeaveApi = async () => {
+    let payload = {};
+    if (leaveType !== "" && leaveStatus === "") {
+      payload = {
+        leaveType,
+      };
+    } else if (leaveStatus !== "" && leaveType === "") {
+      payload = {
+        status: leaveStatus,
+      };
+    } else if (leaveStatus !== "" && leaveType !== "") {
+      payload = {
+        leaveType,
+        status: leaveStatus,
+      };
+    } else {
+      payload = {};
+    }
+    try {
+      const getFilterLeaveApiRes = await filterLeaveApi(payload);
+      setFilteredSearchData(getFilterLeaveApiRes.leaves);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    _getFilterLeaveApi();
+  }, [leaveType, leaveStatus]);
   return (
     <>
       {isLoading ? (
@@ -155,7 +179,9 @@ function Approval() {
                     <Label>Leave Type</Label>
                     <Input
                       type="select"
-                      // onClick={(e) => setLeaveType(e.target.value)}
+                      name="leaveType"
+                      value={leaveType}
+                      onChange={(e) => setLeaveType(e.target.value)}
                     >
                       <option value="">Select Leave Type</option>
                       <option value="PL">PL</option>
@@ -168,12 +194,14 @@ function Approval() {
                     <Label>Status</Label>
                     <Input
                       type="select"
-                      // onClick={(e) => setLeaveStatus(e.target.value)}
+                      name="status"
+                      value={leaveStatus}
+                      onChange={(e) => setLeaveStatus(e.target.value)}
                     >
                       <option value="">All</option>
-                      <option value="accept">Accept</option>
+                      <option value="approved">Accept</option>
                       <option value="pending">Pending</option>
-                      <option value="reject">Reject</option>
+                      <option value="rejected">Reject</option>
                     </Input>
                   </div>
 
@@ -181,7 +209,12 @@ function Approval() {
                   <div className="formGroup searchbar">
                     <Label>Search</Label>
                     <InputGroup>
-                      <Input placeholder="Search..." />
+                      <Input
+                        placeholder="Search..."
+                        name="searchItem"
+                        onChange={handleSearch}
+                        value={searchItem}
+                      />
                       <InputGroupText>
                         <i className="fas fa-search" />
                       </InputGroupText>
@@ -208,11 +241,17 @@ function Approval() {
                     </thead>
 
                     <tbody>
-                      {applyLeaveData?.length !== 0
-                        ? applyLeaveData?.map((curr) => {
+                      {filteredSearchData?.length !== 0
+                        ? filteredSearchData?.map((curr, ind) => {
                             return (
                               <tr>
-                                <td>Kartik</td>
+                                <td>
+                                  {
+                                    applyLeaveData.leaves[ind]._teacher
+                                      .firstName
+                                  }{" "}
+                                  {applyLeaveData.leaves[ind]._teacher.lastName}
+                                </td>
                                 <td>{curr.leaveType}</td>
                                 <td style={{ maxWidth: "300px" }}>
                                   {curr.reason}
