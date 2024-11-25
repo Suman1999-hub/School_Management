@@ -534,3 +534,17 @@ export const setSettings = (payload) => {
       });
   });
 };
+
+export const markAttendanceApi = (payload) => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/markattendance`, true, payload)
+      .then((res) => {
+        resolve(res);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};

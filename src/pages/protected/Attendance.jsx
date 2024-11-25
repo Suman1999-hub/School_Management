@@ -21,6 +21,7 @@ import {
 import {
   getAvailableClasses,
   getClassStudents,
+  markAttendanceApi,
   markStudentAttendance,
 } from "../../http/http-calls";
 import SpinnerLoading from "../../components/SpinnerLoading";
@@ -28,7 +29,7 @@ import SpinnerLoading from "../../components/SpinnerLoading";
 const localizer = momentLocalizer(moment);
 
 function Attendance() {
-  const [btnState, setBtnState] = useState({});
+  const [btnState, setBtnState] = useState([]);
   const [error, setError] = useState("");
   const [value, onChange] = useState(new Date());
 
@@ -43,14 +44,15 @@ function Attendance() {
     (state) => state.userCredential.user.loginType
   );
 
-  const [acedemicYear, setAcedemicYear] = useState("");
+  // const [acedemicYear, setAcedemicYear] = useState("");
   const [classInput, setClassInput] = useState("");
   const [section, setSection] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const [filteredSections, setFilteredSections] = useState([]);
+  const [classId, setClassId] = useState("");
   const _getAllStudent = async () => {
     const payload = {
-      academicYear: acedemicYear,
+      // academicYear: acedemicYear,
       classname: classInput,
       section: section,
     };
@@ -58,6 +60,7 @@ function Attendance() {
     try {
       const getClassStudentRes = await getClassStudents({ payload });
       setStudentsData(getClassStudentRes);
+      setClassId(getClassStudentRes?.classId);
       console.log(getClassStudentRes);
     } catch (err) {
       console.log(err);
@@ -66,16 +69,31 @@ function Attendance() {
       setIsLoading(false);
     }
   };
-  console.log(btnState);
+  console.log("------>>>>", classId);
+  const attendance = JSON.parse(localStorage.getItem("Attendance")) || [];
+  const handleAttendance = (isPresent, _id) => {
+    if (!isPresent) {
+      if (!attendance.includes(_id)) {
+        attendance.push(_id);
+      }
+    } else {
+      const index = attendance.indexOf(_id);
+      if (index > -1) {
+        attendance.splice(index, 1);
+      }
+    }
 
-  const handleAttendance = (btnState, _id) => {
-    console.log(btnState);
-    console.log(_id);
-    setBtnState((prevState) => ({
-      ...prevState,
-      [_id]: !prevState[_id],
-    }));
+    localStorage.setItem("Attendance", JSON.stringify(attendance));
+
+    setBtnState((prevState) => {
+      if (!isPresent) {
+        return [...prevState, _id];
+      } else {
+        return prevState.filter((id) => id !== _id);
+      }
+    });
   };
+  console.log(btnState);
   const [getClass, setGetClass] = useState();
   const _getClassApi = async () => {
     try {
@@ -89,6 +107,32 @@ function Attendance() {
   useEffect(() => {
     _getClassApi();
   }, []);
+  useEffect(() => {
+    if (classInput) {
+      const selectedClass = getClass.find(
+        (currClass) => currClass.grade === classInput
+      );
+      if (selectedClass) {
+        setFilteredSections(selectedClass.sections || []);
+      } else {
+        setFilteredSections([]);
+      }
+    } else {
+      setFilteredSections([]);
+    }
+  }, [classInput]);
+
+  const handleSubmit = async () => {
+    const markAttendance = JSON.parse(localStorage.getItem("Attendance"));
+    console.log("--->", markAttendance);
+    const payload = {
+      _class: classId,
+      studentIds: markAttendance,
+    };
+    const markAttendanceApiCall = await markAttendanceApi(payload);
+    localStorage.clear();
+    console.log(markAttendanceApiCall);
+  };
   return (
     <>
       {userLoginType === "student" && (
@@ -134,10 +178,13 @@ function Attendance() {
                   onChange={(e) => setSection(e.target.value)}
                 >
                   <option value="">Select Section</option>
-                  <option value="A">A</option>
-                  <option value="B">B</option>
-                  <option value="C">C</option>
-                  <option value="D">D</option>
+                  {filteredSections?.map((currSec) => {
+                    return (
+                      <option key={currSec} value={currSec}>
+                        {currSec}
+                      </option>
+                    );
+                  })}
                 </Input>
               </div>
 
@@ -267,25 +314,27 @@ function Attendance() {
                                 <FormGroup switch>
                                   <Input
                                     type="switch"
-                                    checked={btnState[curr?._id] || false}
+                                    checked={btnState.includes(curr?._id)} // Check if the ID is in the btnState array
                                     onClick={() =>
                                       handleAttendance(
-                                        btnState[curr?._id],
-                                        curr?._id
+                                        btnState.includes(curr?._id), // Determine current state of presence
+                                        curr?._id // Pass the student's ID
                                       )
                                     }
                                     style={{
                                       width: "50px",
                                       height: "28px",
                                       position: "relative",
-                                      accentColor: btnState[curr?._id]
+                                      accentColor: btnState.includes(curr?._id)
                                         ? "#0d6efd"
                                         : "#dd9aed",
                                       borderRadius: "50px",
                                       boxShadow:
                                         "rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px",
                                       transition: "all 0.3s ease",
-                                      backgroundColor: btnState[curr?._id]
+                                      backgroundColor: btnState.includes(
+                                        curr?._id
+                                      )
                                         ? "#0d6efd"
                                         : "#dd9aed",
                                     }}
@@ -310,7 +359,9 @@ function Attendance() {
             ""
           ) : (
             <div style={{ textAlign: "center" }}>
-              <Button color="primary">Submit</Button>
+              <Button color="primary" onClick={() => handleSubmit()}>
+                Submit
+              </Button>
             </div>
           )}
         </>

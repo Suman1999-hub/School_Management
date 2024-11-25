@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button, Card, CardBody, CardSubtitle } from "reactstrap";
 import { getNoticedetails } from "../../http/http-calls";
 import { useSelector } from "react-redux";
@@ -13,7 +13,7 @@ function ViewNotice() {
   const UserloginType = useSelector(
     (state) => state.userCredential.user.loginType
   );
-
+  const navigate = useNavigate();
   const _getNoticeById = async () => {
     setIsLoading(true);
     try {
@@ -46,7 +46,14 @@ function ViewNotice() {
       ) : (
         <>
           <div className="innerHeader">
-            <h1>View Notice</h1>
+            {/* <Button outline style={{ height: "70px" }}> */}
+            <img
+              src={require("../../assets/img/previous.png")}
+              alt=""
+              width="60px"
+              onClick={() => navigate(-1)}
+            />
+            {/* </Button> */}
 
             {/* Show "Edit" button if the user is an admin */}
             {UserloginType === "admin" && (
