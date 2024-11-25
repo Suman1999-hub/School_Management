@@ -160,6 +160,31 @@ const BusServiceSettings = ({ activeTab, tabId, title, settings }) => {
                     </Button>
                   </div>
                 </div>
+
+                <div
+                style={{
+                  textAlign: "center",
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "space-evenly",
+                }}
+              >
+                <div>
+                  <div>
+                    <h6>Ranges (in kms)</h6>
+                  </div>
+                </div>
+                <div>
+                  <div>
+                    <h6>Fees</h6>
+                  </div>
+                </div>
+                <div>
+                  <div>
+                    <h6>Action</h6>
+                  </div>
+                </div>
+              </div>
               
                 {formFields.map((fields, index) => (
                   <div

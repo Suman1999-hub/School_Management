@@ -273,8 +273,10 @@ const MyProfile = () => {
       {isLoading ? (
         <div
           style={{
-            textAlign: "center",
-            marginTop: "auto",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "80vh",
           }}
         >
           <SpinnerLoading />

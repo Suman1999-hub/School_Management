@@ -36,7 +36,7 @@
 //                   <div style={{ display: "flex" }}>
 //                     {/* <div>
 //                     <Button style={{margin:"2px"}} color="dark" outline onClick={() => _toggleModal2(true)}>
-//                      Promote 
+//                      Promote
 //                     </Button>
 //                   </div> */}
 
@@ -62,7 +62,7 @@
 //                     <tr>
 //                       <th>Class</th>
 //                       <th>Sections</th>
-//                       <th>Fees(INR)</th>
+//                       <th>monthlyFees(INR)</th>
 //                     </tr>
 //                   </thead>
 //                   <tbody>
@@ -103,7 +103,6 @@
 
 // export default ClassSettings;
 
-
 // ClassSettings.js
 import React, { useEffect, useState } from "react";
 import { Card, Button, Input, NavLink, TabPane, Label } from "reactstrap";
@@ -115,13 +114,13 @@ import {
 import SpinnerLoading from "../../components/SpinnerLoading";
 
 const ClassSettings = ({ activeTab, tabId, title, settings }) => {
-  const [fee, setFee] = useState();
+  const [monthlyFee, setmonthlyFee] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [formFields, setFormFields] = useState(settings);
   const [errors, setErrors] = useState([
     {
       grade: "",
-      fee: "",
+      monthlyFee: "",
     },
   ]);
   const contentStyles = {
@@ -137,7 +136,10 @@ const ClassSettings = ({ activeTab, tabId, title, settings }) => {
     const { value, name } = event.target;
     const updatedFormFields = formFields.map((field, i) =>
       i === index
-        ? { ...field, [name]: name === "fee" ? parseFloat(value) : value }
+        ? {
+            ...field,
+            [name]: name === "monthlyFee" ? parseFloat(value) : value,
+          }
         : field
     );
     setFormFields(updatedFormFields);
@@ -159,8 +161,8 @@ const ClassSettings = ({ activeTab, tabId, title, settings }) => {
       }
       const isValid = await validateForm(formFields);
       if (isValid) {
-        setFormFields([...formFields, { grade: "", fee: "" }]);
-        setErrors([...errors, { grade: "", fee: "" }]);
+        setFormFields([...formFields, { grade: "", monthlyFee: "" }]);
+        setErrors([...errors, { grade: "", monthlyFee: "" }]);
       }
     } catch (error) {}
   };
@@ -182,7 +184,7 @@ const ClassSettings = ({ activeTab, tabId, title, settings }) => {
     return new Promise((resolve) => {
       const updatedErrors = updatedFormFields.map((field) => ({
         grade: "",
-        fee: "",
+        monthlyFee: "",
       }));
       let isFormValid = true;
 
@@ -199,11 +201,11 @@ const ClassSettings = ({ activeTab, tabId, title, settings }) => {
         }
 
         // Check for amount field errors
-        if (!field.fee) {
-          updatedErrors[rowIndex].fee = "*Required";
+        if (!field.monthlyFee) {
+          updatedErrors[rowIndex].monthlyFee = "*Required";
           isFormValid = false;
         } else {
-          updatedErrors[rowIndex].fee = "";
+          updatedErrors[rowIndex].monthlyFee = "";
         }
       });
 
@@ -217,8 +219,8 @@ const ClassSettings = ({ activeTab, tabId, title, settings }) => {
     if (isValid) {
       try {
         const payload = {
-          setField: "busFee",
-          busFee: formFields,
+          setField: "class",
+          availableClasses: formFields,
         };
 
         const response = await setSettings(payload);
@@ -232,120 +234,144 @@ const ClassSettings = ({ activeTab, tabId, title, settings }) => {
 
   return (
     <>
-     
-        <TabPane tabId={tabId}>
-          <section>
-            <Card body>
-              <NavLink
-                style={{ textAlign: "center" }}
-                className={activeTab === tabId ? "active" : ""}
+      <TabPane tabId={tabId}>
+        <section>
+          <Card body>
+            <NavLink
+              style={{ textAlign: "center" }}
+              className={activeTab === tabId ? "active" : ""}
+            >
+              <div className="innerHeader">
+                <h2>{title}</h2>
+                <div>
+                  <Button color="dark" outline onClick={handleAdd}>
+                    <i className="fa fa-plus"></i>
+                  </Button>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  textAlign: "center",
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "space-evenly",
+                }}
               >
-                <div className="innerHeader">
-                  <h2>{title}</h2>
+                <div>
                   <div>
-                    <Button color="dark" outline onClick={handleAdd}>
-                      <i className="fa fa-plus"></i>
-                    </Button>
+                    <h6>Classes</h6>
                   </div>
                 </div>
-              
-                {formFields.map((fields, index) => (
-                  <div
-                    style={{
-                      textAlign: "center",
-                      display: "flex",
-                      flexWrap: "wrap",
-                      justifyContent: "space-evenly",
-                    }}
-                    key={index}
-                  >
-                    <div>
+                <div>
+                  <div>
+                    <h6>Fees</h6>
+                  </div>
+                </div>
+                <div>
+                  <div>
+                    <h6>Action</h6>
+                  </div>
+                </div>
+              </div>
+
+              {formFields.map((fields, index) => (
+                <div
+                  style={{
+                    textAlign: "center",
+                    display: "flex",
+                    flexWrap: "wrap",
+                    justifyContent: "space-evenly",
+                  }}
+                  key={index}
+                >
+                  <div>
                     {/* {index === 1 &&  <div>grade</div>} */}
-                    
-                      <div>
-                        <Input
-                          name="grade"
-                          style={contentStyles}
-                          type="select"
-                          value={fields.grade}
-                          onChange={(e) => handleChange(index, e)}
-                        >
-                          <option>Select Class</option>
-                          <option>1</option>
-                          <option>2</option>
-                          <option>3</option>
-                          <option>4</option>
-                          <option>5</option>
-                          <option>6</option>
-                          <option>7</option>
-                          <option>8</option>
-                          <option>9</option>
-                          <option>10</option>
-                        </Input>
-                      </div>
-                      <div>
-                        <span
-                          style={{
-                            color: "red",
-                            display: "block",
-                            marginTop: "5px",
-                            fontSize: "12px",
-                          }}
-                        >
-                          {errors[index]?.grade}
-                        </span>
-                      </div>
-                    </div>
 
                     <div>
+                      <Input
+                        name="grade"
+                        style={contentStyles}
+                        type="select"
+                        value={fields.grade}
+                        onChange={(e) => handleChange(index, e)}
+                      >
+                        <option>Select Class</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                      </Input>
+                    </div>
+                    <div>
+                      <span
+                        style={{
+                          color: "red",
+                          display: "block",
+                          marginTop: "5px",
+                          fontSize: "12px",
+                        }}
+                      >
+                        {errors[index]?.grade}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div>
                     {/* {index === 1 &&  <div>Amount</div>} */}
 
-                      <div>
+                    <div>
                       <Input
-                          name="fee"
-                          style={contentStyles}
-                          type="number"
-                          value={fields.fee}
-                          placeholder="Fees"
-                          onChange={(e) => handleChange(index, e)}
-                        />
-                      </div>
-                      <div>
-                        <span style={{ color: "red" }}>
-                          {errors[index]?.fee}
-                        </span>
-                      </div>
+                        name="monthlyFee"
+                        style={contentStyles}
+                        type="number"
+                        value={fields.monthlyFee}
+                        placeholder="Monthly Fee"
+                        onChange={(e) => handleChange(index, e)}
+                      />
                     </div>
-
-                    {formFields.length > 1 && (
-                      <Button
-                        color="danger" outline
-                        style={{
-                          marginTop: "30px",  
-                          maxWidth: "350px",
-                          textAlign: "center",
-                        }}
-                        onClick={() => handleDelete(index)}
-                      >
-                        <i className="fa fa-trash"></i>
-                      </Button>
-                    )}
+                    <div>
+                      <span style={{ color: "red" }}>
+                        {errors[index]?.monthlyFee}
+                      </span>
+                    </div>
                   </div>
-                ))}
-                <Button
-                  style={{ marginTop: "30px" }}
-                  color="primary"
-                  onClick={handleSave}
-                >
-                  Save
-                </Button>
-              </NavLink>
-            </Card>
-          </section>
-        </TabPane>
+
+                  {formFields.length > 1 && (
+                    <Button
+                      color="danger"
+                      outline
+                      style={{
+                        marginTop: "30px",
+                        maxWidth: "350px",
+                        textAlign: "center",
+                      }}
+                      onClick={() => handleDelete(index)}
+                    >
+                      <i className="fa fa-trash"></i>
+                    </Button>
+                  )}
+                </div>
+              ))}
+              <Button
+                style={{ marginTop: "30px" }}
+                color="primary"
+                onClick={handleSave}
+              >
+                Save
+              </Button>
+            </NavLink>
+          </Card>
+        </section>
+      </TabPane>
     </>
   );
 };
 
 export default ClassSettings;
-

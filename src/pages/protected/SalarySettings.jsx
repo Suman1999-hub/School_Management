@@ -160,6 +160,30 @@ const SalarySettings = ({ activeTab, tabId, title, settings }) => {
                     </Button>
                   </div>
                 </div>
+                <div
+                style={{
+                  textAlign: "center",
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "space-evenly",
+                }}
+              >
+                <div>
+                  <div>
+                    <h6>Experience (months)</h6>
+                  </div>
+                </div>
+                <div>
+                  <div>
+                    <h6>Salary</h6>
+                  </div>
+                </div>
+                <div>
+                  <div>
+                    <h6>Action</h6>
+                  </div>
+                </div>
+              </div>
                 {formFields.map((fields, index) => (
                   <div
                     style={{
