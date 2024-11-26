@@ -59,6 +59,12 @@ const NavigationTabs = ({ userType, activeTab, _toggleTab }) => (
             Leave
           </NavLink>
         </NavItem>
+
+        <NavItem>
+          <NavLink className={activeTab === "10" ? "active" : ""} onClick={() => _toggleTab("10")}>
+            Subjects
+          </NavLink>
+        </NavItem>
       </>
     )}
   </Nav>

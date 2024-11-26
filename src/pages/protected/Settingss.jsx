@@ -55,11 +55,6 @@ const Settingss = () => {
     if (activeTab !== newTab) setActiveTab(newTab);
   };
 
-  const onAddClick = () => {
-    // Handle the add click logic here
-    console.log("Add clicked");
-  };
-
   return (
     <>
       {isLoading ? (
