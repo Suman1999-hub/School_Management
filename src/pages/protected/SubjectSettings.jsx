@@ -8,8 +8,10 @@ import {
 } from "../../http/http-calls";
 
 const SubjectSettings = ({ activeTab, tabId, title, settings }) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [formFields, setFormFields] = useState(settings);  
+  const [formFields, setFormFields] = useState(
+    settings.map(el => ({ subject: el }))
+  );
+  
   const [errors, setErrors] = useState([]);  
   const contentStyles = {
     marginTop: "30px",
@@ -18,7 +20,6 @@ const SubjectSettings = ({ activeTab, tabId, title, settings }) => {
   };
 
   console.log("formFields>>>", formFields);
-  console.log("errors>>>", errors);
 
   const handleChange = (index, event) => {
     const { value, name } = event.target;
@@ -158,7 +159,7 @@ const SubjectSettings = ({ activeTab, tabId, title, settings }) => {
                         name="subject"
                         style={contentStyles}
                         type="text"
-                        value={fields  || ""} 
+                        value={fields.subject || ""} 
                         onChange={(e) => handleChange(index, e)}
                       />
                     </div>
