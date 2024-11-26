@@ -21,6 +21,7 @@ const Settingss = () => {
   const navigate = useNavigate();
   const [userType, setUserType] = useState("");
   const [allSettings, setAllSettings] = useState({});
+  const [organizationSettings, setOrganizationSettings] = useState({});
   const loginType = useSelector((state) => state.userCredential.user.loginType);
   const [activeTab, setActiveTab] = useState("7");
   const [isLoading, setIsLoading] = useState(true);
@@ -32,6 +33,7 @@ const Settingss = () => {
       const response = await getAvailableSettings();
       console.log("response>>>", response.settings.busamount);
       setAllSettings(response?.settings);
+      setOrganizationSettings(response.schoolDetails)
     } catch (e) {
       console.log(e);
     } finally {
@@ -122,7 +124,7 @@ const Settingss = () => {
             <OrganizationSettings
             activeTab={activeTab}
             tabId="8"
-            settings={allSettings.schoolDetails}
+            settings={organizationSettings}
             />
 
             <LeaveSettings

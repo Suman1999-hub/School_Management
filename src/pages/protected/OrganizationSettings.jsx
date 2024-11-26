@@ -1,8 +1,8 @@
 // OrganizationSettings.js
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, Button, Input, NavLink, TabPane, Label } from 'reactstrap';
 
-const OrganizationSettings = ({ activeTab, tabId, title, onAddClick }) => {
+const OrganizationSettings = ({ activeTab, tabId, settings }) => {
 
   const [formFields, setFormFields] = useState(settings);
 console.log("formFields>>>", formFields);
@@ -83,24 +83,33 @@ console.log("formFields>>>", formFields);
                     }}
                   >
                     <Label>School Name :</Label>
-                    <Input type="text"></Input>
+                    <Input type="text" value={formFields?.name}></Input>
+
+                    <Label>Registration No. :</Label>
+                    <Input type="text" value={formFields?.registrationNumber} disabled></Input>
+
+                    <Label>Established on :</Label>
+                    <Input type="text" value={formFields?.establishYear} disabled></Input>
+
+                    <Label>Principal Name :</Label>
+                    <Input type="text" value={formFields?.principalName}></Input>
 
                     <Label>Map URL :</Label>
-                    <Input type="text"></Input>
+                    <Input type="text" value={formFields?.map_url}></Input>
 
                     <Label>Website :</Label>
-                    <Input type="text"></Input>
+                    <Input type="text" value={formFields?.contact?.website}></Input>
 
                     <Label>Email :</Label>
-                    <Input type="text"></Input>
+                    <Input type="text" value={formFields?.contact?.email}></Input>
 
                     <Label>Phone no. :</Label>
-                    <Input type="number"></Input>
+                    <Input type="text" value={formFields?.contact?.phoneNo}></Input>
 
                     <h6 style={{ marginTop: "2%" }}>Address</h6>
 
                     <Label>Locality</Label>
-                    <Input type="text" name="Locality" />
+                    <Input type="text" name="Locality" value={formFields?.address?.locality} />
 
                     <Label>City</Label>
                     <Input
@@ -111,16 +120,17 @@ console.log("formFields>>>", formFields);
                       }}
                       type="text"
                       name="city"
+                      value={formFields?.address?.city} 
                     />
 
                     <Label>State</Label>
-                    <Input type="text" name="state"></Input>
+                    <Input type="text" name="state" value={formFields?.address?.state} ></Input>
 
                     <Label>Country</Label>
-                    <Input type="text" name="country"></Input>
+                    <Input type="text" name="country" value={formFields?.address?.country} ></Input>
 
                     <Label>PinCode</Label>
-                    <Input type="text" name="pinCode" />
+                    <Input type="text" name="pinCode" value={formFields?.address?.pinCode} />
                   </div>
 
                   <Button style={{ marginTop: "30px" }} color="primary">
