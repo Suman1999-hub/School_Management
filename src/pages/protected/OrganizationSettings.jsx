@@ -3,6 +3,10 @@ import React from 'react';
 import { Card, Button, Input, NavLink, TabPane, Label } from 'reactstrap';
 
 const OrganizationSettings = ({ activeTab, tabId, title, onAddClick }) => {
+
+  const [formFields, setFormFields] = useState(settings);
+console.log("formFields>>>", formFields);
+
   const contentStyles = {
     marginTop: "30px",
     maxWidth: "350px",

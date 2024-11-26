@@ -23,8 +23,8 @@ const LeaveSettings = ({ activeTab, tabId, title, settings }) => {
     textAlign: "center",
   };
 
-  console.log("formFields>>>", formFields);
-  console.log("errors>>>", errors);
+  // console.log("formFields>>>", formFields);
+  // console.log("errors>>>", errors);
 
   const handleChange = (index, event) => {
     const { value, name } = event.target;

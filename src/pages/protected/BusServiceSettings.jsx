@@ -24,8 +24,8 @@ const BusServiceSettings = ({ activeTab, tabId, title, settings }) => {
     textAlign: "center",
   };
 
-  console.log("formFields>>>", formFields);
-  console.log("errors>>>", errors);
+  // console.log("formFields>>>", formFields);
+  // console.log("errors>>>", errors);
 
   // const fetchSettings = async () => {
   //   setIsLoading(true);

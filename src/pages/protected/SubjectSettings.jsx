@@ -1,4 +1,4 @@
-// SalarySettings.js
+// SubjectSettings.js
 import React, { useEffect, useState } from "react";
 import { Card, Button, Input, NavLink, TabPane } from "reactstrap";
 import {
@@ -6,16 +6,15 @@ import {
   getAvailableSettings,
   setSettings,
 } from "../../http/http-calls";
-import SpinnerLoading from "../../components/SpinnerLoading";
 
-const SalarySettings = ({ activeTab, tabId, title, settings }) => {
-  const [amount, setAmount] = useState();
+const SubjectSettings = ({ activeTab, tabId, title, settings }) => {
+  const [days, setDays] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [formFields, setFormFields] = useState(settings);
   const [errors, setErrors] = useState([
     {
-      range: "",
-      amount: "",
+      type: "",
+      days: "",
     },
   ]);
   const contentStyles = {
@@ -24,32 +23,14 @@ const SalarySettings = ({ activeTab, tabId, title, settings }) => {
     textAlign: "center",
   };
 
-  // console.log("formFields>>>", formFields);
-  // console.log("errors>>>", errors);
-
-  // const fetchSettings = async () => {
-  //   setIsLoading(true);
-
-  //   try {
-  //     const response = await getAvailableSettings();
-  //     console.log("response>>>", response.settings.busamount);
-  //     setFormFields(response?.settings?.salary);
-  //   } catch (e) {
-  //     console.log(e);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchSettings();
-  // }, []);
+  console.log("formFields>>>", formFields);
+  console.log("errors>>>", errors);
 
   const handleChange = (index, event) => {
     const { value, name } = event.target;
     const updatedFormFields = formFields.map((field, i) =>
       i === index
-        ? { ...field, [name]: name === "amount" ? parseFloat(value) : value }
+        ? { ...field, [name]: name === "days" ? parseFloat(value) : value }
         : field
     );
     setFormFields(updatedFormFields);
@@ -59,20 +40,20 @@ const SalarySettings = ({ activeTab, tabId, title, settings }) => {
   const handleAdd = async () => {
     try {
       // Use a temporary email for the new row
-      const newRange = formFields[formFields.length - 1]?.range || "";
+      const newtype = formFields[formFields.length - 1]?.type || "";
 
       // Check for duplicate emails in the formFields excluding the new one
       const isEmailDuplicate = check(
         formFields.slice(0, formFields.length - 1),
-        newRange
+        newtype
       );
       if (isEmailDuplicate) {
         return;
       }
       const isValid = await validateForm(formFields);
       if (isValid) {
-        setFormFields([...formFields, { range: "", amount: "" }]);
-        setErrors([...errors, { range: "", amount: "" }]);
+        setFormFields([...formFields, { type: "", days: "" }]);
+        setErrors([...errors, { type: "", days: "" }]);
       }
     } catch (error) {}
   };
@@ -86,36 +67,36 @@ const SalarySettings = ({ activeTab, tabId, title, settings }) => {
     setErrors(updatedErrors);
   };
 
-  const check = (formFields, newRange) => {
-    return formFields.some((field) => field.range === newRange);
+  const check = (formFields, newtype) => {
+    return formFields.some((field) => field.type === newtype);
   };
 
   const validateForm = (updatedFormFields) => {
     return new Promise((resolve) => {
       const updatedErrors = updatedFormFields.map((field) => ({
-        range: "",
-        amount: "",
+        type: "",
+        days: "",
       }));
       let isFormValid = true;
 
       updatedFormFields.forEach((field, rowIndex) => {
-        // Check for range field errors
-        if (!field.range) {
-          updatedErrors[rowIndex].range = "*Required";
+        // Check for type field errors
+        if (!field.type) {
+          updatedErrors[rowIndex].type = "*Required";
           isFormValid = false;
-        } else if (check(updatedFormFields.slice(0, rowIndex), field.range)) {
-          updatedErrors[rowIndex].range = "Range already exists!";
+        } else if (check(updatedFormFields.slice(0, rowIndex), field.type)) {
+          updatedErrors[rowIndex].type = "type already exists!";
           isFormValid = false;
         } else {
-          updatedErrors[rowIndex].range = "";
+          updatedErrors[rowIndex].type = "";
         }
 
-        // Check for amount field errors
-        if (!field.amount) {
-          updatedErrors[rowIndex].amount = "*Required";
+        // Check for days field errors
+        if (!field.days) {
+          updatedErrors[rowIndex].days = "*Required";
           isFormValid = false;
         } else {
-          updatedErrors[rowIndex].amount = "";
+          updatedErrors[rowIndex].days = "";
         }
       });
 
@@ -129,8 +110,8 @@ const SalarySettings = ({ activeTab, tabId, title, settings }) => {
     if (isValid) {
       try {
         const payload = {
-          setField: "salary",
-          salary: formFields,
+          setField: "leave",
+          leave: formFields,
         };
 
         const response = await setSettings(payload);
@@ -170,12 +151,12 @@ const SalarySettings = ({ activeTab, tabId, title, settings }) => {
               >
                 <div>
                   <div>
-                    <h6>Experience (months)</h6>
+                    <h6>Leave Type</h6>
                   </div>
                 </div>
                 <div>
                   <div>
-                    <h6>Salary</h6>
+                    <h6>Days</h6>
                   </div>
                 </div>
                 <div>
@@ -197,17 +178,16 @@ const SalarySettings = ({ activeTab, tabId, title, settings }) => {
                     <div>
                       <div>
                         <Input
-                          name="range"
+                          name="type"
                           style={contentStyles}
                           type="select"
-                          value={fields.range}
+                          value={fields.type}
                           onChange={(e) => handleChange(index, e)}
                         >
-                          <option>Experience(months)</option>
-                          <option>1-6</option>
-                          <option>7-24</option>
-                          <option>25-48</option>
-                          <option>49-60</option>
+                          <option>Type of Leave</option>
+                          <option>SL</option>
+                          <option>CL</option>
+                          <option>PL</option>
                         </Input>
                       </div>
                       <div>
@@ -219,7 +199,7 @@ const SalarySettings = ({ activeTab, tabId, title, settings }) => {
                             fontSize: "12px",
                           }}
                         >
-                          {errors[index]?.range}
+                          {errors[index]?.type}
                         </span>
                       </div>
                     </div>
@@ -227,16 +207,16 @@ const SalarySettings = ({ activeTab, tabId, title, settings }) => {
                     <div>
                       <div>
                         <Input
-                          name="amount"
+                          name="days"
                           style={contentStyles}
                           type="number"
-                          value={fields.amount}
+                          value={fields.days}
                           onChange={(e) => handleChange(index, e)}
                         />
                       </div>
                       <div>
                         <span style={{ color: "red" }}>
-                          {errors[index]?.amount}
+                          {errors[index]?.days}
                         </span>
                       </div>
                     </div>
@@ -268,4 +248,4 @@ const SalarySettings = ({ activeTab, tabId, title, settings }) => {
   );
 };
 
-export default SalarySettings;
+export default SubjectSettings;

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { TabContent, TabPane } from "reactstrap";
-import NavigationTabs from "./NavigationTabs"; 
+import NavigationTabs from "./NavigationTabs";
 import SalarySettings from "./SalarySettings";
 import ClassSettings from "./ClassSettings";
 import ScheduleSettings from "./ScheduleSettings";
@@ -15,6 +15,7 @@ import LeaveSettings from "./LeaveSettings";
 import BusServiceSettings from "./BusServiceSettings";
 import { getAvailableSettings } from "../../http/http-calls";
 import SpinnerLoading from "../../components/SpinnerLoading";
+import SubjectSettings from "./SubjectSettings";
 
 const Settingss = () => {
   const navigate = useNavigate();
@@ -23,7 +24,6 @@ const Settingss = () => {
   const loginType = useSelector((state) => state.userCredential.user.loginType);
   const [activeTab, setActiveTab] = useState("7");
   const [isLoading, setIsLoading] = useState(true);
-
 
   const fetchSettings = async () => {
     setIsLoading(true);
@@ -60,7 +60,7 @@ const Settingss = () => {
 
   return (
     <>
-     {isLoading ? (
+      {isLoading ? (
         <div
           style={{
             display: "flex",
@@ -72,76 +72,75 @@ const Settingss = () => {
           <SpinnerLoading />
         </div>
       ) : (
-      <div className="disputes_tab">
-        <NavigationTabs
-          userType={userType}
-          activeTab={activeTab}
-          _toggleTab={_toggleTab}
-        />
-
-        <TabContent
-          style={{ maxWidth: "900px", margin: "auto", padding: "0" }}
-          activeTab={activeTab}
-        >
-          <h6 style={{ textAlign: "center", marginTop: "10px" }}>Settings</h6>
-
-          <BusServiceSettings
+        <div className="disputes_tab">
+          <NavigationTabs
+            userType={userType}
             activeTab={activeTab}
-            tabId="1"
-            title="Bus Service"
-            settings={allSettings.busFee}
+            _toggleTab={_toggleTab}
           />
 
-          <SalarySettings
+          <TabContent
+            style={{ maxWidth: "900px", margin: "auto", padding: "0" }}
             activeTab={activeTab}
-            tabId="2"
-            title="Salary"
-            settings={allSettings.salary}
-          />
+          >
+            <h6 style={{ textAlign: "center", marginTop: "10px" }}>Settings</h6>
 
-          <ClassSettings
-            activeTab={activeTab}
-            tabId="3"
-            title="Classes"
-            settings={allSettings.availableClasses}
-          />
+            <BusServiceSettings
+              activeTab={activeTab}
+              tabId="1"
+              title="Bus Service"
+              settings={allSettings.busFee}
+            />
 
-          <ScheduleSettings
-            activeTab={activeTab}
-            tabId="4"
-          />
+            <SalarySettings
+              activeTab={activeTab}
+              tabId="2"
+              title="Salary"
+              settings={allSettings.salary}
+            />
 
-          <PromoteSettings
-            activeTab={activeTab}
-            tabId="5"
-          />
+            <ClassSettings
+              activeTab={activeTab}
+              tabId="3"
+              title="Classes"
+              settings={allSettings.availableClasses}
+            />
 
-          <HolidaysSettings
-            activeTab={activeTab}
-            tabId="6"
-            title="Holidays"
-            settings={allSettings.holidays}
-          />
+            <ScheduleSettings activeTab={activeTab} tabId="4" />
 
-          <PersonalSettings
-            activeTab={activeTab}
-            tabId="7"
-          />
+            <PromoteSettings activeTab={activeTab} tabId="5" />
 
-          <OrganizationSettings
+            <HolidaysSettings
+              activeTab={activeTab}
+              tabId="6"
+              title="Holidays"
+              settings={allSettings.holidays}
+            />
+
+            <PersonalSettings activeTab={activeTab} tabId="7" />
+
+            <OrganizationSettings
             activeTab={activeTab}
             tabId="8"
-          />
+            settings={allSettings.schoolDetails}
+            />
 
-          <LeaveSettings
-            activeTab={activeTab}
-            tabId="9"
-            title="Leaves"
-            settings={allSettings.leave}
+            <LeaveSettings
+              activeTab={activeTab}
+              tabId="9"
+              title="Leaves"
+              settings={allSettings.leave}
+            />
 
-          />
-        </TabContent>
-      </div>
+            <SubjectSettings
+              activeTab={activeTab}
+              tabId="10"
+              title="Subjects"
+              settings={allSettings.schoolSubjectsList}
+            />
+            
+          </TabContent>
+        </div>
       )}
     </>
   );

@@ -548,3 +548,17 @@ export const markAttendanceApi = (payload) => {
       });
   });
 };
+
+export const UpdateOwnPassword = (payload) => {
+  return new Promise((resolve, reject) => {
+    makePostRequest(`${BASE_URL}/changepassword`, true, payload)
+      .then((res) => {
+        resolve(res);
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("API call error>>", e);
+        reject(e);
+      });
+  });
+};
