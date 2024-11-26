@@ -72,7 +72,7 @@ function Teachers() {
     setCurrentPage(page);
     await _getAllTeacherAPiCall(page, itemsPerPage);
   };
-
+  console.log(allteacher);
   const handleItemsChange = (items) => {
     setCurrentItems(items);
   };

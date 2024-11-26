@@ -53,32 +53,39 @@ function Notice() {
     setIsLoading(true);
     if (UserloginType === "teacher") {
       payload = {
-        type: "teacher",
+        type: ["teacher", "general"],
         pageNumber: currentPage,
         pageSize: itemsPerPage,
       };
     } else if (UserloginType === "student") {
       payload = {
-        type: "student",
+        type: ["student", "general"],
         pageNumber: currentPage,
         pageSize: itemsPerPage,
       };
     }
+
     try {
       const allNoticeRes = await getAllNotices(payload);
-      console.log(allNoticeRes.notices);
-      setAllNotice(allNoticeRes.notices);
-      setTotalNotice(allNoticeRes.totalNotice);
+      // console.log(allNoticeRes.notices);
+      setAllNotice(allNoticeRes?.notices);
+      setTotalNotice(allNoticeRes?.count);
     } catch (err) {
       console.log(err);
     } finally {
       setIsLoading(false);
     }
   };
-  console.log(allNotice);
+  // console.log(allNotice);
   useEffect(() => {
     _getAllNotice();
   }, []);
+  const [searchItem, setSearchItem] = useState("");
+  const [noticeType, setNoticeType] = useState("");
+
+  const handleSearch = (e) => {
+    setSearchItem(e.target.value);
+  };
 
   const handlePageChange = async (page) => {
     setCurrentPage(page);
@@ -88,10 +95,10 @@ function Notice() {
   const handleItemsChange = (items) => {
     setCurrentItems(items);
   };
+
   return (
     <>
       {isLoading ? (
-        // Display a loading spinner or message when data is loading
         <div
           style={{
             display: "flex",
@@ -138,7 +145,10 @@ function Notice() {
 
                 <div className="formGroup">
                   <Label>Notice Type</Label>
-                  <Input type="select">
+                  <Input
+                    type="select"
+                    onChange={(e) => setNoticeType(e.target.value)}
+                  >
                     <option>All</option>
                     <option>Teacher</option>
                     <option>Student</option>
@@ -149,7 +159,11 @@ function Notice() {
                 <div className="formGroup searchbar">
                   <Label>Search</Label>
                   <InputGroup>
-                    <Input placeholder="Search..." />
+                    <Input
+                      placeholder="Search..."
+                      onChange={handleSearch}
+                      value={searchItem}
+                    />
                     <InputGroupText>
                       <i className="fas fa-search" />
                     </InputGroupText>
